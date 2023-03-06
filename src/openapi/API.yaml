@@ -1,0 +1,1032 @@
+openapi: 3.0.0
+x-stoplight:
+  id: y514b4m78u0va
+info:
+  title: API-v1
+  version: "1.0"
+  description: Microlend API version one
+  contact:
+    name: Nana Kwesi Ofosu-Aikins
+    url: nanaaikinson.com
+    email: nanaaikinson24@gmail.com
+servers:
+  - url: "http://localhost:3000"
+  - url: "http://microlend.test/api/v1"
+    description: ""
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: ""
+      operationId: auth-login
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+      description: "Authentication: Login"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+  /auth/user:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - auth
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+      operationId: auth-user
+      security:
+        - Authorization: []
+  /files/upload:
+    post:
+      tags:
+        - files
+      summary: ""
+      operationId: file-upload
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadedFile"
+      security:
+        - Authorization: []
+      parameters: []
+      description: "Files: Upload id"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/FileUploadRequest"
+        description: ""
+    parameters: []
+  /customers:
+    post:
+      tags:
+        - customers
+      summary: ""
+      operationId: create-customer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Customer"
+                required:
+                  - message
+                  - status
+                  - data
+      description: "Customers: create customer"
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCustomerRequest"
+    get:
+      summary: ""
+      operationId: get-customers
+      tags:
+        - customers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data:
+                      - id: MO9NIEDS7OSBCGU
+                        firstName: John
+                        lastName: Doe
+                        email: null
+                        phoneNumber: "0244815126"
+                        secondaryPhone: null
+                        occupation: null
+                        gpAddress: null
+                        postalAddress: null
+                        dateOfBirth: null
+                        gender: Female
+                        maritalStatus: Single
+                        sourceOfIncome: null
+                        avatar: null
+                        identification: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Customer"
+                required:
+                  - message
+                  - status
+                  - data
+      security:
+        - Authorization: []
+  /customers/search:
+    get:
+      summary: Search for customer
+      tags:
+        - customers
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data:
+                      - id: MO9NIEDS7OSBCGU
+                        name: John Doe
+                        email: null
+                        phone: "0244815126"
+                      - id: LNADAQ4Z5NO1AGY
+                        name: Kofi Atta
+                        email: null
+                        phone: "0241726707"
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                          nullable: true
+                        phone:
+                          type: string
+                      required:
+                        - id
+                        - name
+                        - email
+                        - phone
+                required:
+                  - message
+                  - status
+                  - data
+      operationId: customers-search
+      security:
+        - Authorization: []
+    parameters: []
+  "/customers/{id}":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Customer Id
+    get:
+      summary: Your GET endpoint
+      tags:
+        - customers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Customer"
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                required:
+                  - data
+                  - message
+                  - status
+      operationId: get-customer
+      security:
+        - Authorization: []
+      x-extension-1: null
+    patch:
+      tags:
+        - customers
+      summary: ""
+      operationId: update-customer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Customer"
+      security:
+        - Authorization: []
+  "/customers/{id}/loans":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - customers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: []
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Loan"
+                required:
+                  - message
+                  - status
+                  - data
+      operationId: customers-loans
+      parameters: []
+      security:
+        - Authorization: []
+  "/customers/{id}/attach-loan":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Customer Id
+    patch:
+      tags:
+        - customers
+      summary: ""
+      operationId: attach-loan
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                loanId:
+                  type: string
+              required:
+                - loanId
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: null
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    nullable: true
+                required:
+                  - message
+                  - status
+                  - data
+  /loans:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - loans
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: Loan found successfully
+                    status: 200
+                    data: []
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Loan"
+                required:
+                  - message
+                  - status
+                  - data
+      operationId: get-loans
+      security:
+        - Authorization: []
+    post:
+      tags:
+        - loans
+      summary: ""
+      operationId: create-loan
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: Loan found successfully
+                    status: 200
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Loan"
+                required:
+                  - message
+                  - status
+                  - data
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoanRequest"
+        description: ""
+      description: "Loans: Create a new loan"
+  "/loans/{id}":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - loans
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: Loan found successfully
+                    status: 200
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Loan"
+                required:
+                  - message
+                  - status
+                  - data
+      operationId: get-loan
+      security:
+        - Authorization: []
+    patch:
+      tags:
+        - loans
+      summary: ""
+      operationId: update-loan
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: null
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Loan"
+                required:
+                  - message
+                  - status
+                  - data
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoanRequest"
+        description: ""
+      description: ""
+components:
+  schemas:
+    Customer:
+      type: object
+      x-examples:
+        Example 1:
+          id: MO9NIEDS7OSBCGU
+          firstName: John
+          lastName: Doe
+          email: null
+          phoneNumber: "0244815126"
+          secondaryPhone: null
+          occupation: null
+          gpAddress: null
+          postalAddress: null
+          dateOfBirth: null
+          gender: Female
+          maritalStatus: Single
+          sourceOfIncome: null
+          avatar: null
+      description: Customer Model
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+        secondaryPhone:
+          type: string
+          nullable: true
+        occupation:
+          type: string
+          nullable: true
+        gpAddress:
+          type: string
+          nullable: true
+        postalAddress:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        maritalStatus:
+          type: string
+          nullable: true
+        sourceOfIncome:
+          type: string
+          nullable: true
+        avatar:
+          type: string
+          nullable: true
+        identification:
+          $ref: "#/components/schemas/Identification"
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - phoneNumber
+        - secondaryPhone
+        - occupation
+        - gpAddress
+        - postalAddress
+        - dateOfBirth
+        - gender
+        - maritalStatus
+        - sourceOfIncome
+        - avatar
+    Identification:
+      type: object
+      x-examples:
+        Example 1:
+          id: YTKZENMRJNMEBVN
+          number: "1234567"
+          type: Passport
+          issueDate: "2020-10-01"
+          expiryDate: "2030-10-01"
+          issuingAuthority: Passport Gov
+          issuingCountry: Ghana
+          front:
+            key: 6
+            url: "http://microlend.test/uploads/IDENTIFICATION_FRONT/c5f9f22eaea6b81940f1bd2e1afe1493.png"
+          back:
+            key: 7
+            url: "http://microlend.test/uploads/IDENTIFICATION_BACK/c5f9f22eaea6b81940f1bd2e1afe1493.png"
+      properties:
+        id:
+          type: string
+        number:
+          type: string
+        type:
+          type: string
+        issueDate:
+          type: string
+        expiryDate:
+          type: string
+        issuingAuthority:
+          type: string
+        issuingCountry:
+          type: string
+        front:
+          type: object
+          required:
+            - key
+            - url
+          properties:
+            key:
+              type: integer
+            url:
+              type: string
+        back:
+          type: object
+          required:
+            - key
+            - url
+          properties:
+            key:
+              type: integer
+            url:
+              type: string
+      required:
+        - id
+        - number
+        - type
+        - issueDate
+        - expiryDate
+        - issuingAuthority
+        - issuingCountry
+        - front
+        - back
+    Loan:
+      type: object
+      x-examples:
+        Example 1:
+          id: ALYHUYBCI6D9GI8
+          number: "149189137070596"
+          amount: 3000
+          type: personal
+          status: pending
+          repaymentFrequency: bi-weekly
+          startDate: "2023-03-01"
+          endDate: "2023-06-01"
+          interestRate: 40
+          duration: 3
+          currency: GHS
+          repaymentAmount: 527.27
+          customer:
+            id: LNADAQ4Z5NO1AGY
+            firstName: Kofi
+            lastName: Atta
+            email: null
+            phoneNumber: "0241726707"
+            secondaryPhone: null
+            occupation: null
+            gpAddress: null
+            postalAddress: null
+            dateOfBirth: null
+            gender: female
+            maritalStatus: single
+            sourceOfIncome: null
+            avatar: null
+            identification:
+              id: YTKZENMRJNMEBVN
+              number: "1234567"
+              type: Passport
+              issueDate: "2020-10-01"
+              expiryDate: "2030-10-01"
+              issuingAuthority: Passport Gov
+              issuingCountry: Ghana
+              front:
+                key: 6
+                url: "http://microlend.test/uploads/IDENTIFICATION_FRONT/c5f9f22eaea6b81940f1bd2e1afe1493.png"
+              back:
+                key: 7
+                url: "http://microlend.test/uploads/IDENTIFICATION_BACK/c5f9f22eaea6b81940f1bd2e1afe1493.png"
+      description: Loan model
+      properties:
+        id:
+          type: string
+        number:
+          type: string
+        amount:
+          type: integer
+        type:
+          type: string
+          enum:
+            - personal
+            - business
+        status:
+          type: string
+          enum:
+            - pending
+            - approved
+            - rejected
+            - closed
+            - written off
+        repaymentFrequency:
+          type: string
+          enum:
+            - daily
+            - weekly
+            - bi-weekly
+            - monthly
+            - quarterly
+            - annually
+        startDate:
+          type: string
+        endDate:
+          type: string
+        interestRate:
+          type: integer
+        duration:
+          type: integer
+        currency:
+          type: string
+        repaymentAmount:
+          type: number
+        customer:
+          $ref: "#/components/schemas/Customer"
+      required:
+        - id
+        - number
+        - amount
+        - type
+        - status
+        - repaymentFrequency
+        - startDate
+        - endDate
+        - interestRate
+        - duration
+        - currency
+        - repaymentAmount
+    CreateCustomerRequest:
+      type: object
+      x-examples:
+        Example 1:
+          firstName: John
+          lastName: Doe
+          phoneNumber: "0244815126"
+          secondaryPhone: ""
+          email: ""
+          occupation: ""
+          gpAddress: ""
+          postalAddress: ""
+          idNumber: ""
+          idType: ""
+          idIssueDate: ""
+          idExpiryDate: ""
+          idIssuingAuthority: ""
+          idIssuingCountry: ""
+          idFrontUrl: ""
+          idFrontKey: ""
+          idBackUrl: ""
+          idBackKey: ""
+          dateOfBirth: ""
+          maritalStatus: ""
+          sourceOfIncome: ""
+          gender: ""
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: string
+        secondaryPhone:
+          type: string
+        email:
+          type: string
+        occupation:
+          type: string
+        gpAddress:
+          type: string
+        postalAddress:
+          type: string
+        idNumber:
+          type: string
+        idType:
+          type: string
+          enum:
+            - Ghana Card
+            - Passport
+            - Drivers License
+        idIssueDate:
+          type: string
+        idExpiryDate:
+          type: string
+        idIssuingAuthority:
+          type: string
+        idIssuingCountry:
+          type: string
+        idFrontUrl:
+          type: string
+        idFrontKey:
+          type: string
+        idBackUrl:
+          type: string
+        idBackKey:
+          type: string
+        dateOfBirth:
+          type: string
+        maritalStatus:
+          type: string
+          enum:
+            - single
+            - married
+            - divorced
+            - widowed
+            - separated
+        sourceOfIncome:
+          type: string
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+      required:
+        - firstName
+        - lastName
+        - phoneNumber
+      title: CreateCustomerRequest
+      x-stoplight:
+        id: d5e09e80ef73a
+    LoanRequest:
+      type: object
+      x-examples:
+        Example 1:
+          amount: 3000
+          type: personal
+          repaymentFrequency: bi-weekly
+          startDate: "2023-03-01"
+          interestRate: 40
+          duration: 3
+          customerId: LNADAQ4Z5NO1AGY
+      properties:
+        amount:
+          type: integer
+          minimum: 0
+        type:
+          type: string
+          enum:
+            - personal
+            - business
+        repaymentFrequency:
+          type: string
+          enum:
+            - daily
+            - weekly
+            - bi-weekly
+            - monthly
+            - quarterly
+            - annually
+        startDate:
+          type: string
+        interestRate:
+          type: integer
+        duration:
+          type: integer
+          minimum: 0
+        customerId:
+          type: string
+          nullable: true
+      required:
+        - amount
+        - type
+        - repaymentFrequency
+        - startDate
+        - interestRate
+        - duration
+      description: Create loan request model
+      x-stoplight:
+        id: eacaf4ffc8346
+    LoginRequest:
+      type: object
+      x-examples:
+        Example 1:
+          email: jhintz@example.com
+          password: password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    LoginResponse:
+      type: object
+      x-examples:
+        Example 1:
+          message: Login successful
+          status: 200
+          data:
+            accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbWljcm9sZW5kLnRlc3QvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2NzcwMDM5NzMsImV4cCI6MTY3NzAwNzU3MywibmJmIjoxNjc3MDAzOTczLCJqdGkiOiJmTHBrYmJ0OWNrUWtXRzd6Iiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pbNKaPWxLHH_oapFhMnGncCFw26j7ooX4kla7I1eNM4
+            tokenType: bearer
+            expiresIn: "2023-02-21 19:26:13"
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+        data:
+          type: object
+          required:
+            - accessToken
+            - tokenType
+            - expiresAt
+          properties:
+            accessToken:
+              type: string
+            tokenType:
+              type: string
+            expiresAt:
+              type: string
+      required:
+        - message
+        - status
+        - data
+    UploadedFile:
+      type: object
+      x-examples:
+        Example 1:
+          message: File uploaded successfully
+          status: 200
+          data:
+            key: 2
+            url: "http://microlend.test/uploads/c5f9f22eaea6b81940f1bd2e1afe1493.png"
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+        data:
+          type: object
+          required:
+            - key
+            - url
+          properties:
+            key:
+              type: integer
+            url:
+              type: string
+      required:
+        - message
+        - status
+        - data
+      title: UploadedFile
+      x-stoplight:
+        id: 542117ae49fd1
+    AuthUser:
+      type: object
+      x-examples:
+        Example 1:
+          message: ""
+          status: 200
+          data:
+            id: QEBDJY56677GHH
+            name: John Doe
+            email: jdoe@example.com
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+        data:
+          type: object
+          required:
+            - id
+            - name
+            - email
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+      required:
+        - message
+        - status
+        - data
+    FileUploadRequest:
+      title: FileUploadRequest
+      x-stoplight:
+        id: p9lobvliwx23a
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+        category:
+          type: string
+          enum:
+            - IDENTIFICATION_FRONT
+            - IDENTIFICATION_BACK
+            - PROFILE
+            - OTHER
+      required:
+        - file
+        - category
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      in: header
+      name: Bearer
+      description: ""

@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-size: 16px;
+    /* @apply bg-white text-dark; */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    /*font-family: "Kumbh Sans", sans-serif;*/
+    margin-bottom: 0.5rem;
+    line-height: 1.25;
+  }
+  h1 {
+    font-size: 2.25rem;
+  }
+  h2 {
+    font-size: 1.875rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+  h4 {
+    font-size: 1.25rem;
+  }
+  h5 {
+    font-size: 1.125rem;
+  }
+  h6 {
+    font-weight: bold;
+  }
+  p {
+    margin-bottom: 1rem;
+  }
+
+  form label {
+    @apply text-sm text-gray-600;
+  }
+}
+
+@layer components {
+  .app-shadow {
+    box-shadow: 0 3px 4px -5px rgba(24, 24, 28, 0.03),
+      0 1px 2px rgba(24, 24, 28, 0.04);
+  }
+
+  .btn,
+  .form-input,
+  .form-select,
+  .form-checkbox,
+  .form-radio {
+    @apply app-shadow rounded-[7px];
+  }
+
+  .form-input,
+  .form-select {
+    @apply mt-1 text-[#5F5F61];
+  }
+
+  .form-checkbox {
+    @apply rounded-[4px];
+  }
+
+  .btn {
+    @apply transform-none py-2.5 px-5 hover:shadow-sm focus:ring-0 active:ring-0;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-[#222124] hover:bg-gray-50;
+    border: 1px solid #e6e6e6;
+  }
+
+  .side-nav-item {
+    @apply flex items-center space-x-2 rounded-sm px-4  py-3 text-gray-300 transition duration-300;
+  }
+  .side-nav-item.active {
+    @apply bg-[#9af27a] text-[#283b33];
+  }
+  .side-nav-item:not(.active):hover {
+    @apply text-white;
+  }
+  .side-nav-item .icon {
+    @apply h-5 w-5;
+  }
+
+  .tab-nav-item {
+    @apply flex items-center pb-1 text-gray-300 transition duration-300;
+  }
+
+  .tab-nav-item.active {
+    @apply border-b-2 border-primary font-bold text-[#283b33];
+  }
+  .tab-nav-item:not(.active):hover {
+    @apply text-[#283b33];
+  }
+
+  .dropdown-container {
+    box-shadow: 0 2px 6px rgba(24, 24, 28, 0.06),
+      0 32px 41px -23px rgba(24, 24, 28, 0.07);
+    border: 1px solid #efefef;
+    border-radius: 8px;
+  }
+
+  .date-picker,
+  .date-picker[readonly] {
+    @apply form-input !cursor-pointer !border-[#e2e8f0] !bg-white focus:!border-primary;
+  }
+
+  .flex-0-auto {
+    flex: 0 0 auto;
+  }
+
+  .react-form-select {
+    @apply app-shadow mt-1;
+  }
+}

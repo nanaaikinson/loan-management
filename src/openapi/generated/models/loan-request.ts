@@ -62,6 +62,12 @@ export interface LoanRequest {
      * @memberof LoanRequest
      */
     'customerId'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoanRequest
+     */
+    'interestRateType': LoanRequestInterestRateTypeEnum;
 }
 
 export const LoanRequestTypeEnum = {
@@ -80,5 +86,11 @@ export const LoanRequestRepaymentFrequencyEnum = {
 } as const;
 
 export type LoanRequestRepaymentFrequencyEnum = typeof LoanRequestRepaymentFrequencyEnum[keyof typeof LoanRequestRepaymentFrequencyEnum];
+export const LoanRequestInterestRateTypeEnum = {
+    Amount: 'amount',
+    Percentage: 'percentage'
+} as const;
+
+export type LoanRequestInterestRateTypeEnum = typeof LoanRequestInterestRateTypeEnum[keyof typeof LoanRequestInterestRateTypeEnum];
 
 

@@ -77,16 +77,16 @@
     border: 1px solid #e6e6e6;
   }
 
-  .side-nav-item {
-    @apply flex items-center space-x-2 rounded-sm px-4  py-3 text-gray-300 transition duration-300;
+  .nav-item {
+    @apply flex items-center space-x-2 rounded-sm px-4 py-2 transition duration-300;
   }
-  .side-nav-item.active {
+  .nav-item.active {
     @apply bg-[#9af27a] text-[#283b33];
   }
-  .side-nav-item:not(.active):hover {
-    @apply text-white;
+  .nav-item:not(.active):hover {
+    @apply text-success-dark;
   }
-  .side-nav-item .icon {
+  .nav-item .icon {
     @apply h-5 w-5;
   }
 

@@ -101,6 +101,12 @@ export interface Loan {
      * @memberof Loan
      */
     'customer'?: Customer;
+    /**
+     * 
+     * @type {string}
+     * @memberof Loan
+     */
+    'createdAt': string;
 }
 
 export const LoanTypeEnum = {

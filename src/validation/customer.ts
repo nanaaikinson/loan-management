@@ -1,11 +1,11 @@
-import type { InferType } from "yup";
-import { mixed, number, object, string } from "yup";
 import {
   CreateCustomerRequestGenderEnum,
-  CreateCustomerRequestIdTypeEnum
-} from "./../api-reference/api";
+  CreateCustomerRequestIdTypeEnum,
+} from "@/openapi/generated";
+import type { InferType } from "yup";
+import { mixed, number, object, string } from "yup";
 
-export const validationSchema = object({
+export const storeCustomerValidationSchema = object({
   firstName: string().required().label("First name"),
   lastName: string().required().label("Last name"),
   phoneNumber: string().required().label("Phone number"),
@@ -42,4 +42,4 @@ export const validationSchema = object({
   sourceOfIncome: string().label("Source of income").optional(),
 });
 
-export type AddCustomerForm = InferType<typeof validationSchema>;
+export type StoreCustomerForm = InferType<typeof storeCustomerValidationSchema>;

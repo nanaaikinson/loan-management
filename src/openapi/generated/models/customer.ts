@@ -113,5 +113,11 @@ export interface Customer {
      * @memberof Customer
      */
     'identification'?: Identification;
+    /**
+     * 
+     * @type {string}
+     * @memberof Customer
+     */
+    'createdAt': string;
 }
 

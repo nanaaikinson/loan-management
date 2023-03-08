@@ -3,49 +3,49 @@ x-stoplight:
   id: y514b4m78u0va
 info:
   title: API-v1
-  version: '1.0'
+  version: "1.0"
   description: Microlend API version one
   contact:
     name: Nana Kwesi Ofosu-Aikins
     url: nanaaikinson.com
     email: nanaaikinson24@gmail.com
 servers:
-  - url: 'http://localhost:3000'
-  - url: 'http://microlend.test/api/v1'
-    description: ''
+  - url: "http://localhost:3000"
+  - url: "http://microlend.test/api/v1"
+    description: ""
 paths:
   /auth/login:
     post:
       tags:
         - auth
-      summary: ''
+      summary: ""
       operationId: auth-login
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
-      description: 'Authentication: Login'
+                $ref: "#/components/schemas/LoginResponse"
+      description: "Authentication: Login"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
   /auth/user:
     get:
       summary: Your GET endpoint
       tags:
         - auth
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUser'
+                $ref: "#/components/schemas/AuthUser"
       operationId: auth-user
       security:
         - Authorization: []
@@ -53,34 +53,34 @@ paths:
     post:
       tags:
         - files
-      summary: ''
+      summary: ""
       operationId: file-upload
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UploadedFile'
+                $ref: "#/components/schemas/UploadedFile"
       security:
         - Authorization: []
       parameters: []
-      description: 'Files: Upload id'
+      description: "Files: Upload id"
       requestBody:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/FileUploadRequest'
-        description: ''
+              $ref: "#/components/schemas/FileUploadRequest"
+        description: ""
     parameters: []
   /customers:
     post:
       tags:
         - customers
-      summary: ''
+      summary: ""
       operationId: create-customer
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -88,7 +88,7 @@ paths:
                 type: object
                 x-examples:
                   Example 1:
-                    message: ''
+                    message: ""
                     status: 200
                     data: {}
                 properties:
@@ -97,12 +97,12 @@ paths:
                   status:
                     type: integer
                   data:
-                    $ref: '#/components/schemas/Customer'
+                    $ref: "#/components/schemas/Customer"
                 required:
                   - message
                   - status
                   - data
-      description: 'Customers: create customer'
+      description: "Customers: create customer"
       security:
         - Authorization: []
       requestBody:
@@ -110,14 +110,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomerRequest'
+              $ref: "#/components/schemas/CreateCustomerRequest"
     get:
-      summary: ''
+      summary: ""
       operationId: get-customers
       tags:
         - customers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -125,14 +125,14 @@ paths:
                 type: object
                 x-examples:
                   Example 1:
-                    message: ''
+                    message: ""
                     status: 200
                     data:
                       - id: MO9NIEDS7OSBCGU
                         firstName: John
                         lastName: Doe
                         email: null
-                        phoneNumber: '0244815126'
+                        phoneNumber: "0244815126"
                         secondaryPhone: null
                         occupation: null
                         gpAddress: null
@@ -151,7 +151,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Customer'
+                      $ref: "#/components/schemas/Customer"
                 required:
                   - message
                   - status
@@ -170,7 +170,7 @@ paths:
             type: string
           required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -178,17 +178,17 @@ paths:
                 type: object
                 x-examples:
                   Example 1:
-                    message: ''
+                    message: ""
                     status: 200
                     data:
                       - id: MO9NIEDS7OSBCGU
                         name: John Doe
                         email: null
-                        phone: '0244815126'
+                        phone: "0244815126"
                       - id: LNADAQ4Z5NO1AGY
                         name: Kofi Atta
                         email: null
-                        phone: '0241726707'
+                        phone: "0241726707"
                 properties:
                   message:
                     type: string
@@ -221,7 +221,7 @@ paths:
       security:
         - Authorization: []
     parameters: []
-  '/customers/{id}':
+  "/customers/{id}":
     parameters:
       - schema:
           type: string
@@ -234,7 +234,7 @@ paths:
       tags:
         - customers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -242,7 +242,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Customer'
+                    $ref: "#/components/schemas/Customer"
                   message:
                     type: string
                   status:
@@ -258,10 +258,10 @@ paths:
     patch:
       tags:
         - customers
-      summary: ''
+      summary: ""
       operationId: update-customer
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -269,7 +269,7 @@ paths:
                 type: object
                 x-examples:
                   Example 1:
-                    message: ''
+                    message: ""
                     status: 200
                     data: {}
                 properties:
@@ -278,10 +278,10 @@ paths:
                   status:
                     type: integer
                   data:
-                    $ref: '#/components/schemas/Customer'
+                    $ref: "#/components/schemas/Customer"
       security:
         - Authorization: []
-  '/customers/{id}/loans':
+  "/customers/{id}/loans":
     parameters:
       - schema:
           type: string
@@ -293,7 +293,7 @@ paths:
       tags:
         - customers
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -301,7 +301,7 @@ paths:
                 type: object
                 x-examples:
                   Example 1:
-                    message: ''
+                    message: ""
                     status: 200
                     data: []
                 properties:
@@ -312,7 +312,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Loan'
+                      $ref: "#/components/schemas/Loan"
                 required:
                   - message
                   - status
@@ -321,7 +321,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-  '/customers/{id}/attach-loan':
+  "/customers/{id}/attach-loan":
     parameters:
       - schema:
           type: string
@@ -332,7 +332,7 @@ paths:
     patch:
       tags:
         - customers
-      summary: ''
+      summary: ""
       operationId: attach-loan
       security:
         - Authorization: []
@@ -347,7 +347,7 @@ paths:
               required:
                 - loanId
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -355,7 +355,7 @@ paths:
                 type: object
                 x-examples:
                   Example 1:
-                    message: ''
+                    message: ""
                     status: 200
                     data: null
                 properties:
@@ -375,7 +375,7 @@ paths:
       tags:
         - loans
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -394,7 +394,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Loan'
+                      $ref: "#/components/schemas/Loan"
                 required:
                   - message
                   - status
@@ -405,10 +405,10 @@ paths:
     post:
       tags:
         - loans
-      summary: ''
+      summary: ""
       operationId: create-loan
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -425,7 +425,7 @@ paths:
                   status:
                     type: integer
                   data:
-                    $ref: '#/components/schemas/Loan'
+                    $ref: "#/components/schemas/Loan"
                 required:
                   - message
                   - status
@@ -437,10 +437,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoanRequest'
-        description: ''
-      description: 'Loans: Create a new loan'
-  '/loans/{id}':
+              $ref: "#/components/schemas/LoanRequest"
+        description: ""
+      description: "Loans: Create a new loan"
+  "/loans/{id}":
     parameters:
       - schema:
           type: string
@@ -452,7 +452,7 @@ paths:
       tags:
         - loans
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -469,7 +469,7 @@ paths:
                   status:
                     type: integer
                   data:
-                    $ref: '#/components/schemas/Loan'
+                    $ref: "#/components/schemas/Loan"
                 required:
                   - message
                   - status
@@ -480,10 +480,10 @@ paths:
     patch:
       tags:
         - loans
-      summary: ''
+      summary: ""
       operationId: update-loan
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -491,7 +491,7 @@ paths:
                 type: object
                 x-examples:
                   Example 1:
-                    message: ''
+                    message: ""
                     status: 200
                     data: null
                 properties:
@@ -500,7 +500,7 @@ paths:
                   status:
                     type: integer
                   data:
-                    $ref: '#/components/schemas/Loan'
+                    $ref: "#/components/schemas/Loan"
                 required:
                   - message
                   - status
@@ -512,9 +512,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoanRequest'
-        description: ''
-      description: ''
+              $ref: "#/components/schemas/LoanRequest"
+        description: ""
+      description: ""
 components:
   schemas:
     Customer:
@@ -525,7 +525,7 @@ components:
           firstName: John
           lastName: Doe
           email: null
-          phoneNumber: '0244815126'
+          phoneNumber: "0244815126"
           secondaryPhone: null
           occupation: null
           gpAddress: null
@@ -576,7 +576,9 @@ components:
           type: string
           nullable: true
         identification:
-          $ref: '#/components/schemas/Identification'
+          $ref: "#/components/schemas/Identification"
+        createdAt:
+          type: string
       required:
         - id
         - firstName
@@ -592,23 +594,24 @@ components:
         - maritalStatus
         - sourceOfIncome
         - avatar
+        - createdAt
     Identification:
       type: object
       x-examples:
         Example 1:
           id: YTKZENMRJNMEBVN
-          number: '1234567'
+          number: "1234567"
           type: Passport
-          issueDate: '2020-10-01'
-          expiryDate: '2030-10-01'
+          issueDate: "2020-10-01"
+          expiryDate: "2030-10-01"
           issuingAuthority: Passport Gov
           issuingCountry: Ghana
           front:
             key: 6
-            url: 'http://microlend.test/uploads/IDENTIFICATION_FRONT/c5f9f22eaea6b81940f1bd2e1afe1493.png'
+            url: "http://microlend.test/uploads/IDENTIFICATION_FRONT/c5f9f22eaea6b81940f1bd2e1afe1493.png"
           back:
             key: 7
-            url: 'http://microlend.test/uploads/IDENTIFICATION_BACK/c5f9f22eaea6b81940f1bd2e1afe1493.png'
+            url: "http://microlend.test/uploads/IDENTIFICATION_BACK/c5f9f22eaea6b81940f1bd2e1afe1493.png"
       properties:
         id:
           type: string
@@ -659,13 +662,13 @@ components:
       x-examples:
         Example 1:
           id: ALYHUYBCI6D9GI8
-          number: '149189137070596'
+          number: "149189137070596"
           amount: 3000
           type: personal
           status: pending
           repaymentFrequency: bi-weekly
-          startDate: '2023-03-01'
-          endDate: '2023-06-01'
+          startDate: "2023-03-01"
+          endDate: "2023-06-01"
           interestRate: 40
           duration: 3
           currency: GHS
@@ -675,7 +678,7 @@ components:
             firstName: Kofi
             lastName: Atta
             email: null
-            phoneNumber: '0241726707'
+            phoneNumber: "0241726707"
             secondaryPhone: null
             occupation: null
             gpAddress: null
@@ -687,18 +690,18 @@ components:
             avatar: null
             identification:
               id: YTKZENMRJNMEBVN
-              number: '1234567'
+              number: "1234567"
               type: Passport
-              issueDate: '2020-10-01'
-              expiryDate: '2030-10-01'
+              issueDate: "2020-10-01"
+              expiryDate: "2030-10-01"
               issuingAuthority: Passport Gov
               issuingCountry: Ghana
               front:
                 key: 6
-                url: 'http://microlend.test/uploads/IDENTIFICATION_FRONT/c5f9f22eaea6b81940f1bd2e1afe1493.png'
+                url: "http://microlend.test/uploads/IDENTIFICATION_FRONT/c5f9f22eaea6b81940f1bd2e1afe1493.png"
               back:
                 key: 7
-                url: 'http://microlend.test/uploads/IDENTIFICATION_BACK/c5f9f22eaea6b81940f1bd2e1afe1493.png'
+                url: "http://microlend.test/uploads/IDENTIFICATION_BACK/c5f9f22eaea6b81940f1bd2e1afe1493.png"
       description: Loan model
       properties:
         id:
@@ -742,7 +745,9 @@ components:
         repaymentAmount:
           type: number
         customer:
-          $ref: '#/components/schemas/Customer'
+          $ref: "#/components/schemas/Customer"
+        createdAt:
+          type: string
       required:
         - id
         - number
@@ -756,32 +761,33 @@ components:
         - duration
         - currency
         - repaymentAmount
+        - createdAt
     CreateCustomerRequest:
       type: object
       x-examples:
         Example 1:
           firstName: John
           lastName: Doe
-          phoneNumber: '0244815126'
-          secondaryPhone: ''
-          email: ''
-          occupation: ''
-          gpAddress: ''
-          postalAddress: ''
-          idNumber: ''
-          idType: ''
-          idIssueDate: ''
-          idExpiryDate: ''
-          idIssuingAuthority: ''
-          idIssuingCountry: ''
-          idFrontUrl: ''
-          idFrontKey: ''
-          idBackUrl: ''
-          idBackKey: ''
-          dateOfBirth: ''
-          maritalStatus: ''
-          sourceOfIncome: ''
-          gender: ''
+          phoneNumber: "0244815126"
+          secondaryPhone: ""
+          email: ""
+          occupation: ""
+          gpAddress: ""
+          postalAddress: ""
+          idNumber: ""
+          idType: ""
+          idIssueDate: ""
+          idExpiryDate: ""
+          idIssuingAuthority: ""
+          idIssuingCountry: ""
+          idFrontUrl: ""
+          idFrontKey: ""
+          idBackUrl: ""
+          idBackKey: ""
+          dateOfBirth: ""
+          maritalStatus: ""
+          sourceOfIncome: ""
+          gender: ""
       properties:
         firstName:
           type: string
@@ -854,7 +860,7 @@ components:
           amount: 3000
           type: personal
           repaymentFrequency: bi-weekly
-          startDate: '2023-03-01'
+          startDate: "2023-03-01"
           interestRate: 40
           duration: 3
           customerId: LNADAQ4Z5NO1AGY
@@ -925,7 +931,7 @@ components:
           data:
             accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbWljcm9sZW5kLnRlc3QvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2NzcwMDM5NzMsImV4cCI6MTY3NzAwNzU3MywibmJmIjoxNjc3MDAzOTczLCJqdGkiOiJmTHBrYmJ0OWNrUWtXRzd6Iiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pbNKaPWxLHH_oapFhMnGncCFw26j7ooX4kla7I1eNM4
             tokenType: bearer
-            expiresIn: '2023-02-21 19:26:13'
+            expiresIn: "2023-02-21 19:26:13"
       properties:
         message:
           type: string
@@ -956,7 +962,7 @@ components:
           status: 200
           data:
             key: 2
-            url: 'http://microlend.test/uploads/c5f9f22eaea6b81940f1bd2e1afe1493.png'
+            url: "http://microlend.test/uploads/c5f9f22eaea6b81940f1bd2e1afe1493.png"
       properties:
         message:
           type: string
@@ -983,7 +989,7 @@ components:
       type: object
       x-examples:
         Example 1:
-          message: ''
+          message: ""
           status: 200
           data:
             id: QEBDJY56677GHH
@@ -1035,4 +1041,4 @@ components:
       type: apiKey
       in: header
       name: Bearer
-      description: ''
+      description: ""

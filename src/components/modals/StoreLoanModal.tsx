@@ -7,6 +7,7 @@ import {
   LoanRequestRepaymentFrequencyEnum,
   LoanRequestTypeEnum,
 } from "@/openapi/generated";
+import { CustomerService } from "@/services/customer.service";
 import { LoanService } from "@/services/loan.service";
 import { formatDate } from "@/utils/helpers";
 import { StoreLoanForm, storeLoanValidationSchema } from "@/validation/loan";
@@ -17,6 +18,7 @@ import "flatpickr/dist/flatpickr.min.css";
 import { useState } from "react";
 import DatePicker from "react-flatpickr";
 import { useForm } from "react-hook-form";
+import AsyncSelect from "react-select/async";
 
 interface StoreLoanModalProps {
   visible: boolean;
@@ -129,12 +131,27 @@ const StoreLoanModal = ({ visible, onClose }: StoreLoanModalProps) => {
     onClose();
   };
 
+  const loadCustomers = async (inputValue: string) => {
+    try {
+      const {
+        data: { data: response },
+      } = await CustomerService.instance().customersSearch(inputValue);
+
+      return response.map((customer) => ({
+        value: customer.id,
+        label: customer.name,
+      }));
+    } catch (error) {
+      return [];
+    }
+  };
+
   return (
     <>
       <Drawer visible={visible} className="w-full lg:!w-[30%] xl:!w-[28%]">
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between py-2 px-5 border-b border-gray-100">
-            <h3 className="text-lg font-medium">Loan</h3>
+          <div className="flex items-center justify-between h-12 px-5 border-b border-gray-100">
+            <h3 className="text-lg font-medium mb-0">Loan</h3>
 
             <CloseButton onClick={handleClose} />
           </div>
@@ -302,6 +319,21 @@ const StoreLoanModal = ({ visible, onClose }: StoreLoanModalProps) => {
                     />
                     {errors?.duration?.message && (
                       <ErrorMessage message={errors?.duration?.message} />
+                    )}
+                  </div>
+                </div>
+
+                <div className="col-12">
+                  <div className="mb-4">
+                    <label htmlFor="customerId">Assign customer</label>
+                    <AsyncSelect
+                      className="react-form-select"
+                      classNamePrefix="react-select"
+                      cacheOptions
+                      loadOptions={loadCustomers}
+                    />
+                    {errors?.customerId?.message && (
+                      <ErrorMessage message={errors?.customerId?.message} />
                     )}
                   </div>
                 </div>

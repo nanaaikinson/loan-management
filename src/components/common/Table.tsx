@@ -39,9 +39,14 @@ const Table = <T,>({
 
   return (
     <>
-      <div className={classNames("p-2", tableContainerClassName)}>
-        <table className={classNames("", tableClassName)}>
-          <thead className={classNames("", tableHeadClassName)}>
+      <div className={classNames("py-2", tableContainerClassName)}>
+        <table
+          className={classNames(
+            "min-w-full divide-y divide-gray-200",
+            tableClassName
+          )}
+        >
+          <thead className={classNames("bg-gray-50/50", tableHeadClassName)}>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
@@ -49,8 +54,12 @@ const Table = <T,>({
               >
                 {headerGroup.headers.map((header) => (
                   <th
+                    scope="col"
                     key={header.id}
-                    className={classNames("", tableHeaderClassName)}
+                    className={classNames(
+                      "px-3 py-3.5 text-left text-sm font-semibold text-gray-900",
+                      tableHeaderClassName
+                    )}
                   >
                     {header.isPlaceholder
                       ? null
@@ -64,7 +73,12 @@ const Table = <T,>({
             ))}
           </thead>
 
-          <tbody className={classNames("", tableBodyClassName)}>
+          <tbody
+            className={classNames(
+              "divide-y divide-gray-200 bg-white",
+              tableBodyClassName
+            )}
+          >
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
@@ -73,7 +87,10 @@ const Table = <T,>({
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className={classNames("", tableCellClassName)}
+                    className={classNames(
+                      "whitespace-nowrap px-3 py-4 text-sm text-gray-500",
+                      tableCellClassName
+                    )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

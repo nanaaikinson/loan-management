@@ -27,9 +27,11 @@ const Header = () => {
 
   return (
     <>
-      <nav className="fixed top-0 z-[80] w-full left-0 h-14 border-b border-gray-100 bg-white">
+      <nav className="fixed top-0 z-[80] w-full left-0 h-12 border-b border-gray-100 bg-dark">
         <div className="container flex h-full items-center justify-between">
-          <a href="#">Logo</a>
+          <a href="#" className="text-white">
+            Logo
+          </a>
 
           <ul className="flex items-center space-x-5">
             <li>

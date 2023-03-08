@@ -1,9 +1,26 @@
+import Badge from "@/components/common/Badge";
+import Button from "@/components/common/Button";
 import Table from "@/components/common/Table";
 import StoreLoanModal from "@/components/modals/StoreLoanModal";
-import { Loan } from "@/openapi/generated";
+import { Loan, LoanStatusEnum } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
+import { formatDate } from "@/utils/helpers";
+import { Icon } from "@iconify/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
+
+const LoanStatus = (status: string) => {
+  switch (status) {
+    case "pending":
+      return <Badge variant="warning" text={"pending"} />;
+    case "approved":
+      return <Badge variant="success" text={"approved"} />;
+    case "rejected":
+      return <Badge variant="danger" text={"rejected"} />;
+    default:
+      return null;
+  }
+};
 
 const Loans = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -14,7 +31,7 @@ const Loans = () => {
     () => [
       {
         header: "Number",
-        cell: (row) => row.renderValue(),
+        cell: (val) => val.renderValue(),
         accessorKey: "number",
       },
       {
@@ -26,18 +43,63 @@ const Loans = () => {
       },
       {
         header: "Type",
-        cell: (row) => row.renderValue(),
+        cell: (val) => (
+          <span className="capitalize">{val.row.original.type}</span>
+        ),
         accessorKey: "type",
       },
       {
         header: "Interest Rate",
-        cell: (row) => row.renderValue(),
+        cell: (val) => (
+          <span className="text-right">{`${val.renderValue()}`}</span>
+        ),
         accessorKey: "interestRate",
       },
       {
         header: "Status",
-        cell: (row) => row.renderValue(),
+        cell: (val) => {
+          switch (val.row.original.status) {
+            case "pending":
+              return <Badge variant="warning" text={"pending"} />;
+            case "approved":
+              return <Badge variant="success" text={"approved"} />;
+            case "rejected":
+              return <Badge variant="danger" text={"rejected"} />;
+            default:
+              return <Badge variant="default" text={val.row.original.status} />;
+          }
+        },
         accessorKey: "status",
+      },
+      {
+        header: "Start Date",
+        cell: (val) => val.row.original.startDate,
+        accessorKey: "startDate",
+      },
+      {
+        header: "End Date",
+        cell: (val) => val.row.original.endDate,
+        accessorKey: "endDate",
+      },
+      {
+        header: "Created At",
+        cell: (val) => formatDate(val.row.original.createdAt),
+        accessorKey: "createdAt",
+      },
+
+      {
+        header: " ",
+        cell: (val) => (
+          <div className="flex space-x-2 items-center">
+            <button
+              className="text-info"
+              onClick={() => viewLoan(val.row.original)}
+            >
+              View
+            </button>
+          </div>
+        ),
+        accessorKey: "",
       },
     ],
     []
@@ -58,13 +120,40 @@ const Loans = () => {
     }
   };
 
+  const viewLoan = async (loan: Loan) => {
+    setLoading(true);
+
+    try {
+      const {
+        data: { data: response },
+      } = await LoanService.instance().getLoan(loan.id);
+      setShowLoanModal(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <>
-      <div>
+      <div className="flex flex-col space-y-8">
+        <div className="flex justify-between items-center">
+          <div>
+            <h4>Loans</h4>
+            <span className="text-gray-500">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
+              dolore!
+            </span>
+          </div>
+
+          <Button onClick={() => setShowLoanModal(true)}>Add loan</Button>
+        </div>
+
         <Table data={loans} columns={tableColumns} />
       </div>
 

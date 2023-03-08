@@ -3,8 +3,19 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: "Metric-Medium";
+    src: local("Metric Medium"), local("Metric-Medium"),
+      url("../fonts/metric/Metric-Medium.woff2") format("woff2"),
+      url("../fonts/metric/Metric-Medium.woff") format("woff"),
+      url("../fonts/metric/Metric-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
   body {
     font-size: 16px;
+    font-family: "Metric", sans-serif;
     /* @apply bg-white text-dark; */
   }
 
@@ -14,7 +25,7 @@
   h4,
   h5,
   h6 {
-    /*font-family: "Kumbh Sans", sans-serif;*/
+    font-family: "Metric-Medium", sans-serif;
     margin-bottom: 0.5rem;
     line-height: 1.25;
   }
@@ -78,13 +89,13 @@
   }
 
   .nav-item {
-    @apply flex items-center space-x-2 rounded-sm px-4 py-2 transition duration-300;
+    @apply flex items-center space-x-2 rounded-sm px-4 py-2 text-gray-300 transition duration-300;
   }
   .nav-item.active {
     @apply bg-[#9af27a] text-[#283b33];
   }
   .nav-item:not(.active):hover {
-    @apply text-success-dark;
+    @apply text-white;
   }
   .nav-item .icon {
     @apply h-5 w-5;
@@ -119,5 +130,7 @@
 
   .react-form-select {
     @apply app-shadow mt-1;
+  }
+  .react-form-select .react-select__control {
   }
 }

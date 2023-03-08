@@ -25,6 +25,11 @@ const colors = {
     DEFAULT: "#E73F3F",
     dark: "#A11A1A",
   },
+  warning: {
+    light: "#ffbd3f",
+    DEFAULT: "#ffad0f",
+    dark: "#e69c0e",
+  },
   army: {
     light: "#485642",
     DEFAULT: "#34432d",

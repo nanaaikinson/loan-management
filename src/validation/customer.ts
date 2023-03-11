@@ -4,7 +4,7 @@ import {
   StoreCustomerRequestMaritalStatusEnum,
 } from "@/openapi/generated";
 import type { InferType } from "yup";
-import { mixed, number, object, string } from "yup";
+import { mixed, number, object, string, lazy } from "yup";
 
 export const personalInfoValidationSchema = object({
   firstName: string().required().label("First name"),
@@ -31,17 +31,17 @@ export type PersonalInfoForm = InferType<typeof personalInfoValidationSchema>;
 
 export const identificationValidationSchema = object({
   idNumber: string().label("ID number").optional(),
-  idType: mixed<StoreCustomerRequestIdTypeEnum>()
-    .oneOf(Object.values(StoreCustomerRequestIdTypeEnum))
-    .label("ID type")
-    .optional(),
+  idType: string()
+    .optional()
+    .oneOf([...Object.values(StoreCustomerRequestIdTypeEnum), ""])
+    .label("ID type"),
   idIssueDate: string().optional().label("ID issue date"),
   idExpiryDate: string().optional().label("ID expiry date"),
   idIssuingAuthority: string().label("ID issuing authority"),
   idIssuingCountry: string().optional().label("ID issuing country"),
-  idFrontUrl: mixed().label("Front of ID").optional(),
+  idFrontUrl: string().label("Front of ID").optional(),
   idFrontKey: number().label("ID front key").optional(),
-  idBackUrl: string().label("Back of ID url").optional(),
+  idBackUrl: string().label("Back of ID").optional(),
   idBackKey: number().label("Back of ID key").optional(),
 });
 

@@ -1,5 +1,6 @@
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import { StoreCustomerContext } from "@/context/customer.context";
 import {
   StoreCustomerRequestGenderEnum,
   StoreCustomerRequestMaritalStatusEnum,
@@ -11,9 +12,13 @@ import {
 } from "@/validation/customer";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import DatePicker from "react-flatpickr";
 import { useForm } from "react-hook-form";
+
+interface PersonalInformationProps {
+  updateStep: () => void;
+}
 
 const genderOptions = Object.values(StoreCustomerRequestGenderEnum);
 const maritalStatusOptions = Object.values(
@@ -23,8 +28,9 @@ const maritalStatusOptions = Object.values(
 const maxDateOfBirth = new Date();
 maxDateOfBirth.setFullYear(maxDateOfBirth.getFullYear() - 18);
 
-const PersonalInformation = () => {
+const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
+  const storeCustomerContext = useContext(StoreCustomerContext);
   const {
     register,
     handleSubmit,
@@ -34,8 +40,12 @@ const PersonalInformation = () => {
     resolver: yupResolver(personalInfoValidationSchema),
   });
 
-  const onSubmit = async () => {
-    //
+  const onSubmit = async (data: PersonalInfoForm) => {
+    if (storeCustomerContext) {
+      storeCustomerContext.updatePersonalInfo(data);
+
+      updateStep();
+    }
   };
 
   return (

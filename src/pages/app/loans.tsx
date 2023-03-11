@@ -147,7 +147,7 @@ const Loans = () => {
       <div className="flex flex-col space-y-8">
         <div className="flex justify-between items-center">
           <div>
-            <h4>Loans</h4>
+            <h3>Loans</h3>
             <span className="text-gray-500">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
               dolore!

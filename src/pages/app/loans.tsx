@@ -4,7 +4,7 @@ import Table from "@/components/common/Table";
 import StoreLoanModal from "@/components/modals/StoreLoanModal";
 import { Loan, LoanStatusEnum } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
-import { formatDate } from "@/utils/helpers";
+import { formatDate, formatMoney } from "@/utils/helpers";
 import { Icon } from "@iconify/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
@@ -37,7 +37,9 @@ const Loans = () => {
       {
         header: "Amount",
         cell: (val) => (
-          <span className="text-right">{`${val.row.original.currency} ${val.row.original.amount}`}</span>
+          <span className="text-right">{`${
+            val.row.original.currency
+          } ${formatMoney(val.row.original.amount)}`}</span>
         ),
         accessorKey: "amount",
       },
@@ -51,7 +53,9 @@ const Loans = () => {
       {
         header: "Interest Rate",
         cell: (val) => (
-          <span className="text-right">{`${val.renderValue()}`}</span>
+          <span className="text-right">{`${val.renderValue()} (${
+            val.row.original.interestRateType === "amount" ? "cash" : "%"
+          })`}</span>
         ),
         accessorKey: "interestRate",
       },
@@ -86,7 +90,6 @@ const Loans = () => {
         cell: (val) => formatDate(val.row.original.createdAt),
         accessorKey: "createdAt",
       },
-
       {
         header: " ",
         cell: (val) => (
@@ -160,6 +163,7 @@ const Loans = () => {
       <StoreLoanModal
         visible={showLoanModal}
         onClose={() => setShowLoanModal(false)}
+        onUpdated={() => fetchData()}
       />
     </>
   );

@@ -18,3 +18,29 @@ export const generateInitials = (name: string) => {
 
   return `${firstLetter}${lastLetter}`.toUpperCase();
 };
+
+export const formatMoney = (
+  amount: number,
+  decimalCount = 2,
+  decimalSeparator = ".",
+  thousandsSeparator = ","
+): string => {
+  const negativeSign = amount < 0 ? "-" : "";
+  const absAmount = Math.abs(amount);
+  const intAmount = parseInt(absAmount.toFixed(decimalCount), 10).toString();
+  const hasThousandsSeparator = intAmount.length > 3;
+  const startIndex = hasThousandsSeparator ? intAmount.length % 3 : 0;
+  const intAmountWithSeparator = startIndex
+    ? intAmount.slice(0, startIndex) + thousandsSeparator
+    : "";
+  const decimalAmount = absAmount.toFixed(decimalCount).slice(-decimalCount);
+  return (
+    negativeSign +
+    intAmountWithSeparator +
+    intAmount
+      .slice(startIndex)
+      .replace(/(\d{3})(?=\d)/g, `$1${thousandsSeparator}`) +
+    decimalSeparator +
+    decimalAmount
+  );
+};

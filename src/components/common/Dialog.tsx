@@ -1,6 +1,6 @@
 import { Dialog as HeadlessDialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
 import classnames from "classnames";
+import { Fragment } from "react";
 
 interface DialogProps {
   visible: boolean;
@@ -43,9 +43,12 @@ export default function Dialog({
   const panelClassNames = classnames(
     "w-full transform overflow-hidden rounded-[10px] bg-white text-left align-middle shadow-xl transition-all",
     panelClassName,
-    sizeClassName(),
+    sizeClassName()
   );
-  const dialogClassNames = classnames("relative z-20 dialog-class", dialogClassName);
+  const dialogClassNames = classnames(
+    "relative z-[100] dialog-class",
+    dialogClassName
+  );
 
   const closeDialog = () => {
     if (closeOnBackgroundClick) {
@@ -56,7 +59,11 @@ export default function Dialog({
   return (
     <>
       <Transition appear show={visible} as={Fragment}>
-        <HeadlessDialog as="div" className={dialogClassNames} onClose={closeDialog}>
+        <HeadlessDialog
+          as="div"
+          className={dialogClassNames}
+          onClose={closeDialog}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -66,7 +73,7 @@ export default function Dialog({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-50" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -80,7 +87,9 @@ export default function Dialog({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <HeadlessDialog.Panel className={panelClassNames}>{children}</HeadlessDialog.Panel>
+                <HeadlessDialog.Panel className={panelClassNames}>
+                  {children}
+                </HeadlessDialog.Panel>
               </Transition.Child>
             </div>
           </div>

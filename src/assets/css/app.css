@@ -14,8 +14,8 @@
   }
 
   body {
-    font-size: 16px;
-    font-family: "Metric", sans-serif;
+    font-size: 15px;
+    /* font-family: "Inter", sans-serif; */
     /* @apply bg-white text-dark; */
   }
 

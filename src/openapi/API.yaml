@@ -110,7 +110,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateCustomerRequest"
+              $ref: "#/components/schemas/StoreCustomerRequest"
     get:
       summary: ""
       operationId: get-customers
@@ -670,6 +670,7 @@ components:
           startDate: "2023-03-01"
           endDate: "2023-06-01"
           interestRate: 40
+          interestRateType: amount
           duration: 3
           currency: GHS
           repaymentAmount: 527.27
@@ -738,6 +739,11 @@ components:
           type: string
         interestRate:
           type: integer
+        interestRateType:
+          type: string
+          enum:
+            - amount
+            - percentage
         duration:
           type: integer
         currency:
@@ -758,11 +764,12 @@ components:
         - startDate
         - endDate
         - interestRate
+        - interestRateType
         - duration
         - currency
         - repaymentAmount
         - createdAt
-    CreateCustomerRequest:
+    StoreCustomerRequest:
       type: object
       x-examples:
         Example 1:
@@ -788,6 +795,9 @@ components:
           maritalStatus: ""
           sourceOfIncome: ""
           gender: ""
+      title: StoreCustomerRequest
+      x-stoplight:
+        id: 0b680ac3167ff
       properties:
         firstName:
           type: string
@@ -850,9 +860,8 @@ components:
         - firstName
         - lastName
         - phoneNumber
-      title: CreateCustomerRequest
-      x-stoplight:
-        id: d5e09e80ef73a
+        - maritalStatus
+        - gender
     LoanRequest:
       type: object
       x-examples:

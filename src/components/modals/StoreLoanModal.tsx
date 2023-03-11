@@ -1,5 +1,6 @@
 import Button from "../common/Button";
 import CloseButton from "../common/CloseButton";
+import Dialog from "../common/Dialog";
 import Drawer from "../common/Drawer";
 import ErrorMessage from "../common/ErrorMessage";
 import {
@@ -18,14 +19,20 @@ import "flatpickr/dist/flatpickr.min.css";
 import { useState } from "react";
 import DatePicker from "react-flatpickr";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import AsyncSelect from "react-select/async";
 
 interface StoreLoanModalProps {
   visible: boolean;
   onClose: () => void;
+  onUpdated: () => void;
 }
 
-const StoreLoanModal = ({ visible, onClose }: StoreLoanModalProps) => {
+const StoreLoanModal = ({
+  visible,
+  onClose,
+  onUpdated,
+}: StoreLoanModalProps) => {
   const [interestLabel, setInterestLabel] = useState<string>("in cash");
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<string>("");
@@ -59,13 +66,14 @@ const StoreLoanModal = ({ visible, onClose }: StoreLoanModalProps) => {
     setLoading(true);
 
     try {
-      const {
-        data: { data: response },
-      } = await LoanService.instance().createLoan(data);
+      const { data: response } = await LoanService.instance().createLoan(data);
       console.log(response);
 
       // Show toast notification
-      // Close modal
+      toast.success(response.message, { position: "top-center" });
+
+      onUpdated();
+      handleClose();
     } catch (error) {
       if (isAxiosError(error) && error?.response) {
         const { status, data } = error.response;
@@ -148,7 +156,8 @@ const StoreLoanModal = ({ visible, onClose }: StoreLoanModalProps) => {
 
   return (
     <>
-      <Drawer visible={visible} className="w-full lg:!w-[30%] xl:!w-[28%]">
+      {/* <Dialog visible={visible} className="w-full lg:!w-[30%] xl:!w-[28%]"> */}
+      <Dialog visible={visible} size="xs">
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-12 px-5 border-b border-gray-100">
             <h3 className="text-lg font-medium mb-0">Loan</h3>
@@ -351,7 +360,7 @@ const StoreLoanModal = ({ visible, onClose }: StoreLoanModalProps) => {
             </form>
           </div>
         </div>
-      </Drawer>
+      </Dialog>
     </>
   );
 };

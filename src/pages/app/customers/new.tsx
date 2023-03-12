@@ -4,6 +4,7 @@ import {
   IStoreCustomerContext,
   StoreCustomerContext,
 } from "@/context/customer.context";
+import { StoreCustomerRequestIdTypeEnum } from "@/openapi/generated";
 import {
   IdentificationInfoForm,
   PersonalInfoForm,
@@ -18,24 +19,47 @@ const steps: Array<Steps> = [
 ];
 
 const StoreCustomer = () => {
-  const [stepNumber, setStepNumber] = useState<number>(1);
+  const [stepNumber, setStepNumber] = useState<number>(0);
   const [stepPercentage, setStepPercentage] = useState<number>(0);
   const [customer, setCustomer] = useState<
     IStoreCustomerContext["customer"] | null
   >(null);
+
+  // Methods
   const updateStep = () => {
     if (stepNumber < steps.length - 1) {
       setStepNumber(stepNumber + 1);
-      setStepPercentage((stepNumber + 1) * (100 / steps.length));
+      setStepPercentage(100);
     }
   };
-  const updateIdentificationInfo = (data: IdentificationInfoForm) => {
-    console.log(data);
+  const previousStep = () => {
+    if (stepNumber > 0) {
+      setStepNumber(stepNumber - 1);
+      setStepPercentage(0);
+    }
   };
   const updatePersonalInfo = (data: PersonalInfoForm) => {
-    console.log(data);
+    setCustomer({ ...customer, ...data });
+  };
+  const updateIdentificationInfo = (data: IdentificationInfoForm) => {
+    if (customer && customer?.firstName) {
+      setCustomer({
+        ...customer,
+        idNumber: data.idNumber,
+        idType: data.idType as StoreCustomerRequestIdTypeEnum,
+        idExpiryDate: data.idExpiryDate,
+        idIssueDate: data.idIssueDate,
+        idIssuingAuthority: data.idIssuingAuthority,
+        idIssuingCountry: data.idIssuingCountry,
+        idBackKey: data.idBackKey,
+        idBackUrl: data.idBackUrl,
+        idFrontKey: data.idFrontKey,
+        idFrontUrl: data.idFrontUrl,
+      });
+    }
   };
 
+  // Markup
   return (
     <>
       <div className="container flex flex-col pb-10">
@@ -58,14 +82,14 @@ const StoreCustomer = () => {
             value={{
               customer,
               updateIdentificationInfo: updateIdentificationInfo,
-              updatePersonalInfo: setCustomer,
+              updatePersonalInfo: updatePersonalInfo,
             }}
           >
             {stepNumber === 0 && (
               <PersonalInformation updateStep={updateStep} />
             )}
             {stepNumber === 1 && (
-              <IdentificationInformation updateStep={updateStep} />
+              <IdentificationInformation previousStep={previousStep} />
             )}
           </StoreCustomerContext.Provider>
         </div>

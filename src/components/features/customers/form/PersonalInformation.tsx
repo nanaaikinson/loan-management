@@ -12,7 +12,7 @@ import {
 } from "@/validation/customer";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Icon } from "@iconify/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-flatpickr";
 import { useForm } from "react-hook-form";
 
@@ -47,6 +47,22 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
       updateStep();
     }
   };
+
+  useEffect(() => {
+    if (storeCustomerContext?.customer) {
+      setValue("firstName", storeCustomerContext.customer.firstName);
+      setValue("lastName", storeCustomerContext.customer.lastName);
+      setValue("gender", storeCustomerContext.customer.gender);
+      setValue("maritalStatus", storeCustomerContext.customer.maritalStatus);
+      setValue("dateOfBirth", storeCustomerContext.customer.dateOfBirth);
+      setValue("email", storeCustomerContext.customer.email);
+      setValue("phoneNumber", storeCustomerContext.customer.phoneNumber);
+      setValue("gpAddress", storeCustomerContext.customer.gpAddress);
+      setValue("postalAddress", storeCustomerContext.customer.postalAddress);
+      setValue("occupation", storeCustomerContext.customer.occupation);
+      setValue("secondaryPhone", storeCustomerContext.customer.secondaryPhone);
+    }
+  }, []);
 
   return (
     <>

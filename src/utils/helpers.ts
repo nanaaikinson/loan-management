@@ -44,3 +44,14 @@ export const formatMoney = (
     decimalAmount
   );
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isEmpty = (value: any) => {
+  return (
+    value === undefined ||
+    value === null ||
+    value === "" ||
+    (typeof value === "object" && Object.keys(value).length === 0) ||
+    (Array.isArray(value) && value.length === 0)
+  );
+};

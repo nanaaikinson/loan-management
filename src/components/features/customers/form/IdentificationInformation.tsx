@@ -1,8 +1,18 @@
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { StoreCustomerContext } from "@/context/customer.context";
-import { StoreCustomerRequestIdTypeEnum } from "@/openapi/generated";
-import { formatDate } from "@/utils/helpers";
+import {
+  IStoreCustomerContext,
+  StoreCustomerContext,
+} from "@/context/customer.context";
+import {
+  StoreCustomerRequest,
+  StoreCustomerRequestGenderEnum,
+  StoreCustomerRequestIdTypeEnum,
+  StoreCustomerRequestMaritalStatusEnum,
+} from "@/openapi/generated";
+import { CustomerService } from "@/services/customer.service";
+import { FileService } from "@/services/file.service";
+import { formatDate, isEmpty } from "@/utils/helpers";
 import {
   IdentificationInfoForm,
   identificationValidationSchema,
@@ -10,19 +20,22 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Icon } from "@iconify/react";
 import classNames from "classnames";
-import { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DatePicker from "react-flatpickr";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface IdentificationInformationProps {
-  updateStep: () => void;
+  previousStep: () => void;
 }
 
 const idTypeOptions = Object.values(StoreCustomerRequestIdTypeEnum);
 
 const IdentificationInformation = ({
-  updateStep,
+  previousStep,
 }: IdentificationInformationProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [idIssueDate, setIdIssueDate] = useState<string>("");
   const [idExpiryDate, setIdExpiryDate] = useState<string>("");
   const [idNumber, setIdNumber] = useState<string>("");
@@ -31,25 +44,149 @@ const IdentificationInformation = ({
   const [idBackImage, setIdBackImage] = useState<string>("");
   const [idBackImageFile, setIdBackImageFile] = useState<File>();
   const storeCustomerContext = useContext(StoreCustomerContext);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     setValue,
     setError,
+    getValues,
+    clearErrors,
     formState: { errors },
   } = useForm<IdentificationInfoForm>({
     resolver: yupResolver(identificationValidationSchema),
   });
 
   const onSubmit = async (data: IdentificationInfoForm) => {
-    if (storeCustomerContext) {
-      storeCustomerContext.updateIdentificationInfo({
-        ...storeCustomerContext?.customer,
-        ...data,
-      });
+    try {
+      if (storeCustomerContext) {
+        const formData = getValues();
+
+        if (!isEmpty(idNumber)) {
+          // Set error for idType, idIssueDate, idExpiryDate if idNumber is not empty
+          if (isEmpty(data.idType)) {
+            setError("idType", {
+              type: "manual",
+              message: "ID type is required",
+            });
+          }
+          if (isEmpty(idIssueDate)) {
+            setError("idIssueDate", {
+              type: "manual",
+              message: "ID issue date is required",
+            });
+          }
+          if (isEmpty(idExpiryDate)) {
+            setError("idExpiryDate", {
+              type: "manual",
+              message: "ID expiry date is required",
+            });
+          }
+          if (isEmpty(formData?.idIssuingAuthority)) {
+            setError("idIssuingAuthority", {
+              type: "manual",
+              message: "ID issuing authority is required",
+            });
+          }
+          if (isEmpty(formData?.idIssuingCountry)) {
+            setError("idIssuingCountry", {
+              type: "manual",
+              message: "ID issuing country is required",
+            });
+          }
+          if (isEmpty(idFrontImage)) {
+            setError("idFrontUrl", {
+              type: "manual",
+              message: "ID front image is required",
+            });
+          }
+          if (isEmpty(idBackImage)) {
+            setError("idBackUrl", {
+              type: "manual",
+              message: "ID back image is required",
+            });
+          }
+        }
+
+        setLoading(true);
+
+        // Uploaded files
+        if (idFrontImageFile) {
+          const {
+            data: { data: response },
+          } = await FileService.instance().fileUpload(
+            idFrontImageFile,
+            "IDENTIFICATION_FRONT"
+          );
+          data.idFrontUrl = response.url;
+          data.idFrontKey = response.key;
+        }
+        if (idBackImageFile) {
+          const {
+            data: { data: response },
+          } = await FileService.instance().fileUpload(
+            idBackImageFile,
+            "IDENTIFICATION_BACK"
+          );
+          data.idBackUrl = response.url;
+          data.idBackKey = response.key;
+        }
+
+        storeCustomerContext.updateIdentificationInfo({
+          ...storeCustomerContext?.customer,
+          ...data,
+        });
+
+        // Submit form
+        if (storeCustomerContext?.customer) {
+          const {
+            data: { message },
+          } = await CustomerService.instance().createCustomer(
+            requestData(storeCustomerContext?.customer, data)
+          );
+
+          toast.success(message);
+          navigate("/customers");
+        }
+      }
+    } catch (error) {
+      setLoading(false);
+
+      console.log(error);
     }
   };
+  const requestData = (
+    customer: IStoreCustomerContext["customer"],
+    formData: IdentificationInfoForm
+  ) => {
+    const data: StoreCustomerRequest = {
+      dateOfBirth: customer?.dateOfBirth,
+      email: customer?.email,
+      firstName: customer?.firstName as string,
+      gender: customer?.gender as StoreCustomerRequestGenderEnum,
+      gpAddress: customer?.gpAddress,
+      idBackKey: formData?.idBackKey as string | undefined,
+      idBackUrl: formData?.idBackUrl,
+      idExpiryDate: formData?.idExpiryDate,
+      idFrontKey: formData?.idFrontKey as string | undefined,
+      idFrontUrl: formData?.idFrontUrl,
+      idIssueDate: formData?.idIssueDate,
+      idIssuingAuthority: formData?.idIssuingAuthority,
+      idIssuingCountry: formData?.idIssuingCountry,
+      idNumber: formData?.idNumber,
+      idType: formData?.idType as StoreCustomerRequestIdTypeEnum,
+      lastName: customer?.lastName as string,
+      maritalStatus:
+        customer?.maritalStatus as StoreCustomerRequestMaritalStatusEnum,
+      occupation: customer?.occupation,
+      phoneNumber: customer?.phoneNumber as string,
+      postalAddress: customer?.postalAddress,
+      secondaryPhone: customer?.secondaryPhone,
+      sourceOfIncome: customer?.sourceOfIncome,
+    };
 
+    return data;
+  };
   const onChangeImageFile = (
     type: "idFrontImage" | "idBackImage",
     e: React.ChangeEvent<HTMLInputElement>
@@ -69,7 +206,6 @@ const IdentificationInformation = ({
       }
     }
   };
-
   const removeImage = (type: "idFrontImage" | "idBackImage") => {
     if (type === "idFrontImage") {
       setIdFrontImage("");
@@ -80,6 +216,29 @@ const IdentificationInformation = ({
       setIdBackImageFile(undefined);
     }
   };
+
+  useEffect(() => {
+    if (storeCustomerContext?.customer) {
+      const customer = storeCustomerContext?.customer;
+      setValue("idNumber", customer?.idNumber ?? "");
+      setValue("idType", customer?.idType ?? "");
+      setValue("idIssueDate", customer?.idIssueDate ?? "");
+      setValue("idExpiryDate", customer?.idExpiryDate ?? "");
+      setValue("idIssuingAuthority", customer?.idIssuingAuthority ?? "");
+      setValue("idIssuingCountry", customer?.idIssuingCountry ?? "");
+      setValue("idFrontUrl", customer?.idFrontUrl ?? "");
+      setValue("idBackUrl", customer?.idBackUrl ?? "");
+      setValue("idFrontKey", customer?.idFrontKey);
+      setValue("idBackKey", customer?.idBackKey);
+      setIdFrontImage(customer?.idFrontUrl ?? "");
+      setIdBackImage(customer?.idBackUrl ?? "");
+      setIdNumber(customer?.idNumber ?? "");
+      setIdIssueDate(customer?.idIssueDate ?? "");
+      setIdExpiryDate(customer?.idExpiryDate ?? "");
+      setIdFrontImage(customer?.idFrontUrl ?? "");
+      setIdBackImage(customer?.idBackUrl ?? "");
+    }
+  }, []);
 
   return (
     <>
@@ -94,7 +253,10 @@ const IdentificationInformation = ({
                 name="idNumber"
                 id="idNumber"
                 className="form-input"
-                onInput={(e) => setIdNumber(e.currentTarget.value)}
+                onInput={(e) => {
+                  setIdNumber(e.currentTarget.value);
+                  if (e.currentTarget.value.length === 0) clearErrors();
+                }}
               />
               {errors?.idNumber?.message && (
                 <ErrorMessage message={errors?.idNumber?.message} />
@@ -259,16 +421,21 @@ const IdentificationInformation = ({
         <div className="row">
           <div className="col-12 lg:col-6">
             <div className="mb-4">
-              <label className="block mb-1">
-                ID Front Image{" "}
-                <span
-                  className={classNames(
-                    idNumber.length ? "text-danger" : "hidden"
-                  )}
-                >
-                  *
-                </span>
-              </label>
+              <div className=" mb-1">
+                <label className="block">
+                  ID Front Image{" "}
+                  <span
+                    className={classNames(
+                      idNumber.length ? "text-danger" : "hidden"
+                    )}
+                  >
+                    *
+                  </span>
+                </label>
+                {errors?.idFrontUrl?.message && (
+                  <ErrorMessage message={errors?.idFrontUrl?.message} />
+                )}
+              </div>
               {idFrontImage.length ? (
                 <div className="relative border border-gray-200 rounded h-[200px] overflow-hidden">
                   <img
@@ -307,16 +474,22 @@ const IdentificationInformation = ({
 
           <div className="col-12 lg:col-6">
             <div className="mb-4">
-              <label className="block mb-1">
-                ID Back Image{" "}
-                <span
-                  className={classNames(
-                    idNumber.length ? "text-danger" : "hidden"
-                  )}
-                >
-                  *
-                </span>
-              </label>
+              <div className="mb-1">
+                <label className="block">
+                  ID Back Image{" "}
+                  <span
+                    className={classNames(
+                      idNumber.length ? "text-danger" : "hidden"
+                    )}
+                  >
+                    *
+                  </span>
+                </label>
+                {errors?.idFrontUrl?.message && (
+                  <ErrorMessage message={errors?.idFrontUrl?.message} />
+                )}
+              </div>
+
               {idBackImage.length ? (
                 <div className="relative border border-gray-200 rounded h-[200px] overflow-hidden">
                   <img
@@ -355,10 +528,16 @@ const IdentificationInformation = ({
         </div>
 
         <div className="mt-10 flex space-x-3 justify-end">
-          <Button type="button" variant="secondary">
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={loading}
+            onClick={() => previousStep()}
+          >
             Previous
           </Button>
-          <Button type="submit" className="px-10">
+
+          <Button type="submit" className="px-10" disabled={loading}>
             Submit
           </Button>
         </div>

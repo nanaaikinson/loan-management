@@ -1,14 +1,13 @@
-import Avatar from "@/components/common/Avatar";
 import Button from "@/components/common/Button";
-import Card from "@/components/common/Card";
-import { Customer } from "@/openapi/generated";
+import Customer from "@/components/features/customers/Customer";
+import { Customer as ICustomer } from "@/openapi/generated";
 import { CustomerService } from "@/services/customer.service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Customers = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [customers, setCustomers] = useState<Array<Customer>>([]);
+  const [customers, setCustomers] = useState<Array<ICustomer>>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,19 +50,7 @@ const Customers = () => {
           {customers.map((customer) => (
             <>
               <div className="col-12 sm:col-6 lg:col-4 xl:col-3">
-                <Card className="p-4 !rounded-[10px] border border-gray-100">
-                  <div className="flex flex-col space-y-5">
-                    <div className="flex items-center space-x-3 border-b border-gray-100 pb-3">
-                      <Avatar src="NA" initials className="h-12 w-12" />
-                      <div>
-                        <h6 className="font-semibold mb-0">{`${customer.firstName} ${customer.lastName}`}</h6>
-                        <span className="text-xs text-gray-500">
-                          {customer.occupation}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <Customer customer={customer} />
               </div>
             </>
           ))}

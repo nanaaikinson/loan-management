@@ -16,6 +16,7 @@
   body {
     font-size: 15px;
     font-family: "Noto Sans", sans-serif;
+    @apply bg-[#f6fafd];
     /* @apply bg-white text-dark; */
   }
 
@@ -90,13 +91,13 @@
   }
 
   .nav-item {
-    @apply flex items-center space-x-2 rounded-sm px-4 py-2 text-sm text-gray-300 transition duration-300;
+    @apply flex items-center space-x-2 rounded-sm px-4 py-2 text-sm text-gray-500 transition duration-300;
   }
   .nav-item.active {
-    @apply bg-[#9af27a] text-[#283b33];
+    @apply bg-primary text-white;
   }
   .nav-item:not(.active):hover {
-    @apply text-white;
+    @apply text-primary;
   }
   .nav-item .icon {
     @apply h-5 w-5;

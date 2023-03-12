@@ -1,8 +1,8 @@
 const colors = {
   primary: {
-    light: "#1d1f1c",
-    DEFAULT: "#040605",
-    dark: "#030504",
+    light: "#597af4",
+    DEFAULT: "#466bf3",
+    dark: "#3856c2",
   },
   info: {
     light: "#368df7",
@@ -10,35 +10,25 @@ const colors = {
     dark: "#1650CF",
   },
   dark: {
-    light: "#1d1f1c",
-    DEFAULT: "#040605",
-    dark: "#030504",
+    light: "#1f2a4b",
+    DEFAULT: "#061237",
+    dark: "#050e2c",
   },
   success: {
-    light: "#51d436",
+    light: "#5da95b",
     // DEFAULT: "#9af27a",
-    DEFAULT: "#49bf31",
-    dark: "#317f20",
+    DEFAULT: "#349432",
+    dark: "#2a7628",
   },
   danger: {
-    light: "#e95252",
-    DEFAULT: "#E73F3F",
-    dark: "#A11A1A",
+    light: "#f2574c",
+    DEFAULT: "#f04438",
+    dark: "#d83d32",
   },
   warning: {
-    light: "#ffbd3f",
-    DEFAULT: "#ffad0f",
-    dark: "#e69c0e",
-  },
-  army: {
-    light: "#485642",
-    DEFAULT: "#34432d",
-    dark: "#242f1f",
-  },
-  "microlend-gray": {
-    light: "#c9cfc9",
-    DEFAULT: "#bbc3bc",
-    dark: "#838984",
+    light: "#fc851a",
+    DEFAULT: "#fc7700",
+    dark: "#e36b00",
   },
 };
 

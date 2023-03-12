@@ -12,11 +12,11 @@ const Avatar = ({ src, alt, className, initials = false }: AvatarProps) => {
     return (
       <div
         className={classNames(
-          "relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-success bg-opacity-[20%] rounded-full",
+          "relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-primary bg-opacity-10 rounded-full",
           className
         )}
       >
-        <span className="font-medium text-success ">{src}</span>
+        <span className="font-medium text-primary ">{src}</span>
       </div>
     );
   }

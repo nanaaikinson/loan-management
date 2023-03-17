@@ -32,18 +32,16 @@ http.interceptors.response.use(
   },
   function (error) {
     if (error.response.status === 401) {
+      toast("Your session has expired. Please login again.", {
+        icon: "👋",
+      });
+
       SecureStorage.instance().removeItem(mlAtName);
       SecureStorage.instance().removeItem(mlAtExpiresAtName);
 
       useAuthStore.getState().logout();
 
       router.navigate("/");
-
-      toast("Your session has expired. Please login again.", {
-        icon: "👋",
-      });
-
-      // window.location.href = "/";
     }
 
     return Promise.reject(error);

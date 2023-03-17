@@ -17,15 +17,16 @@ export const storeLoanValidationSchema = object({
     .oneOf(Object.values(LoanRequestRepaymentFrequencyEnum))
 
     .label("Repayment frequency"),
-  startDate: string().required().label("Start date"),
+  startDate: string().trim().required().label("Start date"),
   interestRateType: string()
+    .trim()
     .required()
     .oneOf(Object.values(LoanRequestInterestRateTypeEnum))
     .label("Interest rate type"),
   interestRate: number().required().label("Interest rate"),
 
   duration: number().label("Duration of loan").required(),
-  customerId: string().nullable().optional().label("Customer"),
+  customerId: string().trim().nullable().optional().label("Customer"),
 });
 
 export type StoreLoanForm = InferType<typeof storeLoanValidationSchema>;

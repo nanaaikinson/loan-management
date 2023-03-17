@@ -82,7 +82,7 @@ export interface Customer {
      * @type {string}
      * @memberof Customer
      */
-    'dateOfBirth': string | null;
+    'dateOfBirth': string;
     /**
      * 
      * @type {string}

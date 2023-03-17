@@ -85,9 +85,8 @@ const Loans = () => {
         accessorKey: "endDate",
       },
       {
-        header: "Created At",
-        cell: (val) => formatDate(val.row.original.createdAt),
-        accessorKey: "createdAt",
+        header: "Added On",
+        cell: (val) => formatDate(val.row.original.createdAt, "MMM DD, YYYY"),
       },
       {
         header: " ",

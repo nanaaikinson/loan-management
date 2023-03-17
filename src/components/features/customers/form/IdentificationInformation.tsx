@@ -19,6 +19,7 @@ import {
 } from "@/validation/customer";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Icon } from "@iconify/react";
+import { isAxiosError } from "axios";
 import classNames from "classnames";
 import React, { useContext, useEffect, useState } from "react";
 import DatePicker from "react-flatpickr";
@@ -57,6 +58,7 @@ const IdentificationInformation = ({
     resolver: yupResolver(identificationValidationSchema),
   });
 
+  // Methods
   const onSubmit = async (data: IdentificationInfoForm) => {
     try {
       if (storeCustomerContext) {
@@ -110,6 +112,8 @@ const IdentificationInformation = ({
 
         setLoading(true);
 
+        storeCustomerContext.updateErrors([]);
+
         // Uploaded files
         if (idFrontImageFile) {
           const {
@@ -152,7 +156,25 @@ const IdentificationInformation = ({
     } catch (error) {
       setLoading(false);
 
-      console.log(error);
+      const errors: Array<string> = [];
+
+      if (isAxiosError(error) && error?.response) {
+        const { status, data } = error.response;
+
+        if (status === 422) {
+          for (const [_, value] of Object.entries(data?.errors)) {
+            const val = (value as Array<string>)[0];
+
+            errors.push(val);
+          }
+        } else {
+          errors.push(data?.message);
+        }
+      } else {
+        errors.push((error as Error).message);
+      }
+
+      storeCustomerContext?.updateErrors(errors);
     }
   };
   const requestData = (
@@ -217,6 +239,7 @@ const IdentificationInformation = ({
     }
   };
 
+  // Effects
   useEffect(() => {
     if (storeCustomerContext?.customer) {
       const customer = storeCustomerContext?.customer;
@@ -240,6 +263,7 @@ const IdentificationInformation = ({
     }
   }, []);
 
+  // Tenplate
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>

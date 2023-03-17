@@ -35,8 +35,10 @@ export interface IStoreCustomerContext {
     idBackUrl?: string;
     idBackKey?: number;
   } | null;
+  errors?: Array<string>;
   updatePersonalInfo: (data: PersonalInfoForm) => void;
   updateIdentificationInfo: (data: IdentificationInfoForm) => void;
+  updateErrors: (errors: Array<string>) => void;
 }
 
 export const StoreCustomerContext = createContext<IStoreCustomerContext | null>(

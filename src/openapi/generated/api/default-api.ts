@@ -34,6 +34,43 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary 
+         * @param {string} id Customer Id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        customerTransact: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('customerTransact', 'id', id)
+            const localVarPath = `/customers/{id}/transact`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 
          * @param {string} id 
          * @param {StoreTransactionRequest} [storeTransactionRequest] 
          * @param {*} [options] Override http request option.
@@ -85,6 +122,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary 
+         * @param {string} id Customer Id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async customerTransact(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.customerTransact(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary 
          * @param {string} id 
          * @param {StoreTransactionRequest} [storeTransactionRequest] 
          * @param {*} [options] Override http request option.
@@ -107,6 +155,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary 
+         * @param {string} id Customer Id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        customerTransact(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.customerTransact(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 
          * @param {string} id 
          * @param {StoreTransactionRequest} [storeTransactionRequest] 
          * @param {*} [options] Override http request option.
@@ -125,6 +183,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @summary 
+     * @param {string} id Customer Id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public customerTransact(id: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).customerTransact(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary 

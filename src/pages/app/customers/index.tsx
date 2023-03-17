@@ -1,20 +1,22 @@
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
-import { Customer as ICustomer } from "@/openapi/generated";
-import { CustomerService } from "@/services/customer.service";
+import {
+  Customer as ICustomer,
+  GetCustomers200Response,
+} from "@/openapi/generated";
 import { formatDate } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { useTitle } from "react-use";
 
 const Customers = () => {
   useTitle("Customers | Microlend");
 
   const navigate = useNavigate();
+  const customers = (useLoaderData() as GetCustomers200Response).data;
   const [loading, setLoading] = useState<boolean>(false);
-  const [customers, setCustomers] = useState<Array<ICustomer>>([]);
   const tableColumns = useMemo<Array<ColumnDef<ICustomer>>>(
     () => [
       {
@@ -68,7 +70,7 @@ const Customers = () => {
           <>
             <div className="flex space-x-3">
               <Link
-                to={`/customers/${val.row.original.id}`}
+                to={`/customers/${val.row.original.id}/loans`}
                 className="text-info"
               >
                 View
@@ -82,25 +84,6 @@ const Customers = () => {
   );
 
   // Methods
-  const fetchData = async () => {
-    setLoading(true);
-
-    try {
-      const {
-        data: { data: loans },
-      } = await CustomerService.instance().getCustomers();
-      setCustomers(loans);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Effects
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   // Template
   return (

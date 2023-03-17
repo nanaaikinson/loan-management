@@ -18,8 +18,9 @@ models/auth-user-data.ts
 models/auth-user.ts
 models/create-customer200-response.ts
 models/create-loan200-response.ts
+models/customer-loans200-response.ts
+models/customer-transactions200-response.ts
 models/customer.ts
-models/customers-loans200-response.ts
 models/customers-search200-response-data-inner.ts
 models/customers-search200-response.ts
 models/get-customer200-response.ts

@@ -3,33 +3,25 @@ import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import StoreLoanModal from "@/components/modals/StoreLoanModal";
+import { Loan } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
-import { ILoan } from "@/types";
 import { formatDate, formatMoney } from "@/utils/helpers";
-import { Icon } from "@iconify/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 
 const Loans = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [showLoanModal, setShowLoanModal] = useState<boolean>(false);
-  const [loans, setLoans] = useState<Array<ILoan>>([]);
-  const [loan, setLoan] = useState<ILoan>();
+  const [loans, setLoans] = useState<Array<Loan>>([]);
+  const [loan, setLoan] = useState<Loan>();
 
-  const tableColumns = useMemo<Array<ColumnDef<ILoan>>>(
+  const tableColumns = useMemo<Array<ColumnDef<Loan>>>(
     () => [
-      // {
-      //   header: "Number",
-      //   cell: (val) => val.renderValue(),
-      //   accessorKey: "number",
-      // },
-
       {
         header: "Type",
         cell: (val) => (
           <span className="capitalize">{val.row.original.type}</span>
         ),
-        accessorKey: "type",
       },
       {
         header: "Amount",
@@ -38,7 +30,6 @@ const Loans = () => {
             val.row.original.currency
           } ${formatMoney(val.row.original.amount)}`}</span>
         ),
-        accessorKey: "amount",
       },
       {
         header: "Interest Rate",
@@ -56,7 +47,6 @@ const Loans = () => {
             val.row.original.currency
           } ${formatMoney(val.row.original.totalAmount)}`}</span>
         ),
-        accessorKey: "totalAmount",
       },
       {
         header: "Status",
@@ -72,17 +62,14 @@ const Loans = () => {
               return <Badge variant="default" text={val.row.original.status} />;
           }
         },
-        accessorKey: "status",
       },
       {
         header: "Start Date",
-        cell: (val) => val.row.original.startDate,
-        accessorKey: "startDate",
+        cell: (val) => formatDate(val.row.original.startDate, "MMM DD, YYYY"),
       },
       {
         header: "End Date",
-        cell: (val) => val.row.original.endDate,
-        accessorKey: "endDate",
+        cell: (val) => formatDate(val.row.original.endDate, "MMM DD, YYYY"),
       },
       {
         header: "Added On",
@@ -100,7 +87,6 @@ const Loans = () => {
             </button>
           </div>
         ),
-        accessorKey: "",
       },
     ],
     []
@@ -121,7 +107,7 @@ const Loans = () => {
       setLoading(false);
     }
   };
-  const viewLoan = async (loan: ILoan) => {
+  const viewLoan = async (loan: Loan) => {
     setLoading(true);
 
     try {

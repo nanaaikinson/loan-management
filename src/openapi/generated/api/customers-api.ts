@@ -28,7 +28,9 @@ import { AttachLoanRequest } from '../models';
 // @ts-ignore
 import { CreateCustomer200Response } from '../models';
 // @ts-ignore
-import { CustomersLoans200Response } from '../models';
+import { CustomerLoans200Response } from '../models';
+// @ts-ignore
+import { CustomerTransactions200Response } from '../models';
 // @ts-ignore
 import { CustomersSearch200Response } from '../models';
 // @ts-ignore
@@ -127,14 +129,14 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary Your GET endpoint
+         * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        customersLoans: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        customerLoans: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('customersLoans', 'id', id)
+            assertParamExists('customerLoans', 'id', id)
             const localVarPath = `/customers/{id}/loans`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -164,7 +166,44 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary Search for customer
+         * @summary 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        customerTransactions: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('customerTransactions', 'id', id)
+            const localVarPath = `/customers/{id}/transactions`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 
          * @param {string} q 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -204,7 +243,7 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary Your GET endpoint
+         * @summary 
          * @param {string} id Customer Id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -344,18 +383,29 @@ export const CustomersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Your GET endpoint
+         * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async customersLoans(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CustomersLoans200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.customersLoans(id, options);
+        async customerLoans(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CustomerLoans200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.customerLoans(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @summary Search for customer
+         * @summary 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async customerTransactions(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CustomerTransactions200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.customerTransactions(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary 
          * @param {string} q 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -366,7 +416,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Your GET endpoint
+         * @summary 
          * @param {string} id Customer Id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -429,17 +479,27 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @summary Your GET endpoint
+         * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        customersLoans(id: string, options?: any): AxiosPromise<CustomersLoans200Response> {
-            return localVarFp.customersLoans(id, options).then((request) => request(axios, basePath));
+        customerLoans(id: string, options?: any): AxiosPromise<CustomerLoans200Response> {
+            return localVarFp.customerLoans(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Search for customer
+         * @summary 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        customerTransactions(id: string, options?: any): AxiosPromise<CustomerTransactions200Response> {
+            return localVarFp.customerTransactions(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 
          * @param {string} q 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -449,7 +509,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @summary Your GET endpoint
+         * @summary 
          * @param {string} id Customer Id
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -513,19 +573,31 @@ export class CustomersApi extends BaseAPI {
 
     /**
      * 
-     * @summary Your GET endpoint
+     * @summary 
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CustomersApi
      */
-    public customersLoans(id: string, options?: AxiosRequestConfig) {
-        return CustomersApiFp(this.configuration).customersLoans(id, options).then((request) => request(this.axios, this.basePath));
+    public customerLoans(id: string, options?: AxiosRequestConfig) {
+        return CustomersApiFp(this.configuration).customerLoans(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Search for customer
+     * @summary 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CustomersApi
+     */
+    public customerTransactions(id: string, options?: AxiosRequestConfig) {
+        return CustomersApiFp(this.configuration).customerTransactions(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 
      * @param {string} q 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -537,7 +609,7 @@ export class CustomersApi extends BaseAPI {
 
     /**
      * 
-     * @summary Your GET endpoint
+     * @summary 
      * @param {string} id Customer Id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

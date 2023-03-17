@@ -58,9 +58,13 @@ const CustomerLoans = () => {
       },
       {
         header: " ",
-        cell: () => (
-          <div className="flex space-x-2 items-center">
+        cell: (val) => (
+          <div className="flex space-x-3 items-center">
             <button className="text-info">View</button>
+
+            {val.row.original.status === "approved" && (
+              <button className="text-success">Pay</button>
+            )}
           </div>
         ),
       },

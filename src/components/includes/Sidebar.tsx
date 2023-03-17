@@ -22,7 +22,7 @@ const Sidebar = ({ className }: SidebarProps) => {
           />
         </a>
 
-        <nav className="px-4 flex flex-col gap-y-4">
+        <nav className="px-4 flex flex-col gap-y-2">
           <NavLink className="sidebar-item" to="/customers">
             <Icon icon="clarity:group-solid-badged" className="icon" />
             <span>Customers</span>
@@ -31,6 +31,11 @@ const Sidebar = ({ className }: SidebarProps) => {
           <NavLink className="sidebar-item" to="/loans">
             <Icon icon="clarity:contract-solid" className="icon" />
             <span>Loans</span>
+          </NavLink>
+
+          <NavLink className="sidebar-item" to="/transactions">
+            <Icon icon="uil:transaction" className="icon" />
+            <span>Transactions</span>
           </NavLink>
         </nav>
       </nav>

@@ -3,16 +3,20 @@ import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import StoreLoanModal from "@/components/modals/StoreLoanModal";
-import { Loan } from "@/openapi/generated";
+import { GetLoans200Response, Loan } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import { useTitle } from "react-use";
 
 const Loans = () => {
+  useTitle("Loans | Microlend");
+
+  const loans = (useLoaderData() as GetLoans200Response).data;
   const [loading, setLoading] = useState<boolean>(false);
   const [showLoanModal, setShowLoanModal] = useState<boolean>(false);
-  const [loans, setLoans] = useState<Array<Loan>>([]);
   const [loan, setLoan] = useState<Loan>();
 
   const tableColumns = useMemo<Array<ColumnDef<Loan>>>(
@@ -93,20 +97,6 @@ const Loans = () => {
   );
 
   // Methods
-  const fetchData = async () => {
-    setLoading(true);
-
-    try {
-      const {
-        data: { data: loans },
-      } = await LoanService.instance().getLoans();
-      setLoans(loans);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
   const viewLoan = async (loan: Loan) => {
     setLoading(true);
 
@@ -123,16 +113,11 @@ const Loans = () => {
     }
   };
 
-  // Effects
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   // Template
   return (
     <>
       <div className="container">
-        <Card className="rounded-[7px] p-5">
+        <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">
               <div>
@@ -154,7 +139,7 @@ const Loans = () => {
           setShowLoanModal(false);
           setLoan(undefined);
         }}
-        onUpdated={() => fetchData()}
+        onUpdated={() => console.log("updated")}
       />
     </>
   );

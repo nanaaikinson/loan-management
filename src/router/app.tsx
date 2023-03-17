@@ -1,9 +1,4 @@
 import AppLayout from "@/layouts/app";
-import {
-  loadCustomer,
-  loadCustomerLoans,
-  loadCustomers,
-} from "@/loaders/customer";
 import Customers from "@/pages/app/customers";
 import ViewCustomer from "@/pages/app/customers/[customerId]";
 import CustomerLoans from "@/pages/app/customers/[customerId]/loans";
@@ -12,6 +7,13 @@ import EditCustomer from "@/pages/app/customers/edit";
 import StoreCustomer from "@/pages/app/customers/new";
 import Loans from "@/pages/app/loans";
 import Transactions from "@/pages/app/transactions";
+import {
+  loadCustomer,
+  loadCustomerLoans,
+  loadCustomers,
+  loadLoans,
+  loadTransactions,
+} from "@/utils/loaders";
 import { RouteObject } from "react-router-dom";
 
 const appRoutes: Array<RouteObject> = [
@@ -21,6 +23,9 @@ const appRoutes: Array<RouteObject> = [
       {
         path: "loans",
         element: <Loans />,
+        loader: async () => {
+          return await loadLoans();
+        },
       },
       {
         path: "customers",
@@ -60,6 +65,9 @@ const appRoutes: Array<RouteObject> = [
       {
         path: "transactions",
         element: <Transactions />,
+        loader: async () => {
+          return await loadTransactions();
+        },
       },
     ],
   },

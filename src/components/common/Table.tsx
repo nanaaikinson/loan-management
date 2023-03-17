@@ -79,24 +79,42 @@ const Table = <T,>({
               tableBodyClassName
             )}
           >
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className={classNames("", tableBodyRowClassName)}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className={classNames(
-                      "whitespace-nowrap px-3 py-4 text-sm text-gray-500",
-                      tableCellClassName
-                    )}
+            {table.getRowModel().rows.length > 0 ? (
+              <>
+                {table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className={classNames("", tableBodyRowClassName)}
                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className={classNames(
+                          "whitespace-nowrap px-3 py-4 text-sm text-gray-500",
+                          tableCellClassName
+                        )}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            ))}
+              </>
+            ) : (
+              <>
+                <tr>
+                  <td
+                    colSpan={table._getColumnDefs().length}
+                    className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center"
+                  >
+                    No data{" "}
+                  </td>
+                </tr>
+              </>
+            )}
           </tbody>
         </table>
       </div>

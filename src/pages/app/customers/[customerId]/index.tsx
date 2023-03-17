@@ -33,7 +33,7 @@ const ViewCustomer = () => {
               <div className="bg-gray-100 h-14 w-14 rounded-full"></div>
               <div className="flex flex-col flex-1 ">
                 <span className="text-dark font-semibold">{`${customer?.firstName} ${customer?.lastName}`}</span>
-                <span className="text-gray-500">
+                <span className="text-gray-500 text-sm">
                   Added on{" "}
                   {customer && formatDate(customer?.createdAt, "MMM DD, YYYY")}
                 </span>

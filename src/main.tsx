@@ -1,5 +1,6 @@
 import { router } from "./router";
 import "@/assets/css/app.css";
+import "nprogress/nprogress.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Toaster } from "react-hot-toast";

@@ -1,8 +1,8 @@
 const colors = {
   primary: {
-    light: "#597af4",
-    DEFAULT: "#466bf3",
-    dark: "#3856c2",
+    light: "#4a73ec",
+    DEFAULT: "#3663ea",
+    dark: "#3159d3",
   },
   info: {
     light: "#368df7",

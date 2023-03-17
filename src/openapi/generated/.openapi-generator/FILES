@@ -3,8 +3,10 @@
 api.ts
 api/auth-api.ts
 api/customers-api.ts
+api/default-api.ts
 api/files-api.ts
 api/loans-api.ts
+api/transactions-api.ts
 base.ts
 common.ts
 configuration.ts
@@ -23,6 +25,7 @@ models/customers-search200-response.ts
 models/get-customer200-response.ts
 models/get-customers200-response.ts
 models/get-loans200-response.ts
+models/get-transactions200-response.ts
 models/identification-front.ts
 models/identification.ts
 models/index.ts
@@ -32,6 +35,9 @@ models/login-request.ts
 models/login-response-data.ts
 models/login-response.ts
 models/store-customer-request.ts
+models/store-transaction-request.ts
+models/transaction-response.ts
+models/transaction.ts
 models/update-customer200-response.ts
 models/update-loan200-response.ts
 models/uploaded-file.ts

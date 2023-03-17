@@ -91,6 +91,12 @@ export interface Loan {
     'duration': number;
     /**
      * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'totalAmount': number;
+    /**
+     * 
      * @type {string}
      * @memberof Loan
      */

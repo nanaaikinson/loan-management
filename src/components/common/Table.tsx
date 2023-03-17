@@ -46,7 +46,7 @@ const Table = <T,>({
             tableClassName
           )}
         >
-          <thead className={classNames("bg-gray-50/50", tableHeadClassName)}>
+          <thead className={classNames("bg-white", tableHeadClassName)}>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
@@ -75,7 +75,7 @@ const Table = <T,>({
 
           <tbody
             className={classNames(
-              "divide-y divide-gray-200 bg-white",
+              "divide-y divide-gray-100 bg-white",
               tableBodyClassName
             )}
           >

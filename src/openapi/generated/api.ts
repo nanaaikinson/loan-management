@@ -16,6 +16,8 @@
 
 export * from './api/auth-api';
 export * from './api/customers-api';
+export * from './api/default-api';
 export * from './api/files-api';
 export * from './api/loans-api';
+export * from './api/transactions-api';
 

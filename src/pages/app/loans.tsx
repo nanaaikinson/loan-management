@@ -1,38 +1,35 @@
 import Badge from "@/components/common/Badge";
 import Button from "@/components/common/Button";
+import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import StoreLoanModal from "@/components/modals/StoreLoanModal";
-import { Loan, LoanStatusEnum } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
+import { ILoan } from "@/types";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { Icon } from "@iconify/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 
-const LoanStatus = (status: string) => {
-  switch (status) {
-    case "pending":
-      return <Badge variant="warning" text={"pending"} />;
-    case "approved":
-      return <Badge variant="success" text={"approved"} />;
-    case "rejected":
-      return <Badge variant="danger" text={"rejected"} />;
-    default:
-      return null;
-  }
-};
-
 const Loans = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [showLoanModal, setShowLoanModal] = useState<boolean>(false);
-  const [loans, setLoans] = useState<Array<Loan>>([]);
+  const [loans, setLoans] = useState<Array<ILoan>>([]);
+  const [loan, setLoan] = useState<ILoan>();
 
-  const tableColumns = useMemo<Array<ColumnDef<Loan>>>(
+  const tableColumns = useMemo<Array<ColumnDef<ILoan>>>(
     () => [
+      // {
+      //   header: "Number",
+      //   cell: (val) => val.renderValue(),
+      //   accessorKey: "number",
+      // },
+
       {
-        header: "Number",
-        cell: (val) => val.renderValue(),
-        accessorKey: "number",
+        header: "Type",
+        cell: (val) => (
+          <span className="capitalize">{val.row.original.type}</span>
+        ),
+        accessorKey: "type",
       },
       {
         header: "Amount",
@@ -44,13 +41,6 @@ const Loans = () => {
         accessorKey: "amount",
       },
       {
-        header: "Type",
-        cell: (val) => (
-          <span className="capitalize">{val.row.original.type}</span>
-        ),
-        accessorKey: "type",
-      },
-      {
         header: "Interest Rate",
         cell: (val) => (
           <span className="text-right">{`${val.renderValue()} (${
@@ -58,6 +48,15 @@ const Loans = () => {
           })`}</span>
         ),
         accessorKey: "interestRate",
+      },
+      {
+        header: "Total Amount",
+        cell: (val) => (
+          <span className="text-right">{`${
+            val.row.original.currency
+          } ${formatMoney(val.row.original.totalAmount)}`}</span>
+        ),
+        accessorKey: "totalAmount",
       },
       {
         header: "Status",
@@ -108,6 +107,7 @@ const Loans = () => {
     []
   );
 
+  // Methods
   const fetchData = async () => {
     setLoading(true);
 
@@ -122,14 +122,14 @@ const Loans = () => {
       setLoading(false);
     }
   };
-
-  const viewLoan = async (loan: Loan) => {
+  const viewLoan = async (loan: ILoan) => {
     setLoading(true);
 
     try {
       const {
         data: { data: response },
       } = await LoanService.instance().getLoan(loan.id);
+      setLoan(response);
       setShowLoanModal(true);
     } catch (error) {
       console.log(error);
@@ -138,31 +138,37 @@ const Loans = () => {
     }
   };
 
+  // Effects
   useEffect(() => {
     fetchData();
   }, []);
 
+  // Template
   return (
     <>
-      <div className="flex flex-col space-y-8">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3>Loans</h3>
-            <span className="text-gray-500">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
-              dolore!
-            </span>
+      <div className="container">
+        <Card className="rounded-[7px] p-5">
+          <div className="flex flex-col space-y-8">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3>Loans</h3>
+              </div>
+
+              <Button onClick={() => setShowLoanModal(true)}>Add loan</Button>
+            </div>
+
+            <Table data={loans} columns={tableColumns} />
           </div>
-
-          <Button onClick={() => setShowLoanModal(true)}>Add loan</Button>
-        </div>
-
-        <Table data={loans} columns={tableColumns} />
+        </Card>
       </div>
 
       <StoreLoanModal
         visible={showLoanModal}
-        onClose={() => setShowLoanModal(false)}
+        loan={loan}
+        onClose={() => {
+          setShowLoanModal(false);
+          setLoan(undefined);
+        }}
         onUpdated={() => fetchData()}
       />
     </>

@@ -1,22 +1,24 @@
-import Button from "../common/Button";
-import CloseButton from "../common/CloseButton";
-import Dialog from "../common/Dialog";
-import Drawer from "../common/Drawer";
-import ErrorMessage from "../common/ErrorMessage";
+import Button from "@/components/common/Button";
+import CloseButton from "@/components/common/CloseButton";
+import Dialog from "@/components/common/Dialog";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import {
+  CreateLoan200Response,
   LoanRequestInterestRateTypeEnum,
   LoanRequestRepaymentFrequencyEnum,
   LoanRequestTypeEnum,
+  UpdateLoan200Response,
 } from "@/openapi/generated";
 import { CustomerService } from "@/services/customer.service";
 import { LoanService } from "@/services/loan.service";
+import { type ILoan } from "@/types";
 import { formatDate } from "@/utils/helpers";
 import { StoreLoanForm, storeLoanValidationSchema } from "@/validation/loan";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Icon } from "@iconify/react";
 import { isAxiosError } from "axios";
 import "flatpickr/dist/flatpickr.min.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-flatpickr";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -24,18 +26,24 @@ import AsyncSelect from "react-select/async";
 
 interface StoreLoanModalProps {
   visible: boolean;
+  loan?: ILoan;
   onClose: () => void;
   onUpdated: () => void;
 }
 
 const StoreLoanModal = ({
   visible,
+  loan,
   onClose,
   onUpdated,
 }: StoreLoanModalProps) => {
   const [interestLabel, setInterestLabel] = useState<string>("in cash");
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<string>("");
+  const [customer, setCustomer] = useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
   const {
     register,
     handleSubmit,
@@ -55,19 +63,30 @@ const StoreLoanModal = ({
     },
   });
 
+  // Methods
   const onInputAmount = (e: React.FormEvent<HTMLInputElement>) => {
     const input = e.target as HTMLInputElement;
     input.value = input.value
       .replace(/[^0-9.]/g, "")
       .replace(/(\..*)\./g, "$1");
   };
-
   const onSubmit = async (data: StoreLoanForm) => {
+    const request = { ...data, startDate, customerId: customer.id };
+    let response: CreateLoan200Response | UpdateLoan200Response;
+
     setLoading(true);
 
     try {
-      const { data: response } = await LoanService.instance().createLoan(data);
-      console.log(response);
+      if (loan?.id) {
+        const { data } = await LoanService.instance().updateLoan(
+          loan?.id,
+          request
+        );
+        response = data;
+      } else {
+        const { data } = await LoanService.instance().createLoan(request);
+        response = data;
+      }
 
       // Show toast notification
       toast.success(response.message, { position: "top-center" });
@@ -130,15 +149,14 @@ const StoreLoanModal = ({
       setLoading(false);
     }
   };
-
   const handleClose = () => {
     setLoading(false);
     setStartDate("");
     setInterestLabel("in cash");
+    setCustomer({ name: "", id: "" });
     reset();
     onClose();
   };
-
   const loadCustomers = async (inputValue: string) => {
     try {
       const {
@@ -154,6 +172,30 @@ const StoreLoanModal = ({
     }
   };
 
+  // Effects
+  useEffect(() => {
+    if (loan) {
+      setValue("amount", loan.amount);
+      setValue("type", loan.type);
+      setValue("repaymentFrequency", loan.repaymentFrequency);
+      setValue("startDate", loan.startDate);
+      setStartDate(loan.startDate);
+      setValue("interestRateType", loan.interestRateType);
+      setValue("interestRate", loan.interestRate);
+      setInterestLabel(
+        loan.interestRateType === "amount" ? "in cash" : "per month"
+      );
+      setValue("duration", loan.duration);
+      if (loan?.customer) {
+        setCustomer({
+          name: `${loan.customer.firstName} ${loan.customer.lastName}`,
+          id: loan.customer.id,
+        });
+      }
+    }
+  }, [visible]);
+
+  // Template
   return (
     <>
       {/* <Dialog visible={visible} className="w-full lg:!w-[30%] xl:!w-[28%]"> */}
@@ -334,15 +376,43 @@ const StoreLoanModal = ({
 
                 <div className="col-12">
                   <div className="mb-4">
-                    <label htmlFor="customerId">Assign customer</label>
-                    <AsyncSelect
-                      className="react-form-select"
-                      classNamePrefix="react-select"
-                      cacheOptions
-                      loadOptions={loadCustomers}
-                    />
-                    {errors?.customerId?.message && (
-                      <ErrorMessage message={errors?.customerId?.message} />
+                    {customer.id.length ? (
+                      <>
+                        <label htmlFor="">Customer</label>
+                        <div className="flex justify-between items-center">
+                          <p className="mb-0">{customer?.name}</p>
+                          <button
+                            type="button"
+                            className="text-danger h-8 w-8 hover:bg-danger hover:bg-opacity-10 rounded-full flex items-center justify-center"
+                            onClick={() => {
+                              setCustomer({ name: "", id: "" });
+                            }}
+                          >
+                            <Icon icon="bx:trash" />
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <label htmlFor="customerId">Search customer</label>
+                        <AsyncSelect
+                          className="react-form-select"
+                          classNamePrefix="react-select"
+                          cacheOptions
+                          loadOptions={loadCustomers}
+                          onChange={(option) => {
+                            if (option) {
+                              setCustomer({
+                                name: option.label,
+                                id: option.value,
+                              });
+                            }
+                          }}
+                        />
+                        {errors?.customerId?.message && (
+                          <ErrorMessage message={errors?.customerId?.message} />
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -354,7 +424,13 @@ const StoreLoanModal = ({
                   className="ml-auto px-10"
                   disabled={loading}
                 >
-                  Submit
+                  {loading
+                    ? loan?.id
+                      ? "Updating..."
+                      : "Submitting..."
+                    : loan?.id
+                    ? "Update"
+                    : "Submit"}
                 </Button>
               </div>
             </form>

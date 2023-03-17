@@ -15,8 +15,8 @@
 
   body {
     font-size: 15px;
-    font-family: "Noto Sans", sans-serif;
-    @apply bg-[#f6fafd];
+    /* font-family: "Noto Sans", sans-serif; */
+    @apply bg-gray-50 text-dark;
     /* @apply bg-white text-dark; */
   }
 
@@ -90,16 +90,16 @@
     border: 1px solid #e6e6e6;
   }
 
-  .nav-item {
-    @apply flex items-center space-x-2 rounded-sm px-4 py-2 text-sm text-gray-500 transition duration-300;
+  .sidebar-item {
+    @apply flex cursor-pointer items-center space-x-3 rounded-[7px] px-4 py-3 transition duration-300;
   }
-  .nav-item.active {
+  .sidebar-item.active {
     @apply bg-primary text-white;
   }
-  .nav-item:not(.active):hover {
+  .sidebar-item:not(.active):hover {
     @apply text-primary;
   }
-  .nav-item .icon {
+  .sidebar-item .icon {
     @apply h-5 w-5;
   }
 

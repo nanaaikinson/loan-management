@@ -1,4 +1,5 @@
 import Header from "@/components/includes/Header";
+import Sidebar from "@/components/includes/Sidebar";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -9,11 +10,14 @@ const AppLayout = () => {
 
   return (
     <>
-      <Header />
+      <section className="min-h-screen">
+        <Sidebar className="z-[80] w-60" />
+        <Header className="z-[70] px-5 lg:pl-60" />
 
-      <div className="container">
-        <Outlet />
-      </div>
+        <main className="ml-0 transition md:ml-60">
+          <Outlet />
+        </main>
+      </section>
     </>
   );
 };

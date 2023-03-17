@@ -1,6 +1,7 @@
 import { useAuthStore } from "@/stores/auth";
 import { SecureStorage } from "@/utils/storage";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { redirect } from "react-router-dom";
 
 const http = axios.create({
@@ -31,12 +32,16 @@ http.interceptors.response.use(
   },
   function (error) {
     if (error.response.status === 401) {
-      redirect("/");
+      toast("Your session has expired. Please login again.", {
+        icon: "👋",
+      });
 
       SecureStorage.instance().removeItem(mlAtName);
       SecureStorage.instance().removeItem(mlAtExpiresAtName);
 
       useAuthStore.getState().logout();
+
+      window.location.href = "/";
     }
 
     return Promise.reject(error);

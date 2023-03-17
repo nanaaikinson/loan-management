@@ -4,10 +4,13 @@ import { useAuthStore } from "@/stores/auth";
 import { generateInitials } from "@/utils/helpers";
 import { Menu, Transition } from "@headlessui/react";
 import { Icon } from "@iconify/react";
+import classNames from "classnames";
 import { Fragment, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-const Header = () => {
+type HeaderProps = React.HTMLAttributes<HTMLElement>;
+
+const Header = ({ className }: HeaderProps) => {
   const [initials, setInitials] = useState<string>("");
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
@@ -27,31 +30,14 @@ const Header = () => {
 
   return (
     <>
-      <nav className="fixed top-0 z-[80] w-full left-0 h-12 border-b border-gray-100 bg-white">
-        <div className="container flex h-full items-center justify-between">
-          <a href="#" className="text-white">
-            Logo
-          </a>
-
-          <ul className="flex items-center space-x-5">
-            <li>
-              <NavLink className={"nav-item "} to="/customers">
-                Customers
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={"nav-item "} to="/loans">
-                Loans
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={"nav-item "} to="/transactions">
-                Transactions
-              </NavLink>
-            </li>
-          </ul>
-
-          <ul className="flex items-center space-x-3">
+      <nav
+        className={classNames(
+          "fixed top-0 w-full left-0 h-16 border-b border-gray-100 bg-white",
+          className
+        )}
+      >
+        <div className="flex h-full items-center justify-between">
+          <ul className="flex items-center space-x-3 ml-auto">
             <li>
               <Menu as="div" className="relative">
                 <div>

@@ -515,6 +515,101 @@ paths:
               $ref: "#/components/schemas/LoanRequest"
         description: ""
       description: ""
+  /transactions:
+    get:
+      summary: Get transactions
+      tags:
+        - transactions
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: ""
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Transaction"
+                required:
+                  - message
+                  - status
+                  - data
+      operationId: get-transactions
+      parameters: []
+      security:
+        - Authorization: []
+      description: Get a list of transactions
+    post:
+      tags:
+        - transactions
+      summary: Create transaction
+      operationId: create-transaction
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionResponse"
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreTransactionRequest"
+  "/transactions/{id}":
+    get:
+      summary: Get transaction
+      tags:
+        - transactions
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionResponse"
+      operationId: get-transaction
+      parameters: []
+      security:
+        - Authorization: []
+      description: Get transaction
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    patch:
+      summary: ""
+      operationId: update-transaction
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionResponse"
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreTransactionRequest"
 components:
   schemas:
     Customer:
@@ -746,6 +841,8 @@ components:
             - percentage
         duration:
           type: integer
+        totalAmount:
+          type: number
         currency:
           type: string
         repaymentAmount:
@@ -766,6 +863,7 @@ components:
         - interestRate
         - interestRateType
         - duration
+        - totalAmount
         - currency
         - repaymentAmount
         - createdAt
@@ -1045,6 +1143,112 @@ components:
       required:
         - file
         - category
+    Transaction:
+      type: object
+      x-examples:
+        Example 1:
+          id: WKVAMSCJWYG6T5G
+          customer: {}
+          loan: null
+          amount: 200
+          currency: GHS
+          type: credit
+          description: null
+          reference: null
+          loanRepayment: 0
+          createdAt: "2023-03-16T08:52:22.000000Z"
+      properties:
+        id:
+          type: string
+        customer:
+          $ref: "#/components/schemas/Customer"
+        loan:
+          $ref: "#/components/schemas/Customer"
+        amount:
+          type: integer
+        currency:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+          nullable: true
+        reference:
+          type: string
+          nullable: true
+        loanRepayment:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - customer
+        - amount
+        - currency
+        - type
+        - description
+        - reference
+        - loanRepayment
+        - createdAt
+    StoreTransactionRequest:
+      type: object
+      x-examples:
+        Example 1:
+          customer: YDSALN5ICMP91OS
+          amount: 3000
+          currency: GHS
+          type: credit
+          loan: UJ0VZAUAKTJ7T2H
+          description: ""
+          reference: ""
+      properties:
+        customer:
+          type: string
+        amount:
+          type: integer
+        currency:
+          type: string
+        type:
+          type: string
+          enum:
+            - debit
+            - credit
+        loan:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        reference:
+          type: string
+          nullable: true
+      required:
+        - customer
+        - amount
+        - currency
+        - type
+        - loan
+        - description
+        - reference
+    TransactionResponse:
+      type: object
+      x-examples:
+        Example 1:
+          message: ""
+          status: 200
+          data: {}
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+        data:
+          $ref: "#/components/schemas/Transaction"
+      required:
+        - message
+        - status
+        - data
+      title: ""
   securitySchemes:
     Authorization:
       type: apiKey

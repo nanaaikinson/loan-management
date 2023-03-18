@@ -56,7 +56,8 @@ export const FilesApiAxiosParamCreator = function (configuration?: Configuration
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
 
             // authentication Authorization required
-            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
             if (file !== undefined) { 

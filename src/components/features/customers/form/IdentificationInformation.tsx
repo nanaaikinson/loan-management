@@ -36,7 +36,7 @@ const idTypeOptions = Object.values(StoreCustomerRequestIdTypeEnum);
 const IdentificationInformation = ({
   previousStep,
 }: IdentificationInformationProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [idIssueDate, setIdIssueDate] = useState<string>("");
   const [idExpiryDate, setIdExpiryDate] = useState<string>("");
   const [idNumber, setIdNumber] = useState<string>("");
@@ -110,7 +110,7 @@ const IdentificationInformation = ({
           }
         }
 
-        setLoading(true);
+        setIsSubmitting(true);
 
         storeCustomerContext.updateErrors([]);
 
@@ -171,7 +171,7 @@ const IdentificationInformation = ({
     } catch (error) {
       console.log(error);
 
-      setLoading(false);
+      setIsSubmitting(false);
 
       const errors: Array<string> = [];
 
@@ -572,14 +572,14 @@ const IdentificationInformation = ({
           <Button
             type="button"
             variant="secondary"
-            disabled={loading}
+            disabled={isSubmitting}
             onClick={() => previousStep()}
           >
             Previous
           </Button>
 
-          <Button type="submit" className="px-10" disabled={loading}>
-            {loading
+          <Button type="submit" className="px-10" disabled={isSubmitting}>
+            {isSubmitting
               ? storeCustomerContext?.customer?.id
                 ? "Updating..."
                 : "Submitting..."

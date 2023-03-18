@@ -583,6 +583,60 @@ paths:
               $ref: "#/components/schemas/LoanRequest"
         description: ""
       description: ""
+  "/loans/{id}/approval":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    patch:
+      tags:
+        - loans
+      summary: ""
+      operationId: loan-approval
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Loan"
+                required:
+                  - message
+                  - status
+                  - data
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  status: ""
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - approved
+                    - rejected
+              required:
+                - status
   /transactions:
     get:
       summary: Get transactions
@@ -1319,7 +1373,6 @@ components:
       title: ""
   securitySchemes:
     Authorization:
-      type: apiKey
-      in: header
-      name: Bearer
+      type: http
+      scheme: bearer
       description: ""

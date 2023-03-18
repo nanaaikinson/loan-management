@@ -89,7 +89,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication Authorization required
-            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     

@@ -26,6 +26,10 @@ import { CreateLoan200Response } from '../models';
 // @ts-ignore
 import { GetLoans200Response } from '../models';
 // @ts-ignore
+import { LoanApproval200Response } from '../models';
+// @ts-ignore
+import { LoanApprovalRequest } from '../models';
+// @ts-ignore
 import { LoanRequest } from '../models';
 // @ts-ignore
 import { UpdateLoan200Response } from '../models';
@@ -58,7 +62,8 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             const localVarQueryParameter = {} as any;
 
             // authentication Authorization required
-            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -98,7 +103,8 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             const localVarQueryParameter = {} as any;
 
             // authentication Authorization required
-            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -131,13 +137,58 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             const localVarQueryParameter = {} as any;
 
             // authentication Authorization required
-            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 
+         * @param {string} id 
+         * @param {LoanApprovalRequest} loanApprovalRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loanApproval: async (id: string, loanApprovalRequest: LoanApprovalRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('loanApproval', 'id', id)
+            // verify required parameter 'loanApprovalRequest' is not null or undefined
+            assertParamExists('loanApproval', 'loanApprovalRequest', loanApprovalRequest)
+            const localVarPath = `/loans/{id}/approval`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(loanApprovalRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -171,7 +222,8 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             const localVarQueryParameter = {} as any;
 
             // authentication Authorization required
-            await setApiKeyToObject(localVarHeaderParameter, "Bearer", configuration)
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -233,6 +285,18 @@ export const LoansApiFp = function(configuration?: Configuration) {
          * 
          * @summary 
          * @param {string} id 
+         * @param {LoanApprovalRequest} loanApprovalRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loanApproval(id: string, loanApprovalRequest: LoanApprovalRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoanApproval200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loanApproval(id, loanApprovalRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary 
+         * @param {string} id 
          * @param {LoanRequest} loanRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -279,6 +343,17 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
          */
         getLoans(options?: any): AxiosPromise<GetLoans200Response> {
             return localVarFp.getLoans(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 
+         * @param {string} id 
+         * @param {LoanApprovalRequest} loanApprovalRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loanApproval(id: string, loanApprovalRequest: LoanApprovalRequest, options?: any): AxiosPromise<LoanApproval200Response> {
+            return localVarFp.loanApproval(id, loanApprovalRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -334,6 +409,19 @@ export class LoansApi extends BaseAPI {
      */
     public getLoans(options?: AxiosRequestConfig) {
         return LoansApiFp(this.configuration).getLoans(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 
+     * @param {string} id 
+     * @param {LoanApprovalRequest} loanApprovalRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LoansApi
+     */
+    public loanApproval(id: string, loanApprovalRequest: LoanApprovalRequest, options?: AxiosRequestConfig) {
+        return LoansApiFp(this.configuration).loanApproval(id, loanApprovalRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

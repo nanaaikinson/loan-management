@@ -279,8 +279,18 @@ paths:
                     type: integer
                   data:
                     $ref: "#/components/schemas/Customer"
+                required:
+                  - message
+                  - status
+                  - data
       security:
         - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreCustomerRequest"
   "/customers/{id}/loans":
     parameters:
       - schema:

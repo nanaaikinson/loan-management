@@ -24,6 +24,5 @@ export * from './store-customer-request';
 export * from './store-transaction-request';
 export * from './transaction';
 export * from './transaction-response';
-export * from './update-customer200-response';
 export * from './update-loan200-response';
 export * from './uploaded-file';

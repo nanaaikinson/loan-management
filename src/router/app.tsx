@@ -1,16 +1,18 @@
 import AppLayout from "@/layouts/app";
 import Customers from "@/pages/app/customers";
 import ViewCustomer from "@/pages/app/customers/[customerId]";
+import EditCustomer from "@/pages/app/customers/[customerId]/edit";
 import CustomerLoans from "@/pages/app/customers/[customerId]/loans";
 import CustomerTransactions from "@/pages/app/customers/[customerId]/transactions";
-import EditCustomer from "@/pages/app/customers/edit";
 import StoreCustomer from "@/pages/app/customers/new";
+import Dashboard from "@/pages/app/dashboard";
 import Loans from "@/pages/app/loans";
 import Transactions from "@/pages/app/transactions";
 import {
   loadCustomer,
   loadCustomerLoans,
   loadCustomers,
+  loadCustomerTransactions,
   loadLoans,
   loadTransactions,
 } from "@/utils/loaders";
@@ -20,6 +22,10 @@ const appRoutes: Array<RouteObject> = [
   {
     element: <AppLayout />,
     children: [
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
       {
         path: "loans",
         element: <Loans />,
@@ -39,6 +45,13 @@ const appRoutes: Array<RouteObject> = [
         element: <StoreCustomer />,
       },
       {
+        path: "customers/:customerId/edit",
+        element: <EditCustomer />,
+        loader: async ({ params }) => {
+          return await loadCustomer(params.customerId as string);
+        },
+      },
+      {
         path: "customers/:customerId",
         element: <ViewCustomer />,
         loader: async ({ params }) => {
@@ -55,12 +68,13 @@ const appRoutes: Array<RouteObject> = [
           {
             path: "transactions",
             element: <CustomerTransactions />,
+            loader: async ({ params }) => {
+              return await loadCustomerTransactions(
+                params.customerId as string
+              );
+            },
           },
         ],
-      },
-      {
-        path: "customers/:customerId/edit",
-        element: <EditCustomer />,
       },
       {
         path: "transactions",

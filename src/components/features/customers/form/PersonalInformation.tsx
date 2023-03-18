@@ -62,7 +62,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
       setValue("occupation", storeCustomerContext.customer.occupation);
       setValue("secondaryPhone", storeCustomerContext.customer.secondaryPhone);
     }
-  }, []);
+  }, [storeCustomerContext?.customer]);
 
   return (
     <>

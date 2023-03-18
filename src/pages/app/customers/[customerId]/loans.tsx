@@ -1,5 +1,6 @@
 import Badge from "@/components/common/Badge";
 import Table from "@/components/common/Table";
+import NoData from "@/components/misc/NoData";
 import { CustomerLoans200Response, Loan } from "@/openapi/generated";
 import { formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
@@ -79,10 +80,7 @@ const CustomerLoans = () => {
           <Table columns={tableColumns} data={loans} />
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center h-36">
-          <img src="/images/no_data.svg" alt="no data" className="h-20 mb-4" />
-          <p className="text-gray-400">No data found</p>
-        </div>
+        <NoData />
       )}
     </>
   );

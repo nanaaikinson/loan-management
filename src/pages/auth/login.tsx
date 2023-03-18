@@ -40,7 +40,7 @@ const Login = () => {
       } = await AuthService.instance().authUser();
       setUser(user);
 
-      navigate("/loans");
+      navigate("/dashboard");
     } catch (error) {
       if (isAxiosError(error) && error?.response) {
         const { data, status } = error.response;

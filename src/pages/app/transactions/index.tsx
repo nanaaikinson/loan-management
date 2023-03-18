@@ -21,6 +21,10 @@ const Transactions = () => {
           } ${formatMoney(val.row.original.amount)}`}</span>
         ),
       },
+      // {
+      //   header: "Account Number",
+      //   cell: (val) => <span className="font-semibold">1234567890</span>,
+      // },
       {
         header: "Customer",
         cell: (val) => (

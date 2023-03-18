@@ -39,6 +39,5 @@ models/store-customer-request.ts
 models/store-transaction-request.ts
 models/transaction-response.ts
 models/transaction.ts
-models/update-customer200-response.ts
 models/update-loan200-response.ts
 models/uploaded-file.ts

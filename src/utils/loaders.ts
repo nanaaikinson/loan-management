@@ -20,6 +20,14 @@ export const loadCustomerLoans = async (customerId: string) => {
   return data;
 };
 
+export const loadCustomerTransactions = async (customerId: string) => {
+  const { data } = await CustomerService.instance().customerTransactions(
+    customerId
+  );
+
+  return data;
+};
+
 export const loadTransactions = async () => {
   const { data } = await TransactionService.instance().getTransactions();
 

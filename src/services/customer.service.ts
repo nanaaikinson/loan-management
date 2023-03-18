@@ -1,10 +1,8 @@
 import { http } from "./axios";
 import { CustomersApi } from "@/openapi/generated";
 
-export class CustomerService extends CustomersApi {
-  constructor() {
-    super(undefined, "", http);
+export class CustomerService {
+  public static instance() {
+    return new CustomersApi(undefined, "", http);
   }
-
-  static instance = () => new CustomerService();
 }

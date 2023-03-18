@@ -6,13 +6,19 @@ import {
   IStoreCustomerContext,
   StoreCustomerContext,
 } from "@/context/customer.context";
-import { StoreCustomerRequestIdTypeEnum } from "@/openapi/generated";
+import {
+  GetCustomer200Response,
+  StoreCustomerRequestGenderEnum,
+  StoreCustomerRequestIdTypeEnum,
+  StoreCustomerRequestMaritalStatusEnum,
+} from "@/openapi/generated";
 import { BreadcrumbItem } from "@/types";
 import {
   IdentificationInfoForm,
   PersonalInfoForm,
 } from "@/validation/customer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
 type Steps = "personal information" | "identification information";
 
@@ -21,7 +27,8 @@ const steps: Array<Steps> = [
   "identification information",
 ];
 
-const StoreCustomer = () => {
+const EditCustomer = () => {
+  const customerData = (useLoaderData() as GetCustomer200Response).data;
   const [stepNumber, setStepNumber] = useState<number>(0);
   const [stepPercentage, setStepPercentage] = useState<number>(0);
   const [errors, setErrors] = useState<Array<string>>([]);
@@ -30,7 +37,7 @@ const StoreCustomer = () => {
   >(null);
   const breadcrumbItems: Array<BreadcrumbItem> = [
     { to: "/customers", label: "Customers" },
-    { label: `New Customer` },
+    { label: `Edit Customer: ${customerData.id}` },
   ];
 
   // Methods
@@ -70,6 +77,48 @@ const StoreCustomer = () => {
       });
     }
   };
+
+  // Effects
+  useEffect(() => {
+    if (customerData) {
+      setCustomer({
+        id: customerData.id,
+        firstName: customerData.firstName,
+        lastName: customerData.lastName,
+        phoneNumber: customerData.phoneNumber,
+        gender: customerData.gender as StoreCustomerRequestGenderEnum,
+        dateOfBirth: customerData.dateOfBirth,
+        secondaryPhone: customerData.secondaryPhone ?? "",
+        email: customerData.email ?? "",
+        occupation: customerData.occupation ?? "",
+        gpAddress: customerData.gpAddress ?? "",
+        postalAddress: customerData.postalAddress ?? "",
+        maritalStatus:
+          customerData.maritalStatus as StoreCustomerRequestMaritalStatusEnum,
+        sourceOfIncome: customerData.sourceOfIncome ?? "",
+        idNumber: customerData.identification?.id ?? "",
+        idType:
+          (customerData.identification
+            ?.type as StoreCustomerRequestIdTypeEnum) ?? undefined,
+        idIssueDate: customerData.identification?.issueDate ?? "",
+        idExpiryDate: customerData.identification?.expiryDate ?? "",
+        idIssuingAuthority: customerData.identification?.issuingAuthority ?? "",
+        idIssuingCountry: customerData.identification?.issuingCountry ?? "",
+        idFrontUrl: customerData.identification?.front
+          ? customerData.identification?.front.url
+          : "",
+        idFrontKey: customerData.identification?.front
+          ? customerData.identification?.front.key
+          : undefined,
+        idBackUrl: customerData.identification?.back
+          ? customerData.identification?.back.url
+          : "",
+        idBackKey: customerData.identification?.back
+          ? customerData.identification?.back.key
+          : undefined,
+      });
+    }
+  }, []);
 
   // Markup
   return (
@@ -123,4 +172,4 @@ const StoreCustomer = () => {
   );
 };
 
-export default StoreCustomer;
+export default EditCustomer;

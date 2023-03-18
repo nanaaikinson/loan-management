@@ -143,17 +143,34 @@ const IdentificationInformation = ({
 
         // Submit form
         if (storeCustomerContext?.customer) {
-          const {
-            data: { message },
-          } = await CustomerService.instance().createCustomer(
-            requestData(storeCustomerContext?.customer, data)
-          );
+          let responseMessage = "";
 
-          toast.success(message);
+          if (storeCustomerContext?.customer?.id) {
+            const {
+              data: { message },
+            } = await CustomerService.instance().updateCustomer(
+              storeCustomerContext?.customer?.id,
+              requestData(storeCustomerContext?.customer, data)
+            );
+
+            responseMessage = message;
+          } else {
+            const {
+              data: { message },
+            } = await CustomerService.instance().createCustomer(
+              requestData(storeCustomerContext?.customer, data)
+            );
+
+            responseMessage = message;
+          }
+
+          toast.success(responseMessage);
           navigate("/customers");
         }
       }
     } catch (error) {
+      console.log(error);
+
       setLoading(false);
 
       const errors: Array<string> = [];
@@ -261,9 +278,9 @@ const IdentificationInformation = ({
       setIdFrontImage(customer?.idFrontUrl ?? "");
       setIdBackImage(customer?.idBackUrl ?? "");
     }
-  }, []);
+  }, [storeCustomerContext?.customer]);
 
-  // Tenplate
+  // Template
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -562,7 +579,13 @@ const IdentificationInformation = ({
           </Button>
 
           <Button type="submit" className="px-10" disabled={loading}>
-            Submit
+            {loading
+              ? storeCustomerContext?.customer?.id
+                ? "Updating..."
+                : "Submitting..."
+              : storeCustomerContext?.customer?.id
+              ? "Update"
+              : "Submit"}
           </Button>
         </div>
       </form>

@@ -47,14 +47,14 @@ const ViewCustomer = () => {
                     icon="material-symbols:alternate-email-rounded"
                     className="w-5 h-5"
                   />
-                  <div className="font-semibold">{customer?.email}</div>
+                  <div className="font-semibold text-sm">{customer?.email}</div>
                 </div>
               </li>
 
               <li className="flex py-4 items-center">
                 <div className="px-2 flex items-center gap-x-5 text-gray-500">
                   <Icon icon="ph:hash" className="w-5 h-5" />
-                  <div className="font-semibold">{customer?.id}</div>
+                  <div className="font-semibold text-sm">{customer?.id}</div>
                 </div>
               </li>
 
@@ -62,8 +62,10 @@ const ViewCustomer = () => {
                 <div className="px-2 flex items-center gap-x-5 text-gray-500">
                   <Icon icon="ic:outline-phone" className="w-5 h-5" />
                   <div>
-                    <div className="font-semibold">{customer?.phoneNumber}</div>
-                    <div className="font-semibold">
+                    <div className="font-semibold text-sm">
+                      {customer?.phoneNumber}
+                    </div>
+                    <div className="font-semibold text-sm">
                       {customer?.secondaryPhone}
                     </div>
                   </div>

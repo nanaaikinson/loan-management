@@ -72,6 +72,13 @@
   }
 
   .form-input,
+  .form-select,
+  .form-checkbox,
+  .form-radio {
+    @apply disabled:!bg-gray-50;
+  }
+
+  .form-input,
   .form-select {
     @apply mt-1 text-[#5F5F61];
   }
@@ -90,10 +97,10 @@
   }
 
   .sidebar-item {
-    @apply flex cursor-pointer items-center space-x-3 rounded-[7px] px-4 py-3 transition duration-300;
+    @apply flex cursor-pointer items-center space-x-3 rounded-sm px-3 py-2 transition duration-300;
   }
   .sidebar-item.active {
-    @apply bg-primary text-white;
+    @apply rounded-[7px] bg-primary bg-opacity-5 text-primary-dark;
   }
   .sidebar-item:not(.active):hover {
     @apply text-primary;

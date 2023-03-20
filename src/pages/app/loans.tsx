@@ -1,23 +1,34 @@
 import Badge from "@/components/common/Badge";
-import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
-import StoreLoanModal from "@/components/modals/StoreLoanModal";
-import { GetLoans200Response, Loan } from "@/openapi/generated";
+import LoanModal from "@/components/modals/LoanModal";
+import Prompt from "@/components/modals/Prompt";
+import {
+  GetLoans200Response,
+  Loan,
+  LoanApprovalRequestStatusEnum,
+} from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
 import { formatDate, formatMoney } from "@/utils/helpers";
+import { loadLoans } from "@/utils/loaders";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { isAxiosError } from "axios";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-hot-toast";
 import { useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
 const Loans = () => {
   useTitle("Loans | Microlend");
 
-  const loans = (useLoaderData() as GetLoans200Response).data;
+  const loaderData = (useLoaderData() as GetLoans200Response).data;
   const [loading, setLoading] = useState<boolean>(false);
   const [showLoanModal, setShowLoanModal] = useState<boolean>(false);
+  const [showApprovalPrompt, setShowApprovalPrompt] = useState<boolean>(false);
   const [loan, setLoan] = useState<Loan>();
+  const [loans, setLoans] = useState<Array<Loan>>([]);
+  const [approvalStatus, setApprovalStatus] =
+    useState<LoanApprovalRequestStatusEnum>("approved");
 
   const tableColumns = useMemo<Array<ColumnDef<Loan>>>(
     () => [
@@ -89,6 +100,32 @@ const Loans = () => {
             >
               View
             </button>
+
+            {val.row.original.status === "pending" && (
+              <>
+                <button
+                  className="text-success"
+                  onClick={() => {
+                    setLoan(val.row.original);
+                    setApprovalStatus("approved");
+                    setShowApprovalPrompt(true);
+                  }}
+                >
+                  Approve
+                </button>
+
+                <button
+                  className="text-danger"
+                  onClick={() => {
+                    setLoan(val.row.original);
+                    setApprovalStatus("rejected");
+                    setShowApprovalPrompt(true);
+                  }}
+                >
+                  Reject
+                </button>
+              </>
+            )}
           </div>
         ),
       },
@@ -112,6 +149,45 @@ const Loans = () => {
       setLoading(false);
     }
   };
+  const onHandleLoanApproval = async () => {
+    if (loan) {
+      await loanApproval(loan, approvalStatus);
+      await loadData();
+    }
+  };
+  const loanApproval = async (
+    loan: Loan,
+    status: LoanApprovalRequestStatusEnum
+  ) => {
+    setLoading(true);
+    setShowApprovalPrompt(false);
+
+    try {
+      const { data: response } = await LoanService.instance().loanApproval(
+        loan.id,
+        { status }
+      );
+      toast.success(response.message);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      } else {
+        toast.error((error as Error).message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  const loadData = async () => {
+    const response = await loadLoans();
+
+    setLoans(response.data);
+  };
+
+  // Effects
+  useEffect(() => {
+    setLoans(loaderData);
+  }, []);
 
   // Template
   return (
@@ -124,7 +200,7 @@ const Loans = () => {
                 <h3>Loans</h3>
               </div>
 
-              <Button onClick={() => setShowLoanModal(true)}>Add loan</Button>
+              {/* <Button onClick={() => setShowLoanModal(true)}>Add loan</Button> */}
             </div>
 
             <Table data={loans} columns={tableColumns} />
@@ -132,14 +208,25 @@ const Loans = () => {
         </Card>
       </div>
 
-      <StoreLoanModal
+      <LoanModal
         visible={showLoanModal}
+        readonly={true}
         loan={loan}
         onClose={() => {
           setShowLoanModal(false);
           setLoan(undefined);
         }}
-        onUpdated={() => console.log("updated")}
+        onUpdated={loadData}
+      />
+
+      <Prompt
+        visible={showApprovalPrompt}
+        title={`Are you sure you want to ${
+          approvalStatus === "approved" ? "approve" : "reject"
+        } this loan?`}
+        message="This action cannot be undone."
+        onConfirm={onHandleLoanApproval}
+        onCancel={() => setShowApprovalPrompt(false)}
       />
     </>
   );

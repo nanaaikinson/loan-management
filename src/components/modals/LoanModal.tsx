@@ -26,13 +26,15 @@ import AsyncSelect from "react-select/async";
 
 interface StoreLoanModalProps {
   visible: boolean;
+  readonly: boolean;
   loan?: ILoan;
   onClose: () => void;
-  onUpdated: () => void;
+  onUpdated?: () => void;
 }
 
 const StoreLoanModal = ({
   visible,
+  readonly: readonlyProp,
   loan,
   onClose,
   onUpdated,
@@ -91,7 +93,7 @@ const StoreLoanModal = ({
       // Show toast notification
       toast.success(response.message, { position: "top-center" });
 
-      onUpdated();
+      onUpdated && onUpdated();
       handleClose();
     } catch (error) {
       if (isAxiosError(error) && error?.response) {
@@ -202,7 +204,7 @@ const StoreLoanModal = ({
       <Dialog visible={visible} size="xs">
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-12 px-5 border-b border-gray-100">
-            <h3 className="text-lg font-medium mb-0">Loan</h3>
+            <h3 className="text-xl font-medium mb-0">Loan</h3>
 
             <CloseButton onClick={handleClose} />
           </div>
@@ -218,6 +220,7 @@ const StoreLoanModal = ({
                       name="type"
                       id="type"
                       className="form-select"
+                      disabled={readonlyProp}
                     >
                       <option value="">Select option</option>
                       {Object.values(LoanRequestTypeEnum).map((type, index) => (
@@ -242,6 +245,7 @@ const StoreLoanModal = ({
                       name="repaymentFrequency"
                       id="repaymentFrequency"
                       className="form-select"
+                      disabled={readonlyProp}
                     >
                       <option value="">Select option</option>
                       {Object.values(LoanRequestRepaymentFrequencyEnum).map(
@@ -270,6 +274,7 @@ const StoreLoanModal = ({
                       id="amount"
                       className="form-input"
                       onInput={onInputAmount}
+                      disabled={readonlyProp}
                     />
                     {errors?.amount?.message && (
                       <ErrorMessage message={errors?.amount?.message} />
@@ -292,6 +297,7 @@ const StoreLoanModal = ({
                           setValue("startDate", d);
                           setStartDate(d);
                         }}
+                        disabled={readonlyProp}
                       />
                       <div className="absolute top-0 right-0 h-full w-12 flex items-center justify-center pointer-events-none">
                         <Icon icon="bx:calendar" />
@@ -319,6 +325,7 @@ const StoreLoanModal = ({
                           value === "amount" ? "in cash" : "in %"
                         );
                       }}
+                      disabled={readonlyProp}
                     >
                       <option value="" disabled>
                         Select option
@@ -351,6 +358,7 @@ const StoreLoanModal = ({
                       id="interestRate"
                       className="form-input"
                       onInput={onInputAmount}
+                      disabled={readonlyProp}
                     />
                     {errors?.interestRate?.message && (
                       <ErrorMessage message={errors?.interestRate?.message} />
@@ -367,6 +375,7 @@ const StoreLoanModal = ({
                       name="duration"
                       id="duration"
                       className="form-input"
+                      disabled={readonlyProp}
                     />
                     {errors?.duration?.message && (
                       <ErrorMessage message={errors?.duration?.message} />
@@ -381,36 +390,45 @@ const StoreLoanModal = ({
                         <label htmlFor="">Customer</label>
                         <div className="flex justify-between items-center">
                           <p className="mb-0">{customer?.name}</p>
-                          <button
-                            type="button"
-                            className="text-danger h-8 w-8 hover:bg-danger hover:bg-opacity-10 rounded-full flex items-center justify-center"
-                            onClick={() => {
-                              setCustomer({ name: "", id: "" });
-                            }}
-                          >
-                            <Icon icon="bx:trash" />
-                          </button>
+
+                          {!readonlyProp && (
+                            <button
+                              type="button"
+                              className="text-danger h-8 w-8 hover:bg-danger hover:bg-opacity-10 rounded-full flex items-center justify-center"
+                              onClick={() => {
+                                setCustomer({ name: "", id: "" });
+                              }}
+                            >
+                              <Icon icon="bx:trash" />
+                            </button>
+                          )}
                         </div>
                       </>
                     ) : (
                       <>
-                        <label htmlFor="customerId">Search customer</label>
-                        <AsyncSelect
-                          className="react-form-select"
-                          classNamePrefix="react-select"
-                          cacheOptions
-                          loadOptions={loadCustomers}
-                          onChange={(option) => {
-                            if (option) {
-                              setCustomer({
-                                name: option.label,
-                                id: option.value,
-                              });
-                            }
-                          }}
-                        />
-                        {errors?.customerId?.message && (
-                          <ErrorMessage message={errors?.customerId?.message} />
+                        {!readonlyProp && (
+                          <>
+                            <label htmlFor="customerId">Search customer</label>
+                            <AsyncSelect
+                              className="react-form-select"
+                              classNamePrefix="react-select"
+                              cacheOptions
+                              loadOptions={loadCustomers}
+                              onChange={(option) => {
+                                if (option) {
+                                  setCustomer({
+                                    name: option.label,
+                                    id: option.value,
+                                  });
+                                }
+                              }}
+                            />
+                            {errors?.customerId?.message && (
+                              <ErrorMessage
+                                message={errors?.customerId?.message}
+                              />
+                            )}
+                          </>
                         )}
                       </>
                     )}
@@ -418,21 +436,23 @@ const StoreLoanModal = ({
                 </div>
               </div>
 
-              <div className="pt-4 flex">
-                <Button
-                  type="submit"
-                  className="ml-auto px-10"
-                  disabled={loading}
-                >
-                  {loading
-                    ? loan?.id
-                      ? "Updating..."
-                      : "Submitting..."
-                    : loan?.id
-                    ? "Update"
-                    : "Submit"}
-                </Button>
-              </div>
+              {!readonlyProp && (
+                <div className="pt-4 flex">
+                  <Button
+                    type="submit"
+                    className="ml-auto px-10"
+                    disabled={loading}
+                  >
+                    {loading
+                      ? loan?.id
+                        ? "Updating..."
+                        : "Submitting..."
+                      : loan?.id
+                      ? "Update"
+                      : "Submit"}
+                  </Button>
+                </div>
+              )}
             </form>
           </div>
         </div>

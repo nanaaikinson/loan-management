@@ -1,8 +1,13 @@
 const colors = {
+  // primary: {
+  //   light: "#4a73ec",
+  //   DEFAULT: "#3663ea",
+  //   dark: "#3159d3",
+  // },
   primary: {
-    light: "#4a73ec",
-    DEFAULT: "#3663ea",
-    dark: "#3159d3",
+    light: "#2d2d31",
+    DEFAULT: "#16161a",
+    dark: "#141417",
   },
   info: {
     light: "#368df7",
@@ -11,7 +16,7 @@ const colors = {
   },
   dark: {
     light: "#1f2a4b",
-    DEFAULT: "#061237",
+    DEFAULT: "#16161a",
     dark: "#050e2c",
   },
   success: {

@@ -204,7 +204,7 @@ const StoreLoanModal = ({
       <Dialog visible={visible} size="xs">
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-12 px-5 border-b border-gray-100">
-            <h3 className="text-xl font-medium mb-0">Loan</h3>
+            <h3 className="text-xl mb-0">Loan</h3>
 
             <CloseButton onClick={handleClose} />
           </div>

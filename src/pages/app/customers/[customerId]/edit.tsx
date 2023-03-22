@@ -125,7 +125,7 @@ const EditCustomer = () => {
     <>
       <Breadcrumb items={breadcrumbItems} className="mb-8" />
 
-      <div className="container flex flex-col pb-10">
+      <div className="container xl:container-fluid flex flex-col pb-10">
         <div className="mx-auto w-full max-w-2xl">
           <div className=" mb-10">
             <div className="flex flex-col space-y-1">

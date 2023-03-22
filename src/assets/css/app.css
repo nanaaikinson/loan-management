@@ -14,8 +14,9 @@
   }
 
   body {
+    font-family: "Source Sans Pro", sans-serif;
     font-size: 15px;
-    @apply bg-gray-50 text-dark;
+    @apply bg-[#f5f5f5] text-dark;
     /* @apply bg-white text-dark; */
   }
 
@@ -25,7 +26,7 @@
   h4,
   h5,
   h6 {
-    font-family: "Metric-Medium", sans-serif;
+    /* font-family: "Metric-Medium", sans-serif; */
     margin-bottom: 0.5rem;
     line-height: 1.25;
     @apply font-semibold;
@@ -68,7 +69,7 @@
   .form-select,
   .form-checkbox,
   .form-radio {
-    @apply app-shadow rounded-[7px];
+    @apply app-shadow rounded-[4px];
   }
 
   .form-input,
@@ -88,7 +89,7 @@
   }
 
   .btn {
-    @apply transform-none py-2.5 px-5 hover:shadow-sm focus:ring-0 active:ring-0;
+    @apply transform-none py-[10px] px-5 hover:shadow-sm focus:ring-0 active:ring-0;
   }
 
   .btn-secondary {
@@ -97,10 +98,10 @@
   }
 
   .sidebar-item {
-    @apply flex cursor-pointer items-center space-x-3 rounded-sm px-3 py-2 transition duration-300;
+    @apply flex cursor-pointer items-center space-x-3 rounded-sm px-3 py-3 text-[#666f75] transition duration-300;
   }
   .sidebar-item.active {
-    @apply rounded-[7px] bg-primary bg-opacity-5 text-primary-dark;
+    @apply rounded-[4px] bg-[#e4e9ec] text-primary;
   }
   .sidebar-item:not(.active):hover {
     @apply text-primary;

@@ -93,7 +93,7 @@ const Customers = () => {
   // Template
   return (
     <>
-      <div className="container">
+      <div className="container xl:container-fluid">
         <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">

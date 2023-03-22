@@ -18,19 +18,19 @@ const Sidebar = ({ className }: SidebarProps) => {
           <h3>MicroLend</h3>
         </a>
 
-        <nav className="px-4 flex flex-col gap-y-2">
+        <nav className="px-4 flex flex-col gap-y-1">
           <NavLink className="sidebar-item" to="/dashboard">
-            <Icon icon="ri:home-fill" className="icon" />
+            <Icon icon="uil:tachometer-fast-alt" className="icon" />
             <span>Dashboard</span>
           </NavLink>
 
           <NavLink className="sidebar-item" to="/customers">
-            <Icon icon="clarity:group-solid-badged" className="icon" />
+            <Icon icon="uil:user" className="icon" />
             <span>Customers</span>
           </NavLink>
 
           <NavLink className="sidebar-item" to="/loans">
-            <Icon icon="clarity:contract-solid" className="icon" />
+            <Icon icon="uil:file-download-alt" className="icon" />
             <span>Loans</span>
           </NavLink>
 

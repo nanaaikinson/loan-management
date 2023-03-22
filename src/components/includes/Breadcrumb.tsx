@@ -11,7 +11,7 @@ const Breadcrumb = ({ items, className }: BreadcrumbProps) => {
   return (
     <nav
       className={classNames(
-        "flex border-b border-gray-100 pb-3 px-5",
+        "flex border-b border-gray-200 pb-3 px-5",
         className
       )}
       aria-label="Breadcrumb"

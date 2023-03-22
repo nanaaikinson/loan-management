@@ -1,4 +1,5 @@
 import Badge from "@/components/common/Badge";
+import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import LoanModal from "@/components/modals/LoanModal";
@@ -15,7 +16,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { isAxiosError } from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
 const Loans = () => {
@@ -23,6 +24,7 @@ const Loans = () => {
 
   const loaderData = (useLoaderData() as GetLoans200Response).data;
   const [loading, setLoading] = useState<boolean>(false);
+  const [readonlyLoan, setReadonlyLoan] = useState<boolean>(false);
   const [showLoanModal, setShowLoanModal] = useState<boolean>(false);
   const [showApprovalPrompt, setShowApprovalPrompt] = useState<boolean>(false);
   const [loan, setLoan] = useState<Loan>();
@@ -36,6 +38,23 @@ const Loans = () => {
         header: "Type",
         cell: (val) => (
           <span className="capitalize">{val.row.original.type}</span>
+        ),
+      },
+      {
+        header: "Customer",
+        cell: (val) => (
+          <span className="capitalize">
+            {val.row.original?.customer ? (
+              <Link
+                to={`/customers/${val.row.original?.customer.id}`}
+                className="text-info transition duration-300 hover:text-primary"
+              >
+                {val.row.original?.customer.firstName}
+              </Link>
+            ) : (
+              <span className="text-gray-300">No customer</span>
+            )}
+          </span>
         ),
       },
       {
@@ -143,6 +162,7 @@ const Loans = () => {
       } = await LoanService.instance().getLoan(loan.id);
       setLoan(response);
       setShowLoanModal(true);
+      setReadonlyLoan(response.status === "approved");
     } catch (error) {
       console.log(error);
     } finally {
@@ -151,23 +171,22 @@ const Loans = () => {
   };
   const onHandleLoanApproval = async () => {
     if (loan) {
-      await loanApproval(loan, approvalStatus);
+      await loanApproval();
       await loadData();
     }
   };
-  const loanApproval = async (
-    loan: Loan,
-    status: LoanApprovalRequestStatusEnum
-  ) => {
+  const loanApproval = async () => {
     setLoading(true);
     setShowApprovalPrompt(false);
 
     try {
-      const { data: response } = await LoanService.instance().loanApproval(
-        loan.id,
-        { status }
-      );
-      toast.success(response.message);
+      if (loan) {
+        const { data: response } = await LoanService.instance().loanApproval(
+          loan?.id,
+          { status: approvalStatus }
+        );
+        toast.success(response.message);
+      }
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(error.response?.data.message);
@@ -192,7 +211,7 @@ const Loans = () => {
   // Template
   return (
     <>
-      <div className="container">
+      <div className="container xl:container-fluid">
         <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">
@@ -200,7 +219,7 @@ const Loans = () => {
                 <h3>Loans</h3>
               </div>
 
-              {/* <Button onClick={() => setShowLoanModal(true)}>Add loan</Button> */}
+              <Button onClick={() => setShowLoanModal(true)}>Add loan</Button>
             </div>
 
             <Table data={loans} columns={tableColumns} />
@@ -210,7 +229,7 @@ const Loans = () => {
 
       <LoanModal
         visible={showLoanModal}
-        readonly={true}
+        readonly={readonlyLoan}
         loan={loan}
         onClose={() => {
           setShowLoanModal(false);

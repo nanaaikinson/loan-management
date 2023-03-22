@@ -57,7 +57,7 @@ const Table = <T,>({
                     scope="col"
                     key={header.id}
                     className={classNames(
-                      "px-3 py-3.5 text-left text-sm font-semibold text-gray-900",
+                      "px-3 py-3.5 text-left font-semibold text-gray-900",
                       tableHeaderClassName
                     )}
                   >
@@ -90,7 +90,7 @@ const Table = <T,>({
                       <td
                         key={cell.id}
                         className={classNames(
-                          "whitespace-nowrap px-3 py-4 text-sm text-gray-500",
+                          "whitespace-nowrap px-3 py-4 text-gray-500",
                           tableCellClassName
                         )}
                       >

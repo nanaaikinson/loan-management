@@ -23,14 +23,14 @@ const Breadcrumb = ({ items, className }: BreadcrumbProps) => {
               <>
                 <Link
                   to={item.to}
-                  className=" transition duration-150 ease-in-out !text-primary hover:!text-primary-dark !text-sm"
+                  className=" transition duration-150 ease-in-out !text-info hover:!text-info-dark "
                 >
                   {item.label}
                 </Link>
               </>
             ) : (
               <>
-                <a aria-current="page" className="!text-sm">
+                <a aria-current="page" className="">
                   {item.label}
                 </a>
               </>

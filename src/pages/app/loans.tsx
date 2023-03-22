@@ -47,7 +47,7 @@ const Loans = () => {
             {val.row.original?.customer ? (
               <Link
                 to={`/customers/${val.row.original?.customer.id}`}
-                className="text-info transition duration-300 hover:text-primary"
+                className="text-info transition duration-300 hover:text-info-dark"
               >
                 {val.row.original?.customer.firstName}
               </Link>

@@ -38,6 +38,11 @@ const Sidebar = ({ className }: SidebarProps) => {
             <Icon icon="uil:transaction" className="icon" />
             <span>Transactions</span>
           </NavLink>
+
+          <NavLink className="sidebar-item" to="/reports">
+            <Icon icon="uil:chart-bar" className="icon" />
+            <span>Reports</span>
+          </NavLink>
         </nav>
       </nav>
     </>

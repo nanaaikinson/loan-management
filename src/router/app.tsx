@@ -7,6 +7,7 @@ import CustomerTransactions from "@/pages/app/customers/[customerId]/transaction
 import StoreCustomer from "@/pages/app/customers/new";
 import Dashboard from "@/pages/app/dashboard";
 import Loans from "@/pages/app/loans";
+import Reports from "@/pages/app/reports";
 import Transactions from "@/pages/app/transactions";
 import {
   loadCustomer,
@@ -25,6 +26,10 @@ const appRoutes: Array<RouteObject> = [
       {
         path: "dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "reports",
+        element: <Reports />,
       },
       {
         path: "loans",

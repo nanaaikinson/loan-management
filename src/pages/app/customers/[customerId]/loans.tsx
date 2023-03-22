@@ -2,7 +2,7 @@ import Badge from "@/components/common/Badge";
 import Table from "@/components/common/Table";
 import NoData from "@/components/misc/NoData";
 import { CustomerLoans200Response, Loan } from "@/openapi/generated";
-import { formatMoney } from "@/utils/helpers";
+import { formatDate, formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { useLoaderData } from "react-router-dom";
@@ -56,6 +56,14 @@ const CustomerLoans = () => {
               return <Badge variant="default" text={val.row.original.status} />;
           }
         },
+      },
+      {
+        header: "Start Date",
+        cell: (val) => formatDate(val.row.original.startDate, "MMM DD, YYYY"),
+      },
+      {
+        header: "End Date",
+        cell: (val) => formatDate(val.row.original.endDate, "MMM DD, YYYY"),
       },
       {
         header: " ",

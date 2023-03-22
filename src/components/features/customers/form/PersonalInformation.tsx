@@ -61,6 +61,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
       setValue("postalAddress", storeCustomerContext.customer.postalAddress);
       setValue("occupation", storeCustomerContext.customer.occupation);
       setValue("secondaryPhone", storeCustomerContext.customer.secondaryPhone);
+      setDateOfBirth(storeCustomerContext.customer.dateOfBirth);
     }
   }, [storeCustomerContext?.customer]);
 

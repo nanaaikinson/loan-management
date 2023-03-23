@@ -1335,13 +1335,11 @@ components:
           enum:
             - debit
             - credit
+            - loan repayment
         loan:
           type: string
           nullable: true
-        description:
-          type: string
-          nullable: true
-        reference:
+        note:
           type: string
           nullable: true
       required:
@@ -1350,8 +1348,7 @@ components:
         - currency
         - type
         - loan
-        - description
-        - reference
+        - note
     TransactionResponse:
       type: object
       x-examples:

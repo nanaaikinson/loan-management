@@ -55,18 +55,13 @@ export interface StoreTransactionRequest {
      * @type {string}
      * @memberof StoreTransactionRequest
      */
-    'description': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof StoreTransactionRequest
-     */
-    'reference': string | null;
+    'note': string | null;
 }
 
 export const StoreTransactionRequestTypeEnum = {
     Debit: 'debit',
-    Credit: 'credit'
+    Credit: 'credit',
+    LoanRepayment: 'loan repayment'
 } as const;
 
 export type StoreTransactionRequestTypeEnum = typeof StoreTransactionRequestTypeEnum[keyof typeof StoreTransactionRequestTypeEnum];

@@ -92,7 +92,7 @@ const ViewCustomer = () => {
               </nav>
             </div>
 
-            <Outlet />
+            <Outlet context={{ customer }} />
           </Card>
         </div>
       </div>

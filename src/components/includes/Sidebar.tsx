@@ -14,7 +14,7 @@ const Sidebar = ({ className }: SidebarProps) => {
           className
         )}
       >
-        <a className="flex items-center px-4 py-5 mb-10">
+        <a className="flex items-center px-6 h-16 mb-10 border-b border-gray-50">
           <h3>MicroLend</h3>
         </a>
 

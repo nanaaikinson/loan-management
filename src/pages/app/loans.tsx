@@ -52,7 +52,7 @@ const Loans = () => {
                 {val.row.original?.customer.firstName}
               </Link>
             ) : (
-              <span className="text-gray-300">No customer</span>
+              <span className="text-gray-300">None</span>
             )}
           </span>
         ),

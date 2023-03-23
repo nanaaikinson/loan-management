@@ -1,3 +1,4 @@
+import Badge from "@/components/common/Badge";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import { GetTransactions200Response, Transaction } from "@/openapi/generated";
@@ -14,34 +15,63 @@ const Transactions = () => {
   const tableColumns = useMemo<Array<ColumnDef<Transaction>>>(
     () => [
       {
+        header: "Reference",
+        cell: (val) => val.renderValue(),
+        accessorKey: "reference",
+      },
+      {
         header: "Amount",
         cell: (val) => (
-          <span className="font-semibold">{`${
-            val.row.original.currency
-          } ${formatMoney(val.row.original.amount)}`}</span>
+          <span className="">{`${val.row.original.currency} ${formatMoney(
+            val.row.original.amount
+          )}`}</span>
         ),
       },
       // {
       //   header: "Account Number",
-      //   cell: (val) => <span className="font-semibold">1234567890</span>,
+      //   cell: (val) => <span className=">1234567890</span>,
       // },
       {
         header: "Customer",
         cell: (val) => (
           <>
-            <Link to={`/customers/${val.row.original.id}/transactions`}>
-              <span className="font-semibold">
-                `${val.row.original.customer.firstName} $
-                {val.row.original.customer.lastName}`
+            <Link to={`/customers/${val.row.original.customer.id}/loans`}>
+              <span className="transition-all duration-300 text-info hover:text-info-dark">
+                {`${val.row.original.customer.firstName} ${val.row.original.customer.lastName}`}
               </span>
             </Link>
           </>
         ),
       },
       {
-        header: "Reference",
-        cell: (val) => val.renderValue(),
-        accessorKey: "reference",
+        header: "Loan",
+        cell: (val) =>
+          val.row.original.loan ? (
+            <>
+              <Link to={`/loans/?loanId=${val.row.original?.loan.id}`}>
+                <span className="transition-all duration-300 text-info hover:text-info-dark">
+                  {val.row.original?.loan.id}
+                </span>
+              </Link>
+            </>
+          ) : (
+            <span className="text-gray-300">None</span>
+          ),
+      },
+      {
+        header: "Status",
+        cell: (val) => {
+          switch (val.row.original.status) {
+            case "pending":
+              return <Badge variant="warning" text={"pending"} />;
+            case "success":
+              return <Badge variant="success" text={"success"} />;
+            case "failed":
+              return <Badge variant="danger" text={"failed"} />;
+            default:
+              return <Badge variant="default" text={val.row.original.status} />;
+          }
+        },
       },
       {
         header: "Transaction Date",

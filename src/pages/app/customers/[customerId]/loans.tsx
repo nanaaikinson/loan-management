@@ -1,13 +1,20 @@
 import Badge from "@/components/common/Badge";
 import Table from "@/components/common/Table";
 import NoData from "@/components/misc/NoData";
+import TransactionModal from "@/components/modals/TransactionModal";
 import { CustomerLoans200Response, Loan } from "@/openapi/generated";
+import { CustomerOutletContextType } from "@/types";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 
 const CustomerLoans = () => {
+  // State
+  const [showTransactionModal, setShowTransactionModal] =
+    useState<boolean>(false);
+  const [loanId, setLoanId] = useState<string>("");
+  const { customer } = useOutletContext<CustomerOutletContextType>();
   const loans = (useLoaderData() as CustomerLoans200Response).data;
   const tableColumns = useMemo<Array<ColumnDef<Loan>>>(
     () => [
@@ -72,7 +79,12 @@ const CustomerLoans = () => {
             <button className="text-info">View</button>
 
             {val.row.original.status === "approved" && (
-              <button className="text-success">Pay</button>
+              <button
+                className="text-success"
+                onClick={() => onShowTransactionModal(val.row.original.id)}
+              >
+                Pay
+              </button>
             )}
           </div>
         ),
@@ -81,6 +93,16 @@ const CustomerLoans = () => {
     []
   );
 
+  // Methods
+  const onShowTransactionModal = (loanId: string) => {
+    setLoanId(loanId);
+    setShowTransactionModal(true);
+  };
+  const onCloseTransactionModal = () => {
+    setShowTransactionModal(false);
+  };
+
+  // Template
   return (
     <>
       {loans.length > 0 ? (
@@ -90,6 +112,13 @@ const CustomerLoans = () => {
       ) : (
         <NoData />
       )}
+
+      <TransactionModal
+        customer={customer}
+        loanId={loanId}
+        visible={showTransactionModal}
+        onClose={onCloseTransactionModal}
+      />
     </>
   );
 };

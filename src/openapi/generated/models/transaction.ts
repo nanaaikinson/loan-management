@@ -64,6 +64,12 @@ export interface Transaction {
      * @type {string}
      * @memberof Transaction
      */
+    'status': TransactionStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Transaction
+     */
     'description': string | null;
     /**
      * 
@@ -84,4 +90,14 @@ export interface Transaction {
      */
     'createdAt': string;
 }
+
+export const TransactionStatusEnum = {
+    Success: 'success',
+    Failed: 'failed',
+    Pending: 'pending',
+    Reversed: 'reversed'
+} as const;
+
+export type TransactionStatusEnum = typeof TransactionStatusEnum[keyof typeof TransactionStatusEnum];
+
 

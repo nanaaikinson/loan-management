@@ -39,7 +39,12 @@ const Table = <T,>({
 
   return (
     <>
-      <div className={classNames("py-2", tableContainerClassName)}>
+      <div
+        className={classNames(
+          "py-2 w-full overflow-auto",
+          tableContainerClassName
+        )}
+      >
         <table
           className={classNames(
             "min-w-full divide-y divide-gray-200",

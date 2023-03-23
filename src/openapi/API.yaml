@@ -1292,6 +1292,13 @@ components:
           type: string
         type:
           type: string
+        status:
+          type: string
+          enum:
+            - success
+            - failed
+            - pending
+            - reversed
         description:
           type: string
           nullable: true
@@ -1308,6 +1315,7 @@ components:
         - amount
         - currency
         - type
+        - status
         - description
         - reference
         - loanRepayment

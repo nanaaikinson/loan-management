@@ -20,6 +20,7 @@ interface TransactionModalProps {
   visible: boolean;
   readonly?: boolean;
   loanId?: string;
+  currency?: string;
   onClose: () => void;
   onUpdate?: () => void;
 }
@@ -30,6 +31,7 @@ const TransactionModal = ({
   visible,
   customer,
   loanId,
+  currency = "GHS",
   readonly,
   onClose,
   onUpdate,
@@ -43,6 +45,7 @@ const TransactionModal = ({
     setValue,
     setError,
     reset,
+    control,
     formState: { errors },
   } = useForm<StoreTransactionForm>({
     resolver: yupResolver(storeTransactionValidationSchema),
@@ -56,7 +59,7 @@ const TransactionModal = ({
       const { data: response } =
         await TransactionService.instance().createTransaction({
           customer: customer.id,
-          loan: data.loan ?? null,
+          loan: loanId ?? null,
           amount: data.amount,
           type: data.type as StoreTransactionRequestTypeEnum,
           note: data.note ?? "",
@@ -92,25 +95,19 @@ const TransactionModal = ({
     }
   };
   const handleClose = () => {
-    // setLoading(false);
-    // setStartDate("");
-    // setInterestLabel("in cash");
-    // setCustomer({ name: "", id: "" });
+    setAmount(0);
     reset();
     onClose();
   };
 
   // Effects
   useEffect(() => {
-    setValue("currency", "GHS");
-    if (loanId) {
-      setValue("loan", loanId);
-    }
-  }, []);
+    setValue("currency", currency);
+  }, [visible]);
 
   return (
     <>
-      <Dialog visible={visible} size="sm">
+      <Dialog visible={visible} size="xs">
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-12 px-5 border-b border-gray-100">
             <h3 className="text-xl mb-0">Transaction</h3>
@@ -187,7 +184,7 @@ const TransactionModal = ({
                       className="ml-auto px-10"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? "Submitting..." : "Transactt"}
+                      {isSubmitting ? "Submitting..." : "Transact"}
                     </Button>
                   </div>
                 </div>

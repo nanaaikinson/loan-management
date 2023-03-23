@@ -25,7 +25,7 @@ const AmountInput = ({
       .replace(/[^0-9.]/g, "")
       .replace(/(\..*)\./g, "$1");
 
-    const value = parseFloat(input.value);
+    const value = !isNaN(parseFloat(input.value)) ? parseFloat(input.value) : 0;
     setAmount(value);
     onChange(value);
   };

@@ -15,10 +15,10 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { Customer } from './customer';
+import { LoanCustomer } from './loan-customer';
 
 /**
- * Loan model
+ * 
  * @export
  * @interface Loan
  */
@@ -29,18 +29,6 @@ export interface Loan {
      * @memberof Loan
      */
     'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Loan
-     */
-    'number': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Loan
-     */
-    'amount': number;
     /**
      * 
      * @type {string}
@@ -61,6 +49,42 @@ export interface Loan {
     'repaymentFrequency': LoanRepaymentFrequencyEnum;
     /**
      * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'amount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'totalAmount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'amountPaid': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'amountDue': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'interestRate': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Loan
+     */
+    'interestRateType': LoanInterestRateTypeEnum;
+    /**
+     * 
      * @type {string}
      * @memberof Loan
      */
@@ -76,31 +100,13 @@ export interface Loan {
      * @type {number}
      * @memberof Loan
      */
-    'interestRate': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Loan
-     */
-    'interestRateType': LoanInterestRateTypeEnum;
-    /**
-     * 
-     * @type {number}
-     * @memberof Loan
-     */
     'duration': number;
     /**
      * 
-     * @type {number}
+     * @type {LoanCustomer}
      * @memberof Loan
      */
-    'totalAmount': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Loan
-     */
-    'currency': string;
+    'customer': LoanCustomer | null;
     /**
      * 
      * @type {number}
@@ -109,10 +115,34 @@ export interface Loan {
     'repaymentAmount': number;
     /**
      * 
-     * @type {Customer}
+     * @type {number}
      * @memberof Loan
      */
-    'customer'?: Customer;
+    'numberOfRepayments': number;
+    /**
+     * 
+     * @type {any}
+     * @memberof Loan
+     */
+    'nextRepaymentDate': any | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'progress': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Loan
+     */
+    'loanNumber': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Loan
+     */
+    'currency': string;
     /**
      * 
      * @type {string}

@@ -1,4 +1,5 @@
 import Badge from "@/components/common/Badge";
+import ProgressBar from "@/components/common/ProgressBar";
 import Table from "@/components/common/Table";
 import NoData from "@/components/misc/NoData";
 import TransactionModal from "@/components/modals/TransactionModal";
@@ -25,14 +26,6 @@ const CustomerLoans = () => {
         ),
       },
       {
-        header: "Amount",
-        cell: (val) => (
-          <span className="text-right">{`${
-            val.row.original.currency
-          } ${formatMoney(val.row.original.amount)}`}</span>
-        ),
-      },
-      {
         header: "Interest Rate",
         cell: (val) => (
           <span className="text-right">{`${val.renderValue()} (${
@@ -42,11 +35,27 @@ const CustomerLoans = () => {
         accessorKey: "interestRate",
       },
       {
-        header: "Total Amount",
+        header: "Loan Amount",
+        cell: (val) => (
+          <span className="text-right">{`${
+            val.row.original.currency
+          } ${formatMoney(val.row.original.amount)}`}</span>
+        ),
+      },
+      {
+        header: "Amount to Pay",
         cell: (val) => (
           <span className="text-right">{`${
             val.row.original.currency
           } ${formatMoney(val.row.original.totalAmount)}`}</span>
+        ),
+      },
+      {
+        header: "Amount Paid",
+        cell: (val) => (
+          <span className="text-right">{`${
+            val.row.original.currency
+          } ${formatMoney(val.row.original.amountPaid)}`}</span>
         ),
       },
       {
@@ -65,12 +74,12 @@ const CustomerLoans = () => {
         },
       },
       {
-        header: "Start Date",
-        cell: (val) => formatDate(val.row.original.startDate, "MMM DD, YYYY"),
+        header: "Duration",
+        cell: (val) => <span>{val.row.original.duration} months</span>,
       },
       {
-        header: "End Date",
-        cell: (val) => formatDate(val.row.original.endDate, "MMM DD, YYYY"),
+        header: "Start Date",
+        cell: (val) => formatDate(val.row.original.startDate, "MMM DD, YYYY"),
       },
       {
         header: " ",
@@ -78,14 +87,14 @@ const CustomerLoans = () => {
           <div className="flex space-x-3 items-center">
             <button className="text-info">View</button>
 
-            {val.row.original.status === "approved" && (
+            {/* {val.row.original.status === "approved" && (
               <button
                 className="text-success"
                 onClick={() => onShowTransactionModal(val.row.original.id)}
               >
                 Pay
               </button>
-            )}
+            )} */}
           </div>
         ),
       },

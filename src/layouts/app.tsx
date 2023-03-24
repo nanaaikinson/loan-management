@@ -11,10 +11,10 @@ const AppLayout = () => {
   return (
     <>
       <section className="min-h-screen">
-        <Sidebar className="z-[80] w-60" />
-        <Header className="z-[70] px-5 lg:pl-60" />
+        <Sidebar className="z-[80] w-60 xl:translate-x-0" />
+        <Header className="z-[70] px-5 xl:pl-60" />
 
-        <main className="ml-0 transition md:ml-60">
+        <main className="ml-0 transition xl:ml-60">
           <Outlet />
         </main>
       </section>

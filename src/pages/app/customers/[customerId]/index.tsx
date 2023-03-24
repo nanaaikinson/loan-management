@@ -27,8 +27,8 @@ const ViewCustomer = () => {
       <Breadcrumb items={breadcrumbItems} className="" />
 
       <div className="row">
-        <div className="col-12 lg:col-5 xl:col-4">
-          <div className="flex flex-col gap-y-8 p-5  h-screen">
+        <div className="col-12 lg:col-3">
+          <div className="flex flex-col gap-y-8 p-5">
             <div className="flex items-center space-x-5">
               <div className="bg-gray-300 h-14 w-14 rounded-full"></div>
               <div className="flex flex-col flex-1 ">
@@ -72,7 +72,7 @@ const ViewCustomer = () => {
           </div>
         </div>
 
-        <div className="col-12 lg:col-7 xl:col-8">
+        <div className="col-12 lg:col-9">
           <Card className="p-5 h-screen flex flex-col gap-y-8 rounded-none">
             <div>
               <nav className="tab">

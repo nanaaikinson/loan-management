@@ -49,20 +49,12 @@ const Loans = () => {
                 to={`/customers/${val.row.original?.customer.id}`}
                 className="text-info transition duration-300 hover:text-info-dark"
               >
-                {val.row.original?.customer.firstName}
+                {val.row.original?.customer.name}
               </Link>
             ) : (
               <span className="text-gray-300">None</span>
             )}
           </span>
-        ),
-      },
-      {
-        header: "Amount",
-        cell: (val) => (
-          <span className="text-right">{`${
-            val.row.original.currency
-          } ${formatMoney(val.row.original.amount)}`}</span>
         ),
       },
       {
@@ -75,7 +67,16 @@ const Loans = () => {
         accessorKey: "interestRate",
       },
       {
-        header: "Total Amount",
+        header: "Loan Amount",
+        cell: (val) => (
+          <span className="text-right">{`${
+            val.row.original.currency
+          } ${formatMoney(val.row.original.amount)}`}</span>
+        ),
+      },
+
+      {
+        header: "Amount to Pay",
         cell: (val) => (
           <span className="text-right">{`${
             val.row.original.currency

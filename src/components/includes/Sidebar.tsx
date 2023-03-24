@@ -10,7 +10,7 @@ const Sidebar = ({ className }: SidebarProps) => {
     <>
       <nav
         className={classNames(
-          "fixed top-0 left-0 h-full pb-10 overflow-x-hidden overflow-y-auto transition origin-left transform bg-white border-r border-gray-100 lg:translate-x-0 -translate-x-full",
+          "fixed top-0 left-0 h-full pb-10 overflow-x-hidden overflow-y-auto transition origin-left transform bg-white border-r border-gray-100 -translate-x-full",
           className
         )}
       >

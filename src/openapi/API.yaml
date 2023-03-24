@@ -878,56 +878,32 @@ components:
       type: object
       x-examples:
         Example 1:
-          id: ALYHUYBCI6D9GI8
-          number: "149189137070596"
-          amount: 3000
+          id: LO_Ue7O3XC4DcqEHb4s7C1R
           type: personal
           status: pending
+          amount: 3000
+          totalAmount: 3400
+          amountPaid: 0
+          amountDue: 3000
           repaymentFrequency: bi-weekly
-          startDate: "2023-03-01"
-          endDate: "2023-06-01"
-          interestRate: 40
+          interestRate: 400
           interestRateType: amount
+          startDate: "2023-04-01"
+          endDate: "2023-07-01"
           duration: 3
-          currency: GHS
-          repaymentAmount: 527.27
           customer:
-            id: LNADAQ4Z5NO1AGY
-            firstName: Kofi
-            lastName: Atta
-            email: null
-            phoneNumber: "0241726707"
-            secondaryPhone: null
-            occupation: null
-            gpAddress: null
-            postalAddress: null
-            dateOfBirth: null
-            gender: female
-            maritalStatus: single
-            sourceOfIncome: null
-            avatar: null
-            identification:
-              id: YTKZENMRJNMEBVN
-              number: "1234567"
-              type: Passport
-              issueDate: "2020-10-01"
-              expiryDate: "2030-10-01"
-              issuingAuthority: Passport Gov
-              issuingCountry: Ghana
-              front:
-                key: 6
-                url: "http://microlend.test/uploads/IDENTIFICATION_FRONT/c5f9f22eaea6b81940f1bd2e1afe1493.png"
-              back:
-                key: 7
-                url: "http://microlend.test/uploads/IDENTIFICATION_BACK/c5f9f22eaea6b81940f1bd2e1afe1493.png"
-      description: Loan model
+            id: CUS_vyecouz8emdhztu2v2ay
+            name: Nana Kwesi Ofosu-Aikins
+          repaymentAmount: 486
+          numberOfRepayments: 7
+          nextRepaymentDate: null
+          progress: 0
+          loanNumber: "980008445546277"
+          currency: GHS
+          createdAt: "2023-03-24T07:40:37.000000Z"
       properties:
         id:
           type: string
-        number:
-          type: string
-        amount:
-          type: integer
         type:
           type: string
           enum:
@@ -950,10 +926,14 @@ components:
             - monthly
             - quarterly
             - annually
-        startDate:
-          type: string
-        endDate:
-          type: string
+        amount:
+          type: integer
+        totalAmount:
+          type: integer
+        amountPaid:
+          type: integer
+        amountDue:
+          type: integer
         interestRate:
           type: integer
         interestRateType:
@@ -961,34 +941,61 @@ components:
           enum:
             - amount
             - percentage
+        startDate:
+          type: string
+        endDate:
+          type: string
         duration:
           type: integer
-        totalAmount:
-          type: number
+        customer:
+          type: object
+          required:
+            - id
+            - name
+          nullable: true
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        repaymentAmount:
+          type: integer
+        numberOfRepayments:
+          type: integer
+        nextRepaymentDate:
+          nullable: true
+        progress:
+          type: integer
+        loanNumber:
+          type: string
         currency:
           type: string
-        repaymentAmount:
-          type: number
-        customer:
-          $ref: "#/components/schemas/Customer"
         createdAt:
           type: string
       required:
         - id
-        - number
-        - amount
         - type
         - status
+        - amount
+        - totalAmount
+        - amountPaid
+        - amountDue
         - repaymentFrequency
-        - startDate
-        - endDate
         - interestRate
         - interestRateType
+        - startDate
+        - endDate
         - duration
-        - totalAmount
-        - currency
+        - customer
         - repaymentAmount
+        - numberOfRepayments
+        - nextRepaymentDate
+        - progress
+        - loanNumber
+        - currency
         - createdAt
+      x-stoplight:
+        id: fe973cda0ce93
     StoreCustomerRequest:
       type: object
       x-examples:

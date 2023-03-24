@@ -190,7 +190,7 @@ const StoreLoanModal = ({
       setValue("duration", loan.duration);
       if (loan?.customer) {
         setCustomer({
-          name: `${loan.customer.firstName} ${loan.customer.lastName}`,
+          name: `${loan.customer.name}`,
           id: loan.customer.id,
         });
       }

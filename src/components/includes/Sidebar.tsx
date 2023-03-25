@@ -1,3 +1,4 @@
+import Logo from "../common/Logo";
 import { Icon } from "@iconify/react";
 import classNames from "classnames";
 import { HTMLAttributes } from "react";
@@ -14,11 +15,11 @@ const Sidebar = ({ className }: SidebarProps) => {
           className
         )}
       >
-        <a className="flex items-center px-6 h-16 mb-10 border-b border-gray-50">
-          <h3>MicroLend</h3>
-        </a>
+        <Logo className="mb-10 px-6" />
 
         <nav className="px-4 flex flex-col gap-y-1">
+          <div className="text-gray-500 text-xs px-3 uppercase">Main Menu</div>
+
           <NavLink className="sidebar-item" to="/dashboard">
             <Icon icon="uil:tachometer-fast-alt" className="icon" />
             <span>Dashboard</span>

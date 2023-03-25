@@ -16,7 +16,7 @@
   body {
     font-family: "Source Sans Pro", sans-serif;
     font-size: 15px;
-    @apply bg-[#f5f5f5] text-dark;
+    @apply bg-white text-dark;
     /* @apply bg-white text-dark; */
   }
 
@@ -98,10 +98,10 @@
   }
 
   .sidebar-item {
-    @apply flex cursor-pointer items-center space-x-3 rounded-sm px-3 py-3 text-[#666f75] transition duration-300;
+    @apply flex cursor-pointer items-center space-x-3 rounded-sm border-l-2 border-l-transparent px-3 py-2 text-[#666f75] transition duration-300;
   }
   .sidebar-item.active {
-    @apply rounded-[4px] bg-[#e4e9ec] text-primary;
+    @apply rounded-[4px] border-l-info bg-info bg-opacity-5 text-info;
   }
   .sidebar-item:not(.active):hover {
     @apply text-primary;

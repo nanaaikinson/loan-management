@@ -655,6 +655,119 @@ paths:
               required:
                 - status
       description: Endpoint for loan approval
+  "/loans/{id}/repayments":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: ""
+      tags:
+        - loans
+      operationId: get-loan-repayments
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data:
+                      - id: TRX_iuVHuiEg2c
+                        amount: 400
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f9a7-37ec-4033-be68-623520638593
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:44.000000Z"
+                        status: pending
+                      - id: TRX_9SBGkHnEt0
+                        amount: 300
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f999-da71-4905-9ba8-0248d1e8d304
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:35.000000Z"
+                        status: pending
+                      - id: TRX_MUkRaFUZ7w
+                        amount: 300
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f976-9021-48ee-9ea0-6619f0628f34
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:12.000000Z"
+                        status: pending
+                      - id: TRX_DYctLoq9LR
+                        amount: 300
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f968-4b8d-4e36-ae7b-5e22f6d6d2cd
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:03.000000Z"
+                        status: pending
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Transaction"
+                required:
+                  - message
+                  - status
+                  - data
+      description: Endpoind for fetch a particular loan's repayments
+      security:
+        - Authorization: []
+    post:
+      summary: ""
+      tags:
+        - loans
+      operationId: loan-repayment
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+                required:
+                  - message
+                  - status
+                  - data
+      description: Endpoint for repayment of a particluar loan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreTransactionRequest"
+      security:
+        - Authorization: []
   /transactions:
     get:
       summary: Get transactions

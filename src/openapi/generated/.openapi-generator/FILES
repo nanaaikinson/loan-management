@@ -24,6 +24,7 @@ models/customers-search200-response-data-inner.ts
 models/customers-search200-response.ts
 models/get-customer200-response.ts
 models/get-customers200-response.ts
+models/get-loan-repayments200-response.ts
 models/get-loans200-response.ts
 models/get-transactions200-response.ts
 models/identification-front.ts
@@ -31,6 +32,7 @@ models/identification.ts
 models/index.ts
 models/loan-approval-request.ts
 models/loan-approval200-response.ts
+models/loan-repayment200-response.ts
 models/loan-request.ts
 models/loan.ts
 models/login-request.ts

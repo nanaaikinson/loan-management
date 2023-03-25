@@ -35,10 +35,6 @@ const ProtectedRoute = () => {
       const accessTokenExpiresAt =
         SecureStorage.instance().getItem(mlAtExpiresAtName);
 
-      console.log(
-        "Checking if access token is expired " + new Date().toISOString()
-      );
-
       if (!accessToken || !accessTokenExpiresAt) {
         logout();
         navigate("/");

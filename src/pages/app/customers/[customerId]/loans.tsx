@@ -8,7 +8,7 @@ import { CustomerOutletContextType } from "@/types";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-import { useLoaderData, useOutletContext } from "react-router-dom";
+import { Link, useLoaderData, useOutletContext } from "react-router-dom";
 
 const CustomerLoans = () => {
   // State
@@ -43,7 +43,7 @@ const CustomerLoans = () => {
         ),
       },
       {
-        header: "Amount to Pay",
+        header: "Total Amount",
         cell: (val) => (
           <span className="text-right">{`${
             val.row.original.currency
@@ -56,6 +56,14 @@ const CustomerLoans = () => {
           <span className="text-right">{`${
             val.row.original.currency
           } ${formatMoney(val.row.original.amountPaid)}`}</span>
+        ),
+      },
+      {
+        header: "Amount Due",
+        cell: (val) => (
+          <span className="text-right">{`${
+            val.row.original.currency
+          } ${formatMoney(val.row.original.amountDue)}`}</span>
         ),
       },
       {
@@ -85,7 +93,12 @@ const CustomerLoans = () => {
         header: " ",
         cell: (val) => (
           <div className="flex space-x-3 items-center">
-            <button className="text-info">View</button>
+            <Link
+              to={`/loans/${val.row.original.id}`}
+              className="text-info hover:text-info-dark"
+            >
+              View
+            </Link>
 
             {/* {val.row.original.status === "approved" && (
               <button

@@ -24,13 +24,19 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { CreateLoan200Response } from '../models';
 // @ts-ignore
+import { GetLoanRepayments200Response } from '../models';
+// @ts-ignore
 import { GetLoans200Response } from '../models';
 // @ts-ignore
 import { LoanApproval200Response } from '../models';
 // @ts-ignore
 import { LoanApprovalRequest } from '../models';
 // @ts-ignore
+import { LoanRepayment200Response } from '../models';
+// @ts-ignore
 import { LoanRequest } from '../models';
+// @ts-ignore
+import { StoreTransactionRequest } from '../models';
 // @ts-ignore
 import { UpdateLoan200Response } from '../models';
 /**
@@ -90,6 +96,44 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getLoan', 'id', id)
             const localVarPath = `/loans/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Endpoind for fetch a particular loan\'s repayments
+         * @summary 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLoanRepayments: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getLoanRepayments', 'id', id)
+            const localVarPath = `/loans/{id}/repayments`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -196,6 +240,50 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Endpoint for repayment of a particluar loan
+         * @summary 
+         * @param {string} id 
+         * @param {StoreTransactionRequest} storeTransactionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loanRepayment: async (id: string, storeTransactionRequest: StoreTransactionRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('loanRepayment', 'id', id)
+            // verify required parameter 'storeTransactionRequest' is not null or undefined
+            assertParamExists('loanRepayment', 'storeTransactionRequest', storeTransactionRequest)
+            const localVarPath = `/loans/{id}/repayments`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(storeTransactionRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Endpoint for updating a particular loan
          * @summary 
          * @param {string} id 
@@ -272,6 +360,17 @@ export const LoansApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Endpoind for fetch a particular loan\'s repayments
+         * @summary 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getLoanRepayments(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetLoanRepayments200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getLoanRepayments(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Endpoint for fetching a list of loans
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
@@ -291,6 +390,18 @@ export const LoansApiFp = function(configuration?: Configuration) {
          */
         async loanApproval(id: string, loanApprovalRequest: LoanApprovalRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoanApproval200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loanApproval(id, loanApprovalRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Endpoint for repayment of a particluar loan
+         * @summary 
+         * @param {string} id 
+         * @param {StoreTransactionRequest} storeTransactionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loanRepayment(id: string, storeTransactionRequest: StoreTransactionRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoanRepayment200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loanRepayment(id, storeTransactionRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -336,6 +447,16 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getLoan(id, options).then((request) => request(axios, basePath));
         },
         /**
+         * Endpoind for fetch a particular loan\'s repayments
+         * @summary 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLoanRepayments(id: string, options?: any): AxiosPromise<GetLoanRepayments200Response> {
+            return localVarFp.getLoanRepayments(id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Endpoint for fetching a list of loans
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
@@ -354,6 +475,17 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
          */
         loanApproval(id: string, loanApprovalRequest: LoanApprovalRequest, options?: any): AxiosPromise<LoanApproval200Response> {
             return localVarFp.loanApproval(id, loanApprovalRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for repayment of a particluar loan
+         * @summary 
+         * @param {string} id 
+         * @param {StoreTransactionRequest} storeTransactionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loanRepayment(id: string, storeTransactionRequest: StoreTransactionRequest, options?: any): AxiosPromise<LoanRepayment200Response> {
+            return localVarFp.loanRepayment(id, storeTransactionRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Endpoint for updating a particular loan
@@ -401,6 +533,18 @@ export class LoansApi extends BaseAPI {
     }
 
     /**
+     * Endpoind for fetch a particular loan\'s repayments
+     * @summary 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LoansApi
+     */
+    public getLoanRepayments(id: string, options?: AxiosRequestConfig) {
+        return LoansApiFp(this.configuration).getLoanRepayments(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Endpoint for fetching a list of loans
      * @summary Your GET endpoint
      * @param {*} [options] Override http request option.
@@ -422,6 +566,19 @@ export class LoansApi extends BaseAPI {
      */
     public loanApproval(id: string, loanApprovalRequest: LoanApprovalRequest, options?: AxiosRequestConfig) {
         return LoansApiFp(this.configuration).loanApproval(id, loanApprovalRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for repayment of a particluar loan
+     * @summary 
+     * @param {string} id 
+     * @param {StoreTransactionRequest} storeTransactionRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LoansApi
+     */
+    public loanRepayment(id: string, storeTransactionRequest: StoreTransactionRequest, options?: AxiosRequestConfig) {
+        return LoansApiFp(this.configuration).loanRepayment(id, storeTransactionRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -17,6 +17,7 @@ interface TableProps<T> {
   tableBodyRowClassName?: string;
   tableCellClassName?: string;
   tableContainerClassName?: string;
+  noDataText?: string;
 }
 
 const Table = <T,>({
@@ -30,6 +31,7 @@ const Table = <T,>({
   tableHeaderClassName,
   tableBodyRowClassName,
   tableHeadRowClassName,
+  noDataText,
 }: TableProps<T>) => {
   const table = useReactTable({
     data,
@@ -115,7 +117,7 @@ const Table = <T,>({
                     colSpan={table._getColumnDefs().length}
                     className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center"
                   >
-                    No data{" "}
+                    {noDataText || "No records found"}
                   </td>
                 </tr>
               </>

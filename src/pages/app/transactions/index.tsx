@@ -48,7 +48,7 @@ const Transactions = () => {
         cell: (val) =>
           val.row.original.loan ? (
             <>
-              <Link to={`/loans/?loanId=${val.row.original?.loan.id}`}>
+              <Link to={`/loans/${val.row.original?.loan.id}`}>
                 <span className="transition-all duration-300 text-info hover:text-info-dark">
                   {val.row.original?.loan.id}
                 </span>
@@ -57,6 +57,11 @@ const Transactions = () => {
           ) : (
             <span className="text-gray-300">None</span>
           ),
+      },
+      {
+        header: "Type",
+        cell: (val) => val.renderValue(),
+        accessorKey: "type",
       },
       {
         header: "Status",
@@ -79,7 +84,7 @@ const Transactions = () => {
           <span>
             {formatDate(
               val.row.original.createdAt,
-              "dddd, MMMM DD, YYYY hh:mm A"
+              "dddd, MMMM DD, YYYY h:mm A"
             )}
           </span>
         ),

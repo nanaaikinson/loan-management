@@ -6,7 +6,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { Icon } from "@iconify/react";
 import classNames from "classnames";
 import { Fragment, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type HeaderProps = React.HTMLAttributes<HTMLElement>;
 

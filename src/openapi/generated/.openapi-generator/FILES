@@ -3,7 +3,6 @@
 api.ts
 api/auth-api.ts
 api/customers-api.ts
-api/default-api.ts
 api/files-api.ts
 api/loans-api.ts
 api/transactions-api.ts
@@ -32,7 +31,6 @@ models/identification.ts
 models/index.ts
 models/loan-approval-request.ts
 models/loan-approval200-response.ts
-models/loan-customer.ts
 models/loan-request.ts
 models/loan.ts
 models/login-request.ts

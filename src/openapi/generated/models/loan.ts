@@ -15,7 +15,7 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { LoanCustomer } from './loan-customer';
+import { Customer } from './customer';
 
 /**
  * 
@@ -103,10 +103,10 @@ export interface Loan {
     'duration': number;
     /**
      * 
-     * @type {LoanCustomer}
+     * @type {Customer}
      * @memberof Loan
      */
-    'customer': LoanCustomer | null;
+    'customer'?: Customer;
     /**
      * 
      * @type {number}

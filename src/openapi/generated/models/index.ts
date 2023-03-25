@@ -18,7 +18,6 @@ export * from './identification-front';
 export * from './loan';
 export * from './loan-approval200-response';
 export * from './loan-approval-request';
-export * from './loan-customer';
 export * from './loan-request';
 export * from './login-request';
 export * from './login-response';

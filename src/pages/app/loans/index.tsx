@@ -49,7 +49,8 @@ const Loans = () => {
                 to={`/customers/${val.row.original?.customer.id}`}
                 className="text-info transition duration-300 hover:text-info-dark"
               >
-                {val.row.original?.customer.name}
+                {val.row.original?.customer.firstName}{" "}
+                {val.row.original?.customer.lastName}
               </Link>
             ) : (
               <span className="text-gray-300">None</span>
@@ -114,14 +115,15 @@ const Loans = () => {
         header: " ",
         cell: (val) => (
           <div className="flex space-x-2 items-center">
-            <button
-              className="text-info"
+            <Link
+              to={`/loans/${val.row.original.id}`}
+              className="text-info hover:text-info-dark"
               onClick={() => viewLoan(val.row.original)}
             >
               View
-            </button>
+            </Link>
 
-            {val.row.original.status === "pending" && (
+            {/* {val.row.original.status === "pending" && (
               <>
                 <button
                   className="text-success"
@@ -145,7 +147,7 @@ const Loans = () => {
                   Reject
                 </button>
               </>
-            )}
+            )} */}
           </div>
         ),
       },

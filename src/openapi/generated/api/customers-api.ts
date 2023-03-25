@@ -46,7 +46,7 @@ import { StoreCustomerRequest } from '../models';
 export const CustomersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Endpoint for attaching a loan to a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {AttachLoanRequest} [attachLoanRequest] 
@@ -88,7 +88,7 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Customers: create customer
+         * Endpoint for creating a new customer
          * @summary 
          * @param {StoreCustomerRequest} storeCustomerRequest 
          * @param {*} [options] Override http request option.
@@ -128,7 +128,7 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * Endpoint for fetching a particular customer\'s loans
          * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -166,7 +166,45 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * Endpoint for transacting on behalf of a particular customer
+         * @summary 
+         * @param {string} id Customer Id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        customerTransact: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('customerTransact', 'id', id)
+            const localVarPath = `/customers/{id}/transact`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Endpoint for fetching a particular customer\'s transactions
          * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -204,7 +242,7 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * Endpoint for searching for customer(s) with limited data
          * @summary 
          * @param {string} q 
          * @param {*} [options] Override http request option.
@@ -245,7 +283,7 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * Endpoint for fetching a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {*} [options] Override http request option.
@@ -283,7 +321,7 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * Endpoint for fetching a list of customers
          * @summary 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -317,7 +355,7 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * Endpoint for updating a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {StoreCustomerRequest} storeCustomerRequest 
@@ -371,7 +409,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = CustomersApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Endpoint for attaching a loan to a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {AttachLoanRequest} [attachLoanRequest] 
@@ -383,7 +421,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Customers: create customer
+         * Endpoint for creating a new customer
          * @summary 
          * @param {StoreCustomerRequest} storeCustomerRequest 
          * @param {*} [options] Override http request option.
@@ -394,7 +432,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for fetching a particular customer\'s loans
          * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -405,7 +443,18 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for transacting on behalf of a particular customer
+         * @summary 
+         * @param {string} id Customer Id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async customerTransact(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.customerTransact(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Endpoint for fetching a particular customer\'s transactions
          * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -416,7 +465,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for searching for customer(s) with limited data
          * @summary 
          * @param {string} q 
          * @param {*} [options] Override http request option.
@@ -427,7 +476,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for fetching a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {*} [options] Override http request option.
@@ -438,7 +487,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for fetching a list of customers
          * @summary 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -448,7 +497,7 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for updating a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {StoreCustomerRequest} storeCustomerRequest 
@@ -470,7 +519,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
     const localVarFp = CustomersApiFp(configuration)
     return {
         /**
-         * 
+         * Endpoint for attaching a loan to a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {AttachLoanRequest} [attachLoanRequest] 
@@ -481,7 +530,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
             return localVarFp.attachLoan(id, attachLoanRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Customers: create customer
+         * Endpoint for creating a new customer
          * @summary 
          * @param {StoreCustomerRequest} storeCustomerRequest 
          * @param {*} [options] Override http request option.
@@ -491,7 +540,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
             return localVarFp.createCustomer(storeCustomerRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for fetching a particular customer\'s loans
          * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -501,7 +550,17 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
             return localVarFp.customerLoans(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for transacting on behalf of a particular customer
+         * @summary 
+         * @param {string} id Customer Id
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        customerTransact(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.customerTransact(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for fetching a particular customer\'s transactions
          * @summary 
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -511,7 +570,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
             return localVarFp.customerTransactions(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for searching for customer(s) with limited data
          * @summary 
          * @param {string} q 
          * @param {*} [options] Override http request option.
@@ -521,7 +580,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
             return localVarFp.customersSearch(q, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for fetching a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {*} [options] Override http request option.
@@ -531,7 +590,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
             return localVarFp.getCustomer(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for fetching a list of customers
          * @summary 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -540,7 +599,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
             return localVarFp.getCustomers(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for updating a particular customer
          * @summary 
          * @param {string} id Customer Id
          * @param {StoreCustomerRequest} storeCustomerRequest 
@@ -561,7 +620,7 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
  */
 export class CustomersApi extends BaseAPI {
     /**
-     * 
+     * Endpoint for attaching a loan to a particular customer
      * @summary 
      * @param {string} id Customer Id
      * @param {AttachLoanRequest} [attachLoanRequest] 
@@ -574,7 +633,7 @@ export class CustomersApi extends BaseAPI {
     }
 
     /**
-     * Customers: create customer
+     * Endpoint for creating a new customer
      * @summary 
      * @param {StoreCustomerRequest} storeCustomerRequest 
      * @param {*} [options] Override http request option.
@@ -586,7 +645,7 @@ export class CustomersApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for fetching a particular customer\'s loans
      * @summary 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -598,7 +657,19 @@ export class CustomersApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for transacting on behalf of a particular customer
+     * @summary 
+     * @param {string} id Customer Id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CustomersApi
+     */
+    public customerTransact(id: string, options?: AxiosRequestConfig) {
+        return CustomersApiFp(this.configuration).customerTransact(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for fetching a particular customer\'s transactions
      * @summary 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -610,7 +681,7 @@ export class CustomersApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for searching for customer(s) with limited data
      * @summary 
      * @param {string} q 
      * @param {*} [options] Override http request option.
@@ -622,7 +693,7 @@ export class CustomersApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for fetching a particular customer
      * @summary 
      * @param {string} id Customer Id
      * @param {*} [options] Override http request option.
@@ -634,7 +705,7 @@ export class CustomersApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for fetching a list of customers
      * @summary 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -645,7 +716,7 @@ export class CustomersApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for updating a particular customer
      * @summary 
      * @param {string} id Customer Id
      * @param {StoreCustomerRequest} storeCustomerRequest 

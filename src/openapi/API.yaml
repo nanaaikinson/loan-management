@@ -13,6 +13,12 @@ servers:
   - url: "http://localhost:3000"
   - url: "http://microlend.test/api/v1"
     description: ""
+tags:
+  - name: auth
+  - name: customers
+  - name: loans
+  - name: transactions
+  - name: files
 paths:
   /auth/login:
     post:
@@ -27,7 +33,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
-      description: "Authentication: Login"
+      description: Endpoint for signing in
       requestBody:
         required: true
         content:
@@ -49,6 +55,7 @@ paths:
       operationId: auth-user
       security:
         - Authorization: []
+      description: Endpoint for fetching the current authenticated user
   /files/upload:
     post:
       tags:
@@ -65,7 +72,7 @@ paths:
       security:
         - Authorization: []
       parameters: []
-      description: "Files: Upload id"
+      description: Endpoint for uploading a fiel
       requestBody:
         content:
           multipart/form-data:
@@ -102,7 +109,7 @@ paths:
                   - message
                   - status
                   - data
-      description: "Customers: create customer"
+      description: Endpoint for creating a new customer
       security:
         - Authorization: []
       requestBody:
@@ -158,6 +165,7 @@ paths:
                   - data
       security:
         - Authorization: []
+      description: Endpoint for fetching a list of customers
   /customers/search:
     get:
       summary: ""
@@ -220,6 +228,7 @@ paths:
       operationId: customers-search
       security:
         - Authorization: []
+      description: Endpoint for searching for customer(s) with limited data
     parameters: []
   "/customers/{id}":
     parameters:
@@ -255,6 +264,7 @@ paths:
       security:
         - Authorization: []
       x-extension-1: null
+      description: Endpoint for fetching a particular customer
     patch:
       tags:
         - customers
@@ -291,6 +301,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/StoreCustomerRequest"
+      description: Endpoint for updating a particular customer
   "/customers/{id}/loans":
     parameters:
       - schema:
@@ -331,7 +342,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: ""
+      description: Endpoint for fetching a particular customer's loans
   "/customers/{id}/transactions":
     parameters:
       - schema:
@@ -372,7 +383,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: ""
+      description: Endpoint for fetching a particular customer's transactions
   "/customers/{id}/attach-loan":
     parameters:
       - schema:
@@ -421,6 +432,7 @@ paths:
                   - message
                   - status
                   - data
+      description: Endpoint for attaching a loan to a particular customer
   "/customers/{id}/transact":
     parameters:
       - schema:
@@ -431,12 +443,15 @@ paths:
         description: Customer Id
     post:
       summary: ""
+      tags:
+        - customers
       operationId: customer-transact
       responses:
         "200":
           description: OK
       security:
         - Authorization: []
+      description: Endpoint for transacting on behalf of a particular customer
   /loans:
     get:
       summary: Your GET endpoint
@@ -470,6 +485,7 @@ paths:
       operationId: get-loans
       security:
         - Authorization: []
+      description: Endpoint for fetching a list of loans
     post:
       tags:
         - loans
@@ -507,7 +523,7 @@ paths:
             schema:
               $ref: "#/components/schemas/LoanRequest"
         description: ""
-      description: "Loans: Create a new loan"
+      description: Endpoint for creating a new loan
   "/loans/{id}":
     parameters:
       - schema:
@@ -516,7 +532,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get Loan
       tags:
         - loans
       responses:
@@ -545,6 +561,7 @@ paths:
       operationId: get-loan
       security:
         - Authorization: []
+      description: Endpoint for fetching a particular loan
     patch:
       tags:
         - loans
@@ -582,7 +599,7 @@ paths:
             schema:
               $ref: "#/components/schemas/LoanRequest"
         description: ""
-      description: ""
+      description: Endpoint for updating a particular loan
   "/loans/{id}/approval":
     parameters:
       - schema:
@@ -637,6 +654,7 @@ paths:
                     - rejected
               required:
                 - status
+      description: Endpoint for loan approval
   /transactions:
     get:
       summary: Get transactions
@@ -671,7 +689,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: Get a list of transactions
+      description: Endpoint for fetching a list of transactions
     post:
       tags:
         - transactions
@@ -692,6 +710,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/StoreTransactionRequest"
+      description: Endpoint for fetching transacting
   "/transactions/{id}":
     get:
       summary: Get transaction
@@ -708,7 +727,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: Get transaction
+      description: Endpoint for fetching a particular transaction
     parameters:
       - schema:
           type: string
@@ -717,6 +736,8 @@ paths:
         required: true
     patch:
       summary: ""
+      tags:
+        - transactions
       operationId: update-transaction
       responses:
         "200":
@@ -732,6 +753,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/StoreTransactionRequest"
+      description: Endpoint for updating a particular transaction
 components:
   schemas:
     Customer:
@@ -893,7 +915,8 @@ components:
           duration: 3
           customer:
             id: CUS_vyecouz8emdhztu2v2ay
-            name: Nana Kwesi Ofosu-Aikins
+            firstName: Nana Kwesi
+            lastName: Ofosu-Aikins
           repaymentAmount: 486
           numberOfRepayments: 7
           nextRepaymentDate: null
@@ -901,6 +924,8 @@ components:
           loanNumber: "980008445546277"
           currency: GHS
           createdAt: "2023-03-24T07:40:37.000000Z"
+      x-stoplight:
+        id: fe973cda0ce93
       properties:
         id:
           type: string
@@ -948,16 +973,7 @@ components:
         duration:
           type: integer
         customer:
-          type: object
-          required:
-            - id
-            - name
-          nullable: true
-          properties:
-            id:
-              type: string
-            name:
-              type: string
+          $ref: "#/components/schemas/Customer"
         repaymentAmount:
           type: integer
         numberOfRepayments:
@@ -976,17 +992,16 @@ components:
         - id
         - type
         - status
+        - repaymentFrequency
         - amount
         - totalAmount
         - amountPaid
         - amountDue
-        - repaymentFrequency
         - interestRate
         - interestRateType
         - startDate
         - endDate
         - duration
-        - customer
         - repaymentAmount
         - numberOfRepayments
         - nextRepaymentDate
@@ -994,8 +1009,6 @@ components:
         - loanNumber
         - currency
         - createdAt
-      x-stoplight:
-        id: fe973cda0ce93
     StoreCustomerRequest:
       type: object
       x-examples:
@@ -1318,7 +1331,6 @@ components:
           type: string
       required:
         - id
-        - customer
         - amount
         - currency
         - type

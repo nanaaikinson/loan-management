@@ -7,6 +7,7 @@ import CustomerTransactions from "@/pages/app/customers/[customerId]/transaction
 import StoreCustomer from "@/pages/app/customers/new";
 import Dashboard from "@/pages/app/dashboard";
 import Loans from "@/pages/app/loans";
+import ViewLoan from "@/pages/app/loans/[id]";
 import Reports from "@/pages/app/reports";
 import Transactions from "@/pages/app/transactions";
 import {
@@ -14,6 +15,7 @@ import {
   loadCustomerLoans,
   loadCustomers,
   loadCustomerTransactions,
+  loadLoan,
   loadLoans,
   loadTransactions,
 } from "@/utils/loaders";
@@ -36,6 +38,13 @@ const appRoutes: Array<RouteObject> = [
         element: <Loans />,
         loader: async () => {
           return await loadLoans();
+        },
+      },
+      {
+        path: "loans/:loanId",
+        element: <ViewLoan />,
+        loader: async ({ params }) => {
+          return await loadLoan(params.loanId as string);
         },
       },
       {

@@ -35,9 +35,9 @@ const Transactions = () => {
         header: "Customer",
         cell: (val) => (
           <>
-            <Link to={`/customers/${val.row.original.customer.id}/loans`}>
+            <Link to={`/customers/${val.row.original?.customer?.id}/loans`}>
               <span className="transition-all duration-300 text-info hover:text-info-dark">
-                {`${val.row.original.customer.firstName} ${val.row.original.customer.lastName}`}
+                {`${val.row.original?.customer?.firstName} ${val.row.original?.customer?.lastName}`}
               </span>
             </Link>
           </>
@@ -86,7 +86,7 @@ const Transactions = () => {
       },
       {
         header: " ",
-        cell: (val) => (
+        cell: () => (
           <div className="flex space-x-2">
             <button className="text-info">View</button>
           </div>

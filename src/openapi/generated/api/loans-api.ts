@@ -40,7 +40,7 @@ import { UpdateLoan200Response } from '../models';
 export const LoansApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Loans: Create a new loan
+         * Endpoint for creating a new loan
          * @summary 
          * @param {LoanRequest} loanRequest 
          * @param {*} [options] Override http request option.
@@ -80,8 +80,8 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * 
-         * @summary Your GET endpoint
+         * Endpoint for fetching a particular loan
+         * @summary Get Loan
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -118,7 +118,7 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * 
+         * Endpoint for fetching a list of loans
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -152,7 +152,7 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * 
+         * Endpoint for loan approval
          * @summary 
          * @param {string} id 
          * @param {LoanApprovalRequest} loanApprovalRequest 
@@ -196,7 +196,7 @@ export const LoansApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * 
+         * Endpoint for updating a particular loan
          * @summary 
          * @param {string} id 
          * @param {LoanRequest} loanRequest 
@@ -250,7 +250,7 @@ export const LoansApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = LoansApiAxiosParamCreator(configuration)
     return {
         /**
-         * Loans: Create a new loan
+         * Endpoint for creating a new loan
          * @summary 
          * @param {LoanRequest} loanRequest 
          * @param {*} [options] Override http request option.
@@ -261,8 +261,8 @@ export const LoansApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
-         * @summary Your GET endpoint
+         * Endpoint for fetching a particular loan
+         * @summary Get Loan
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -272,7 +272,7 @@ export const LoansApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for fetching a list of loans
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -282,7 +282,7 @@ export const LoansApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for loan approval
          * @summary 
          * @param {string} id 
          * @param {LoanApprovalRequest} loanApprovalRequest 
@@ -294,7 +294,7 @@ export const LoansApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for updating a particular loan
          * @summary 
          * @param {string} id 
          * @param {LoanRequest} loanRequest 
@@ -316,7 +316,7 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = LoansApiFp(configuration)
     return {
         /**
-         * Loans: Create a new loan
+         * Endpoint for creating a new loan
          * @summary 
          * @param {LoanRequest} loanRequest 
          * @param {*} [options] Override http request option.
@@ -326,8 +326,8 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.createLoan(loanRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Your GET endpoint
+         * Endpoint for fetching a particular loan
+         * @summary Get Loan
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -336,7 +336,7 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getLoan(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for fetching a list of loans
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -345,7 +345,7 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.getLoans(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for loan approval
          * @summary 
          * @param {string} id 
          * @param {LoanApprovalRequest} loanApprovalRequest 
@@ -356,7 +356,7 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.loanApproval(id, loanApprovalRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for updating a particular loan
          * @summary 
          * @param {string} id 
          * @param {LoanRequest} loanRequest 
@@ -377,7 +377,7 @@ export const LoansApiFactory = function (configuration?: Configuration, basePath
  */
 export class LoansApi extends BaseAPI {
     /**
-     * Loans: Create a new loan
+     * Endpoint for creating a new loan
      * @summary 
      * @param {LoanRequest} loanRequest 
      * @param {*} [options] Override http request option.
@@ -389,8 +389,8 @@ export class LoansApi extends BaseAPI {
     }
 
     /**
-     * 
-     * @summary Your GET endpoint
+     * Endpoint for fetching a particular loan
+     * @summary Get Loan
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -401,7 +401,7 @@ export class LoansApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for fetching a list of loans
      * @summary Your GET endpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -412,7 +412,7 @@ export class LoansApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for loan approval
      * @summary 
      * @param {string} id 
      * @param {LoanApprovalRequest} loanApprovalRequest 
@@ -425,7 +425,7 @@ export class LoansApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for updating a particular loan
      * @summary 
      * @param {string} id 
      * @param {LoanRequest} loanRequest 

@@ -34,7 +34,7 @@ export interface Transaction {
      * @type {Customer}
      * @memberof Transaction
      */
-    'customer': Customer;
+    'customer'?: Customer;
     /**
      * 
      * @type {Customer}

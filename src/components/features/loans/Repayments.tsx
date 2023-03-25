@@ -1,17 +1,42 @@
+import AmountInput from "@/components/common/AmountInput";
 import Badge from "@/components/common/Badge";
 import Button from "@/components/common/Button";
+import Dialog from "@/components/common/Dialog";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import Table from "@/components/common/Table";
-import { Transaction } from "@/openapi/generated";
+import {
+  Loan,
+  StoreTransactionRequestTypeEnum,
+  Transaction,
+} from "@/openapi/generated";
+import { LoanService } from "@/services/loan.service";
 import { formatDate, formatMoney } from "@/utils/helpers";
+import {
+  LoanRepaymentForm,
+  loanRepaymentValidationSchema,
+} from "@/validation/loan";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
 interface LoanRepaymentsProps {
+  loan: Loan;
   repayments: Array<Transaction>;
-  updateRepayments: () => void;
+  updateRepayments: (repayments: Array<Transaction>) => void;
 }
 
-const LoanRepayments = ({ repayments }: LoanRepaymentsProps) => {
+const LoanRepayments = ({
+  loan,
+  repayments,
+  updateRepayments,
+}: LoanRepaymentsProps) => {
+  // State
+  const [amount, setAmount] = useState<number>(0);
+  const [isSubmittingLoanRepayment, setIsSubmittingLoanRepayment] =
+    useState<boolean>(false);
+  const [showRepaymentModal, setShowRepaymentModal] = useState<boolean>(false);
   const tableColumns = useMemo<Array<ColumnDef<Transaction>>>(
     () => [
       {
@@ -50,16 +75,136 @@ const LoanRepayments = ({ repayments }: LoanRepaymentsProps) => {
     ],
     []
   );
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    reset,
+    formState: { errors },
+  } = useForm<LoanRepaymentForm>({
+    resolver: yupResolver(loanRepaymentValidationSchema),
+  });
 
+  // Methods
+  const onLoanRepayment = async (data: LoanRepaymentForm) => {
+    try {
+      if (amount <= 0) {
+        setError("amount", {
+          type: "manual",
+          message: "Amount must be greater than 0",
+        });
+        return;
+      }
+
+      setIsSubmittingLoanRepayment(true);
+
+      const { data: response } = await LoanService.instance().loanRepayment(
+        loan.id,
+        {
+          amount: data.amount,
+          currency: loan.currency,
+          customer: loan?.customer?.id as string,
+          type: StoreTransactionRequestTypeEnum.LoanRepayment,
+          loan: loan.id,
+          note: data?.note ?? "",
+        }
+      );
+
+      toast.success(response.message);
+      updateRepayments([response.data, ...repayments]);
+      closeRepaymentModal();
+    } catch (error) {
+      //
+    } finally {
+      setIsSubmittingLoanRepayment(false);
+    }
+  };
+  const closeRepaymentModal = () => {
+    setShowRepaymentModal(false);
+    setAmount(0);
+    reset();
+  };
+
+  // Template
   return (
-    <div>
-      <div className="flex items-center justify-between mb-5">
-        <span className="font-semibold text-lg">Repayments</span>
-        <Button variant="primary">New payment</Button>
+    <>
+      <div>
+        <div className="flex items-center justify-between mb-5">
+          <span className="font-semibold text-lg">Repayments</span>
+          <Button
+            variant="primary"
+            type="button"
+            onClick={() => setShowRepaymentModal(true)}
+          >
+            New payment
+          </Button>
+        </div>
+
+        <Table columns={tableColumns} data={repayments} />
       </div>
 
-      <Table columns={tableColumns} data={repayments} />
-    </div>
+      <Dialog
+        size="sm"
+        visible={showRepaymentModal}
+        onClose={() => setShowRepaymentModal(false)}
+      >
+        <div className="py-5 px-8">
+          <h4 className="mb-0">New payment</h4>
+        </div>
+
+        <div className="pt-8 pb-10 px-8">
+          <form onSubmit={handleSubmit(onLoanRepayment)}>
+            <div className="mb-4">
+              <label htmlFor="amount">Amount *</label>
+              <AmountInput
+                currency="GHS"
+                value={amount}
+                onChange={(value) => {
+                  setAmount(value);
+                  setValue("amount", value);
+                  setError("amount", { type: "manual", message: "" });
+                }}
+              />
+              {errors?.amount?.message && (
+                <ErrorMessage message={errors?.amount?.message} />
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="note">Note</label>
+              <textarea
+                {...register("note")}
+                name="note"
+                id="note"
+                cols={30}
+                rows={4}
+                className="form-input"
+              ></textarea>
+            </div>
+
+            <div className="pt-4 flex justify-end gap-x-3">
+              <Button
+                variant="secondary"
+                className="px-10"
+                type="button"
+                disabled={isSubmittingLoanRepayment}
+                onClick={closeRepaymentModal}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="px-10"
+                type="submit"
+                disabled={isSubmittingLoanRepayment}
+              >
+                Submit
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Dialog>
+    </>
   );
 };
 

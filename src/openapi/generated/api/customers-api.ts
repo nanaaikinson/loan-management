@@ -39,6 +39,8 @@ import { GetCustomer200Response } from '../models';
 import { GetCustomers200Response } from '../models';
 // @ts-ignore
 import { StoreCustomerRequest } from '../models';
+// @ts-ignore
+import { UpdateAvatarRequest } from '../models';
 /**
  * CustomersApi - axios parameter creator
  * @export
@@ -355,6 +357,50 @@ export const CustomersApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
+         * Endpoint for updating a particular customer\'s profile picture
+         * @summary 
+         * @param {string} id Customer Id
+         * @param {UpdateAvatarRequest} updateAvatarRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateAvatar: async (id: string, updateAvatarRequest: UpdateAvatarRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateAvatar', 'id', id)
+            // verify required parameter 'updateAvatarRequest' is not null or undefined
+            assertParamExists('updateAvatar', 'updateAvatarRequest', updateAvatarRequest)
+            const localVarPath = `/customers/{id}/update-avatar`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateAvatarRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Endpoint for updating a particular customer
          * @summary 
          * @param {string} id Customer Id
@@ -497,6 +543,18 @@ export const CustomersApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Endpoint for updating a particular customer\'s profile picture
+         * @summary 
+         * @param {string} id Customer Id
+         * @param {UpdateAvatarRequest} updateAvatarRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateAvatar(id: string, updateAvatarRequest: UpdateAvatarRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttachLoan200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateAvatar(id, updateAvatarRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Endpoint for updating a particular customer
          * @summary 
          * @param {string} id Customer Id
@@ -597,6 +655,17 @@ export const CustomersApiFactory = function (configuration?: Configuration, base
          */
         getCustomers(options?: any): AxiosPromise<GetCustomers200Response> {
             return localVarFp.getCustomers(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for updating a particular customer\'s profile picture
+         * @summary 
+         * @param {string} id Customer Id
+         * @param {UpdateAvatarRequest} updateAvatarRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateAvatar(id: string, updateAvatarRequest: UpdateAvatarRequest, options?: any): AxiosPromise<AttachLoan200Response> {
+            return localVarFp.updateAvatar(id, updateAvatarRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Endpoint for updating a particular customer
@@ -713,6 +782,19 @@ export class CustomersApi extends BaseAPI {
      */
     public getCustomers(options?: AxiosRequestConfig) {
         return CustomersApiFp(this.configuration).getCustomers(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for updating a particular customer\'s profile picture
+     * @summary 
+     * @param {string} id Customer Id
+     * @param {UpdateAvatarRequest} updateAvatarRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CustomersApi
+     */
+    public updateAvatar(id: string, updateAvatarRequest: UpdateAvatarRequest, options?: AxiosRequestConfig) {
+        return CustomersApiFp(this.configuration).updateAvatar(id, updateAvatarRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

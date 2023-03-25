@@ -433,6 +433,63 @@ paths:
                   - status
                   - data
       description: Endpoint for attaching a loan to a particular customer
+  "/customers/{id}/update-avatar":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Customer Id
+    patch:
+      tags:
+        - customers
+      summary: ""
+      operationId: update-avatar
+      security:
+        - Authorization: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: null
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    nullable: true
+                required:
+                  - message
+                  - status
+                  - data
+      description: Endpoint for updating a particular customer's profile picture
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  key: 1
+                  url: "https://example.com/profile/12nnr34nf.jpg"
+              properties:
+                key:
+                  type: integer
+                url:
+                  type: string
+              required:
+                - key
+                - url
   "/customers/{id}/transact":
     parameters:
       - schema:

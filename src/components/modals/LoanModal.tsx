@@ -1,5 +1,4 @@
 import Button from "@/components/common/Button";
-import CloseButton from "@/components/common/CloseButton";
 import Dialog from "@/components/common/Dialog";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import {
@@ -190,7 +189,7 @@ const StoreLoanModal = ({
       setValue("duration", loan.duration);
       if (loan?.customer) {
         setCustomer({
-          name: `${loan.customer.name}`,
+          name: `${loan.customer.firstName} ${loan.customer.lastName}`,
           id: loan.customer.id,
         });
       }
@@ -201,15 +200,13 @@ const StoreLoanModal = ({
   return (
     <>
       {/* <Dialog visible={visible} className="w-full lg:!w-[30%] xl:!w-[28%]"> */}
-      <Dialog visible={visible} size="xs">
+      <Dialog visible={visible} size="sm">
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between h-12 px-5 border-b border-gray-100">
-            <h3 className="text-xl mb-0">Loan</h3>
-
-            <CloseButton onClick={handleClose} />
+          <div className="flex items-center justify-between py-5 px-8">
+            <h4 className="mb-0">Loan</h4>
           </div>
 
-          <div className="py-8 px-5 flex-1 overflow-auto">
+          <div className="py-8 px-8 flex-1 overflow-auto">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row">
                 <div className="col-12">
@@ -437,12 +434,17 @@ const StoreLoanModal = ({
               </div>
 
               {!readonlyProp && (
-                <div className="pt-4 flex">
+                <div className="pt-4 flex justify-end gap-x-3">
                   <Button
-                    type="submit"
-                    className="ml-auto px-10"
+                    variant="secondary"
+                    className="px-10"
                     disabled={loading}
+                    onClick={handleClose}
                   >
+                    Cancel
+                  </Button>
+
+                  <Button type="submit" className="px-10" disabled={loading}>
                     {loading
                       ? loan?.id
                         ? "Updating..."

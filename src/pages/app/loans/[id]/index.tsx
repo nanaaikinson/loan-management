@@ -60,10 +60,9 @@ const ViewLoan = () => {
           {/* Repayments */}
           {loan.status === "approved" && (
             <LoanRepayments
+              loan={loan}
               repayments={repayments}
-              updateRepayments={() => {
-                //
-              }}
+              updateRepayments={setRepayments}
             />
           )}
         </div>

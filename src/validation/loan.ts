@@ -6,6 +6,8 @@ import {
 import type { InferType } from "yup";
 import { mixed, number, object, string } from "yup";
 
+// const greaterThanZeroRegex = /^([1-9]\d*|0)(\.\d+)?$/;
+
 export const storeLoanValidationSchema = object({
   amount: number().min(10).label("Amount").required(),
   type: mixed<LoanRequestTypeEnum>()
@@ -28,5 +30,10 @@ export const storeLoanValidationSchema = object({
   duration: number().label("Duration of loan").required(),
   customerId: string().trim().nullable().optional().label("Customer"),
 });
-
 export type StoreLoanForm = InferType<typeof storeLoanValidationSchema>;
+
+export const loanRepaymentValidationSchema = object({
+  amount: number().typeError("Amount is required").required().label("Amount"),
+  note: string().trim().optional().label("Note"),
+});
+export type LoanRepaymentForm = InferType<typeof loanRepaymentValidationSchema>;

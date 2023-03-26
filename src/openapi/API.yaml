@@ -1172,6 +1172,7 @@ components:
         - startDate
         - endDate
         - duration
+        - customer
         - repaymentAmount
         - numberOfRepayments
         - nextRepaymentDate
@@ -1313,7 +1314,6 @@ components:
           minimum: 0
         customerId:
           type: string
-          nullable: true
         interestRateType:
           type: string
           enum:
@@ -1326,6 +1326,7 @@ components:
         - startDate
         - interestRate
         - duration
+        - customerId
         - interestRateType
     LoginRequest:
       type: object

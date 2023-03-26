@@ -9,7 +9,11 @@ import { mixed, number, object, string } from "yup";
 // const greaterThanZeroRegex = /^([1-9]\d*|0)(\.\d+)?$/;
 
 export const storeLoanValidationSchema = object({
-  amount: number().min(10).label("Amount").required(),
+  amount: number()
+    .typeError("Amount is required")
+    .required()
+    .test("gt-0", "Amount must be greater than 0", (value) => value > 0)
+    .label("Amount"),
   type: mixed<LoanRequestTypeEnum>()
     .required()
     .oneOf(Object.values(LoanRequestTypeEnum))
@@ -17,7 +21,6 @@ export const storeLoanValidationSchema = object({
   repaymentFrequency: mixed<LoanRequestRepaymentFrequencyEnum>()
     .required()
     .oneOf(Object.values(LoanRequestRepaymentFrequencyEnum))
-
     .label("Repayment frequency"),
   startDate: string().trim().required().label("Start date"),
   interestRateType: string()
@@ -25,15 +28,26 @@ export const storeLoanValidationSchema = object({
     .required()
     .oneOf(Object.values(LoanRequestInterestRateTypeEnum))
     .label("Interest rate type"),
-  interestRate: number().required().label("Interest rate"),
-
-  duration: number().label("Duration of loan").required(),
-  customerId: string().trim().nullable().optional().label("Customer"),
+  interestRate: number()
+    .typeError("Interest rate is required")
+    .required()
+    .test("gt-0", "Interest rate must be greater than 0", (value) => value > 0)
+    .label("Interest rate"),
+  duration: number()
+    .typeError("Duration is required")
+    .required()
+    .test("gt-0", "Duration must be greater than 0", (value) => value > 0)
+    .label("Duration of loan"),
+  customerId: string().trim().required().label("Customer"),
 });
 export type StoreLoanForm = InferType<typeof storeLoanValidationSchema>;
 
 export const loanRepaymentValidationSchema = object({
-  amount: number().typeError("Amount is required").required().label("Amount"),
+  amount: number()
+    .typeError("Amount is required")
+    .required()
+    .test("gt-0", "Amount must be greater than 0", (value) => value > 0)
+    .label("Amount"),
   note: string().trim().optional().label("Note"),
 });
 export type LoanRepaymentForm = InferType<typeof loanRepaymentValidationSchema>;

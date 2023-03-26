@@ -3,7 +3,6 @@ import Dialog from "@/components/common/Dialog";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import {
   CreateLoan200Response,
-  LoanRequestInterestRateTypeEnum,
   LoanRequestRepaymentFrequencyEnum,
   LoanRequestTypeEnum,
   UpdateLoan200Response,
@@ -38,7 +37,6 @@ const StoreLoanModal = ({
   onClose,
   onUpdated,
 }: StoreLoanModalProps) => {
-  const [interestLabel, setInterestLabel] = useState<string>("in cash");
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<string>("");
   const [customer, setCustomer] = useState<{ name: string; id: string }>({
@@ -57,7 +55,7 @@ const StoreLoanModal = ({
     defaultValues: {
       type: "personal",
       repaymentFrequency: "monthly",
-      interestRateType: "amount",
+      interestRateType: "percentage",
       duration: 0,
       amount: 0,
       interestRate: 0,
@@ -153,7 +151,6 @@ const StoreLoanModal = ({
   const handleClose = () => {
     setLoading(false);
     setStartDate("");
-    setInterestLabel("in cash");
     setCustomer({ name: "", id: "" });
     reset();
     onClose();
@@ -183,18 +180,17 @@ const StoreLoanModal = ({
       setStartDate(loan.startDate);
       setValue("interestRateType", loan.interestRateType);
       setValue("interestRate", loan.interestRate);
-      setInterestLabel(
-        loan.interestRateType === "amount" ? "in cash" : "per month"
-      );
       setValue("duration", loan.duration);
-      if (loan?.customer) {
-        setCustomer({
-          name: `${loan.customer.firstName} ${loan.customer.lastName}`,
-          id: loan.customer.id,
-        });
-      }
+      setCustomer({
+        name: `${loan.customer.firstName} ${loan.customer.lastName}`,
+        id: loan.customer.id,
+      });
     }
   }, [visible]);
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
 
   // Template
   return (
@@ -306,7 +302,7 @@ const StoreLoanModal = ({
                   </div>
                 </div>
 
-                <div className="col-12">
+                {/* <div className="col-12">
                   <div className="mb-4">
                     <label htmlFor="interestRateType">
                       Interest Rate Type*
@@ -318,9 +314,6 @@ const StoreLoanModal = ({
                       className="form-select"
                       onChange={(e) => {
                         const value = e.target.value;
-                        setInterestLabel(
-                          value === "amount" ? "in cash" : "in %"
-                        );
                       }}
                       disabled={readonlyProp}
                     >
@@ -341,13 +334,11 @@ const StoreLoanModal = ({
                       />
                     )}
                   </div>
-                </div>
+                </div> */}
 
                 <div className="col-12">
                   <div className="mb-4">
-                    <label htmlFor="interestRate">
-                      Interest Rate ({interestLabel})*
-                    </label>
+                    <label htmlFor="interestRate">Interest Rate (%)*</label>
                     <input
                       {...register("interestRate")}
                       type="text"
@@ -417,8 +408,10 @@ const StoreLoanModal = ({
                                     name: option.label,
                                     id: option.value,
                                   });
+                                  setValue("customerId", option.value);
                                 }
                               }}
+                              placeholder="Search customer"
                             />
                             {errors?.customerId?.message && (
                               <ErrorMessage

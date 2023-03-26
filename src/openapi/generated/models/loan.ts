@@ -106,7 +106,7 @@ export interface Loan {
      * @type {Customer}
      * @memberof Loan
      */
-    'customer'?: Customer;
+    'customer': Customer;
     /**
      * 
      * @type {number}

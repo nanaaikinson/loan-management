@@ -7,7 +7,9 @@ import { FileService } from "@/services/file.service";
 import { BreadcrumbItem } from "@/types";
 import { formatDate } from "@/utils/helpers";
 import { Icon } from "@iconify/react";
+import { isAxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 import { NavLink, Outlet, useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
@@ -49,8 +51,17 @@ const ViewCustomer = () => {
         });
 
         setCustomer({ ...customer, avatar: response.data.url });
+
+        toast.success("Avatar updated successfully");
       } catch (error) {
-        console.log(error);
+        if (isAxiosError(error) && error?.response) {
+          toast.error(error?.response?.data?.message);
+        } else {
+          toast.error((error as Error).message);
+        }
+
+        setAvatarSrc(`${customer?.firstName} ${customer?.lastName}`);
+        setAvatarInitials(true);
       }
     }
   };

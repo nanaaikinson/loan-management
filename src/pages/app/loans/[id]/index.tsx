@@ -2,7 +2,7 @@ import Button from "@/components/common/Button";
 import LoanCustomer from "@/components/features/loans/Customer";
 import LoanRepayments from "@/components/features/loans/Repayments";
 import Breadcrumb from "@/components/includes/Breadcrumb";
-import { Customer, Loan, Transaction } from "@/openapi/generated";
+import { Loan, Transaction } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
 import { BreadcrumbItem } from "@/types";
 import { useEffect, useState } from "react";
@@ -51,11 +51,13 @@ const ViewLoan = () => {
       <div className="container-fluid">
         <div className="flex flex-col gap-y-10 py-5">
           {/* Summary */}
-          {loan?.customer && (
-            <>
-              <LoanCustomer customer={loan?.customer as Customer} />
-            </>
-          )}
+          <div className="row">
+            <div className="col-12 lg:col-4">
+              <LoanCustomer customer={loan.customer} />
+            </div>
+
+            <div className="col-12 lg:col-8"></div>
+          </div>
 
           {/* Repayments */}
           {loan.status === "approved" && (

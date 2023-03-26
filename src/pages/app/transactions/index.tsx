@@ -2,16 +2,18 @@ import Badge from "@/components/common/Badge";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import TransactionStatus from "@/components/misc/TransactionStatus";
+import TransactionModal from "@/components/modals/TransactionModal";
 import { GetTransactions200Response, Transaction } from "@/openapi/generated";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
 const Transactions = () => {
   useTitle("Transactions | Microlend");
 
+  // State
   const transactions = (useLoaderData() as GetTransactions200Response).data;
   const tableColumns = useMemo<Array<ColumnDef<Transaction>>>(
     () => [
@@ -77,16 +79,30 @@ const Transactions = () => {
       },
       {
         header: " ",
-        cell: () => (
+        cell: (val) => (
           <div className="flex space-x-2">
-            <button className="text-info">View</button>
+            <button
+              className="text-info"
+              onClick={viewTransaction(val.row.original)}
+            >
+              View
+            </button>
           </div>
         ),
       },
     ],
     []
   );
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
+  // Methods
+  const viewTransaction = (transaction: Transaction) => () => {
+    setTransaction(transaction);
+    setShowModal(true);
+  };
+
+  // Template
   return (
     <>
       <div className="container-fluid">
@@ -102,6 +118,15 @@ const Transactions = () => {
           </div>
         </Card>
       </div>
+
+      <TransactionModal
+        transaction={transaction as Transaction}
+        visible={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setTransaction(null);
+        }}
+      />
     </>
   );
 };

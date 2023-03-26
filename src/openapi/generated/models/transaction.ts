@@ -70,7 +70,7 @@ export interface Transaction {
      * @type {string}
      * @memberof Transaction
      */
-    'description': string | null;
+    'note': string | null;
     /**
      * 
      * @type {string}

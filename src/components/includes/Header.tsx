@@ -1,5 +1,5 @@
-import Avatar from "../common/Avatar";
-import Button from "../common/Button";
+import Avatar from "@/components/common/Avatar";
+import Button from "@/components/common/Button";
 import { useAuthStore } from "@/stores/auth";
 import { generateInitials } from "@/utils/helpers";
 import { Menu, Transition } from "@headlessui/react";

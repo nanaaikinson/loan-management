@@ -4,6 +4,7 @@ import Button from "@/components/common/Button";
 import Dialog from "@/components/common/Dialog";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Table from "@/components/common/Table";
+import TransactionModal from "@/components/modals/TransactionModal";
 import {
   Loan,
   StoreTransactionRequestTypeEnum,
@@ -37,6 +38,9 @@ const LoanRepayments = ({
   const [isSubmittingLoanRepayment, setIsSubmittingLoanRepayment] =
     useState<boolean>(false);
   const [showRepaymentModal, setShowRepaymentModal] = useState<boolean>(false);
+  const [showTransactionModal, setShowTransactionModal] =
+    useState<boolean>(false);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
   const tableColumns = useMemo<Array<ColumnDef<Transaction>>>(
     () => [
       {
@@ -71,6 +75,17 @@ const LoanRepayments = ({
         header: "Repayment Date",
         cell: (val) =>
           formatDate(val.row.original.createdAt, "dddd, MMMM DD, YYYY h:mm A"),
+      },
+      {
+        header: " ",
+        cell: (val) => (
+          <button
+            className="text-info hover:text-info-dark"
+            onClick={() => viewRepayment(val.row.original)}
+          >
+            View
+          </button>
+        ),
       },
     ],
     []
@@ -124,6 +139,14 @@ const LoanRepayments = ({
     setShowRepaymentModal(false);
     setAmount(0);
     reset();
+  };
+  const viewRepayment = (repayment: Transaction) => {
+    setTransaction(repayment);
+    setShowTransactionModal(true);
+  };
+  const closeTransactionModal = () => {
+    setShowTransactionModal(false);
+    setTransaction(null);
   };
 
   // Template
@@ -204,6 +227,12 @@ const LoanRepayments = ({
           </form>
         </div>
       </Dialog>
+
+      <TransactionModal
+        visible={showTransactionModal}
+        transaction={transaction as Transaction}
+        onClose={closeTransactionModal}
+      />
     </>
   );
 };

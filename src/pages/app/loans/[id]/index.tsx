@@ -48,7 +48,7 @@ const ViewLoan = () => {
     <>
       <Breadcrumb items={breadcrumbItems} className="" />
 
-      <div className="container xl:container-fluid">
+      <div className="container-fluid">
         <div className="flex flex-col gap-y-10 py-5">
           {/* Summary */}
           {loan?.customer && (

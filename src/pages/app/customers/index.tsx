@@ -1,3 +1,4 @@
+import Avatar from "@/components/common/Avatar";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
@@ -24,7 +25,14 @@ const Customers = () => {
         cell: (val) => (
           <>
             <div className="flex items-center space-x-2">
-              <div className="bg-gray-100 h-10 w-10 rounded-full"></div>
+              <Avatar
+                src={
+                  val.row.original.avatar
+                    ? val.row.original.avatar
+                    : `${val.row.original.firstName} ${val.row.original.lastName}`
+                }
+                initials={val.row.original.avatar ? false : true}
+              />
               <div className="flex flex-col flex-1 ">
                 <span className="text-dark font-semibold">
                   {`${val.row.original.firstName} ${val.row.original.lastName}`}
@@ -93,7 +101,7 @@ const Customers = () => {
   // Template
   return (
     <>
-      <div className="container xl:container-fluid">
+      <div className="container-fluid">
         <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">

@@ -2,6 +2,7 @@ import Badge from "@/components/common/Badge";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
+import LoanStatus from "@/components/misc/LoanStatus";
 import LoanModal from "@/components/modals/LoanModal";
 import Prompt from "@/components/modals/Prompt";
 import {
@@ -86,18 +87,7 @@ const Loans = () => {
       },
       {
         header: "Status",
-        cell: (val) => {
-          switch (val.row.original.status) {
-            case "pending":
-              return <Badge variant="warning" text={"pending"} />;
-            case "approved":
-              return <Badge variant="success" text={"approved"} />;
-            case "rejected":
-              return <Badge variant="danger" text={"rejected"} />;
-            default:
-              return <Badge variant="default" text={val.row.original.status} />;
-          }
-        },
+        cell: (val) => <LoanStatus status={val.row.original.status} />,
       },
       {
         header: "Start Date",
@@ -122,32 +112,6 @@ const Loans = () => {
             >
               View
             </Link>
-
-            {/* {val.row.original.status === "pending" && (
-              <>
-                <button
-                  className="text-success"
-                  onClick={() => {
-                    setLoan(val.row.original);
-                    setApprovalStatus("approved");
-                    setShowApprovalPrompt(true);
-                  }}
-                >
-                  Approve
-                </button>
-
-                <button
-                  className="text-danger"
-                  onClick={() => {
-                    setLoan(val.row.original);
-                    setApprovalStatus("rejected");
-                    setShowApprovalPrompt(true);
-                  }}
-                >
-                  Reject
-                </button>
-              </>
-            )} */}
           </div>
         ),
       },
@@ -214,7 +178,7 @@ const Loans = () => {
   // Template
   return (
     <>
-      <div className="container xl:container-fluid">
+      <div className="container-fluid">
         <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">

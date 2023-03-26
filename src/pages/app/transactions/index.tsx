@@ -1,6 +1,7 @@
 import Badge from "@/components/common/Badge";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
+import TransactionStatus from "@/components/misc/TransactionStatus";
 import { GetTransactions200Response, Transaction } from "@/openapi/generated";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
@@ -27,10 +28,6 @@ const Transactions = () => {
           )}`}</span>
         ),
       },
-      // {
-      //   header: "Account Number",
-      //   cell: (val) => <span className=">1234567890</span>,
-      // },
       {
         header: "Customer",
         cell: (val) => (
@@ -65,18 +62,7 @@ const Transactions = () => {
       },
       {
         header: "Status",
-        cell: (val) => {
-          switch (val.row.original.status) {
-            case "pending":
-              return <Badge variant="warning" text={"pending"} />;
-            case "success":
-              return <Badge variant="success" text={"success"} />;
-            case "failed":
-              return <Badge variant="danger" text={"failed"} />;
-            default:
-              return <Badge variant="default" text={val.row.original.status} />;
-          }
-        },
+        cell: (val) => <TransactionStatus status={val.row.original.status} />,
       },
       {
         header: "Transaction Date",
@@ -103,7 +89,7 @@ const Transactions = () => {
 
   return (
     <>
-      <div className="container xl:container-fluid">
+      <div className="container-fluid">
         <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">

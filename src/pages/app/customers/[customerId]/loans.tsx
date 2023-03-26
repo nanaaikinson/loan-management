@@ -1,5 +1,5 @@
-import Badge from "@/components/common/Badge";
 import Table from "@/components/common/Table";
+import LoanStatus from "@/components/misc/LoanStatus";
 import NoData from "@/components/misc/NoData";
 import { CustomerLoans200Response, Loan } from "@/openapi/generated";
 import { formatDate, formatMoney } from "@/utils/helpers";
@@ -61,18 +61,7 @@ const CustomerLoans = () => {
       },
       {
         header: "Status",
-        cell: (val) => {
-          switch (val.row.original.status) {
-            case "pending":
-              return <Badge variant="warning" text={"pending"} />;
-            case "approved":
-              return <Badge variant="success" text={"approved"} />;
-            case "rejected":
-              return <Badge variant="danger" text={"rejected"} />;
-            default:
-              return <Badge variant="default" text={val.row.original.status} />;
-          }
-        },
+        cell: (val) => <LoanStatus status={val.row.original.status} />,
       },
       {
         header: "Duration",

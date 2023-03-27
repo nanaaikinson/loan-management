@@ -1,25 +1,82 @@
+import Avatar from "@/components/common/Avatar";
 import Card from "@/components/common/Card";
 import Breadcrumb from "@/components/includes/Breadcrumb";
-import { GetCustomer200Response } from "@/openapi/generated";
+import { Customer, GetCustomer200Response } from "@/openapi/generated";
+import { CustomerService } from "@/services/customer.service";
+import { FileService } from "@/services/file.service";
 import { BreadcrumbItem } from "@/types";
 import { formatDate } from "@/utils/helpers";
 import { Icon } from "@iconify/react";
+import { isAxiosError } from "axios";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 import { NavLink, Outlet, useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
 const ViewCustomer = () => {
-  const customer = (useLoaderData() as GetCustomer200Response).data;
+  const customerData = (useLoaderData() as GetCustomer200Response).data;
   const breadcrumbItems: Array<BreadcrumbItem> = [
     {
       label: "Customers",
       to: "/customers",
     },
     {
-      label: `${customer?.id}`,
+      label: `${customerData?.id}`,
     },
   ];
+  useTitle(`${customerData.firstName} ${customerData.lastName} | Microlend`);
 
-  useTitle(`${customer.firstName} ${customer.lastName} | Microlend`);
+  const [customer, setCustomer] = useState<Customer>(customerData);
+  const [avatarSrc, setAvatarSrc] = useState<string>("");
+  const [avatarInitials, setAvatarInitials] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Methods
+  const uploadAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setAvatarSrc(url);
+      setAvatarInitials(false);
+
+      try {
+        const { data: response } = await FileService.instance().fileUpload(
+          file,
+          "PROFILE"
+        );
+        await CustomerService.instance().updateAvatar(customer.id, {
+          key: response.data.key,
+          url: response.data.url,
+        });
+
+        setCustomer({ ...customer, avatar: response.data.url });
+
+        toast.success("Avatar updated successfully");
+      } catch (error) {
+        if (isAxiosError(error) && error?.response) {
+          toast.error(error?.response?.data?.message);
+        } else {
+          toast.error((error as Error).message);
+        }
+
+        setAvatarSrc(`${customer?.firstName} ${customer?.lastName}`);
+        setAvatarInitials(true);
+      }
+    }
+  };
+
+  // Effects
+  useEffect(() => {
+    // Set avatar src
+    if (customer?.avatar) {
+      setAvatarSrc(customer?.avatar);
+      setAvatarInitials(false);
+    } else {
+      setAvatarSrc(`${customer?.firstName} ${customer?.lastName}`);
+      setAvatarInitials(true);
+    }
+  }, [customer]);
 
   // Template
   return (
@@ -30,7 +87,24 @@ const ViewCustomer = () => {
         <div className="col-12 lg:col-3">
           <div className="flex flex-col gap-y-8 p-5">
             <div className="flex items-center space-x-5">
-              <div className="bg-gray-300 h-14 w-14 rounded-full"></div>
+              <div className="relative">
+                <Avatar
+                  className="h-20 w-20"
+                  src={avatarSrc}
+                  initials={avatarInitials}
+                />
+                <button
+                  type="button"
+                  className="absolute bottom-0 right-0 flex items-center justify-center h-8 w-8 rounded-full bg-white border border-gray-100"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Icon
+                    icon="uil:camera"
+                    className="h-4 w-4 pointer-events-none"
+                  />
+                </button>
+              </div>
+
               <div className="flex flex-col flex-1 ">
                 <span className="text-dark font-semibold">{`${customer?.firstName} ${customer?.lastName}`}</span>
                 <span className="text-gray-500 text-sm">
@@ -73,7 +147,7 @@ const ViewCustomer = () => {
         </div>
 
         <div className="col-12 lg:col-9">
-          <Card className="p-5 h-screen flex flex-col gap-y-8 rounded-none">
+          <Card className="p-5 h-screen flex flex-col gap-y-8 rounded-none lg:border-t-0">
             <div>
               <nav className="tab">
                 <NavLink
@@ -96,6 +170,16 @@ const ViewCustomer = () => {
           </Card>
         </div>
       </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        name="avatarFileInput"
+        id="avatarFileInput"
+        className="hidden"
+        accept="image/jpeg, image/png, image/jpg"
+        onChange={uploadAvatar}
+      />
     </>
   );
 };

@@ -1,3 +1,4 @@
+import { generateInitials } from "@/utils/helpers";
 import classNames from "classnames";
 
 interface AvatarProps {
@@ -16,7 +17,9 @@ const Avatar = ({ src, alt, className, initials = false }: AvatarProps) => {
           className
         )}
       >
-        <span className="font-medium text-primary ">{src}</span>
+        <span className="font-medium text-primary ">
+          {generateInitials(src)}
+        </span>
       </div>
     );
   }

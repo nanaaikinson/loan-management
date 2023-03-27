@@ -34,7 +34,7 @@ export interface Transaction {
      * @type {Customer}
      * @memberof Transaction
      */
-    'customer': Customer;
+    'customer'?: Customer;
     /**
      * 
      * @type {Customer}
@@ -70,7 +70,7 @@ export interface Transaction {
      * @type {string}
      * @memberof Transaction
      */
-    'description': string | null;
+    'note': string | null;
     /**
      * 
      * @type {string}

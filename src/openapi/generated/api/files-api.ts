@@ -30,7 +30,7 @@ import { UploadedFile } from '../models';
 export const FilesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Files: Upload id
+         * Endpoint for uploading a fiel
          * @summary 
          * @param {File} file 
          * @param {string} category 
@@ -92,7 +92,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = FilesApiAxiosParamCreator(configuration)
     return {
         /**
-         * Files: Upload id
+         * Endpoint for uploading a fiel
          * @summary 
          * @param {File} file 
          * @param {string} category 
@@ -114,7 +114,7 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = FilesApiFp(configuration)
     return {
         /**
-         * Files: Upload id
+         * Endpoint for uploading a fiel
          * @summary 
          * @param {File} file 
          * @param {string} category 
@@ -135,7 +135,7 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
  */
 export class FilesApi extends BaseAPI {
     /**
-     * Files: Upload id
+     * Endpoint for uploading a fiel
      * @summary 
      * @param {File} file 
      * @param {string} category 

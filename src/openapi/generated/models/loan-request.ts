@@ -61,7 +61,7 @@ export interface LoanRequest {
      * @type {string}
      * @memberof LoanRequest
      */
-    'customerId'?: string | null;
+    'customerId': string;
     /**
      * 
      * @type {string}

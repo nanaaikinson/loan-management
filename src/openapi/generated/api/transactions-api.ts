@@ -34,7 +34,7 @@ import { TransactionResponse } from '../models';
 export const TransactionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Endpoint for fetching transacting
          * @summary Create transaction
          * @param {StoreTransactionRequest} storeTransactionRequest 
          * @param {*} [options] Override http request option.
@@ -74,7 +74,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Get transaction
+         * Endpoint for fetching a particular transaction
          * @summary Get transaction
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -112,7 +112,7 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * Get a list of transactions
+         * Endpoint for fetching a list of transactions
          * @summary Get transactions
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -145,6 +145,48 @@ export const TransactionsApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Endpoint for updating a particular transaction
+         * @summary 
+         * @param {string} id 
+         * @param {StoreTransactionRequest} [storeTransactionRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTransaction: async (id: string, storeTransactionRequest?: StoreTransactionRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateTransaction', 'id', id)
+            const localVarPath = `/transactions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorization required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(storeTransactionRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -156,7 +198,7 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TransactionsApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Endpoint for fetching transacting
          * @summary Create transaction
          * @param {StoreTransactionRequest} storeTransactionRequest 
          * @param {*} [options] Override http request option.
@@ -167,7 +209,7 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Get transaction
+         * Endpoint for fetching a particular transaction
          * @summary Get transaction
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -178,13 +220,25 @@ export const TransactionsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Get a list of transactions
+         * Endpoint for fetching a list of transactions
          * @summary Get transactions
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getTransactions(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransactions200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTransactions(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Endpoint for updating a particular transaction
+         * @summary 
+         * @param {string} id 
+         * @param {StoreTransactionRequest} [storeTransactionRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateTransaction(id: string, storeTransactionRequest?: StoreTransactionRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTransaction(id, storeTransactionRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -198,7 +252,7 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
     const localVarFp = TransactionsApiFp(configuration)
     return {
         /**
-         * 
+         * Endpoint for fetching transacting
          * @summary Create transaction
          * @param {StoreTransactionRequest} storeTransactionRequest 
          * @param {*} [options] Override http request option.
@@ -208,7 +262,7 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
             return localVarFp.createTransaction(storeTransactionRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get transaction
+         * Endpoint for fetching a particular transaction
          * @summary Get transaction
          * @param {string} id 
          * @param {*} [options] Override http request option.
@@ -218,13 +272,24 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
             return localVarFp.getTransaction(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get a list of transactions
+         * Endpoint for fetching a list of transactions
          * @summary Get transactions
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getTransactions(options?: any): AxiosPromise<GetTransactions200Response> {
             return localVarFp.getTransactions(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Endpoint for updating a particular transaction
+         * @summary 
+         * @param {string} id 
+         * @param {StoreTransactionRequest} [storeTransactionRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTransaction(id: string, storeTransactionRequest?: StoreTransactionRequest, options?: any): AxiosPromise<TransactionResponse> {
+            return localVarFp.updateTransaction(id, storeTransactionRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -237,7 +302,7 @@ export const TransactionsApiFactory = function (configuration?: Configuration, b
  */
 export class TransactionsApi extends BaseAPI {
     /**
-     * 
+     * Endpoint for fetching transacting
      * @summary Create transaction
      * @param {StoreTransactionRequest} storeTransactionRequest 
      * @param {*} [options] Override http request option.
@@ -249,7 +314,7 @@ export class TransactionsApi extends BaseAPI {
     }
 
     /**
-     * Get transaction
+     * Endpoint for fetching a particular transaction
      * @summary Get transaction
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -261,7 +326,7 @@ export class TransactionsApi extends BaseAPI {
     }
 
     /**
-     * Get a list of transactions
+     * Endpoint for fetching a list of transactions
      * @summary Get transactions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -269,5 +334,18 @@ export class TransactionsApi extends BaseAPI {
      */
     public getTransactions(options?: AxiosRequestConfig) {
         return TransactionsApiFp(this.configuration).getTransactions(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Endpoint for updating a particular transaction
+     * @summary 
+     * @param {string} id 
+     * @param {StoreTransactionRequest} [storeTransactionRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionsApi
+     */
+    public updateTransaction(id: string, storeTransactionRequest?: StoreTransactionRequest, options?: AxiosRequestConfig) {
+        return TransactionsApiFp(this.configuration).updateTransaction(id, storeTransactionRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }

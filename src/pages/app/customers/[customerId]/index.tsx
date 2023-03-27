@@ -147,7 +147,7 @@ const ViewCustomer = () => {
         </div>
 
         <div className="col-12 lg:col-9">
-          <Card className="p-5 h-screen flex flex-col gap-y-8 rounded-none">
+          <Card className="p-5 h-screen flex flex-col gap-y-8 rounded-none lg:border-t-0">
             <div>
               <nav className="tab">
                 <NavLink

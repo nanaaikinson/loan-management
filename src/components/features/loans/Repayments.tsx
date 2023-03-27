@@ -5,8 +5,8 @@ import Dialog from "@/components/common/Dialog";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Table from "@/components/common/Table";
 import TransactionModal from "@/components/modals/TransactionModal";
+import { LoanContext } from "@/context/loan.context";
 import {
-  Loan,
   StoreTransactionRequestTypeEnum,
   Transaction,
 } from "@/openapi/generated";
@@ -18,21 +18,11 @@ import {
 } from "@/validation/loan";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-interface LoanRepaymentsProps {
-  loan: Loan;
-  repayments: Array<Transaction>;
-  updateRepayments: (repayments: Array<Transaction>) => void;
-}
-
-const LoanRepayments = ({
-  loan,
-  repayments,
-  updateRepayments,
-}: LoanRepaymentsProps) => {
+const LoanRepayments = () => {
   // State
   const [amount, setAmount] = useState<number>(0);
   const [isSubmittingLoanRepayment, setIsSubmittingLoanRepayment] =
@@ -90,6 +80,7 @@ const LoanRepayments = ({
     ],
     []
   );
+  const loanContext = useContext(LoanContext);
   const {
     register,
     handleSubmit,
@@ -115,19 +106,22 @@ const LoanRepayments = ({
       setIsSubmittingLoanRepayment(true);
 
       const { data: response } = await LoanService.instance().loanRepayment(
-        loan.id,
+        loanContext?.loan.id as string,
         {
           amount: data.amount,
-          currency: loan.currency,
-          customer: loan?.customer?.id as string,
+          currency: loanContext?.loan.currency as string,
+          customer: loanContext?.loan?.customer?.id as string,
           type: StoreTransactionRequestTypeEnum.LoanRepayment,
-          loan: loan.id,
+          loan: loanContext?.loan.id as string,
           note: data?.note ?? "",
         }
       );
 
       toast.success(response.message);
-      updateRepayments([response.data, ...repayments]);
+      loanContext?.updateRepayments([
+        response.data,
+        ...(loanContext?.repayments as Transaction[]),
+      ]);
       closeRepaymentModal();
     } catch (error) {
       //
@@ -150,21 +144,25 @@ const LoanRepayments = ({
   };
 
   // Template
+  if (!loanContext?.loan) return <></>;
+
   return (
     <>
       <div>
         <div className="flex items-center justify-between mb-5">
           <span className="font-semibold text-lg">Repayments</span>
-          <Button
-            variant="primary"
-            type="button"
-            onClick={() => setShowRepaymentModal(true)}
-          >
-            New payment
-          </Button>
+          {loanContext?.loan.status === "approved" && (
+            <Button
+              variant="primary"
+              type="button"
+              onClick={() => setShowRepaymentModal(true)}
+            >
+              New payment
+            </Button>
+          )}
         </div>
 
-        <Table columns={tableColumns} data={repayments} />
+        <Table columns={tableColumns} data={loanContext?.repayments} />
       </div>
 
       <Dialog

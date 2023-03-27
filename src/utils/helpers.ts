@@ -61,3 +61,20 @@ export const isEmpty = (value: any) => {
     (Array.isArray(value) && value.length === 0)
   );
 };
+
+export const getDurationInMonthsReadable = (
+  durationInMonths: number
+): string => {
+  const years = Math.floor(durationInMonths / 12);
+  const months = durationInMonths % 12;
+
+  let result = `${durationInMonths} month${durationInMonths !== 1 ? "s" : ""}`;
+
+  if (years > 0) {
+    result += ` (${years} year${years !== 1 ? "s" : ""} ${months} month${
+      months !== 1 ? "s" : ""
+    })`;
+  }
+
+  return result;
+};

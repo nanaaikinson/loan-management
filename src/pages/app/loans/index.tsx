@@ -1,4 +1,3 @@
-import Badge from "@/components/common/Badge";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
@@ -76,7 +75,6 @@ const Loans = () => {
           } ${formatMoney(val.row.original.amount)}`}</span>
         ),
       },
-
       {
         header: "Amount to Pay",
         cell: (val) => (

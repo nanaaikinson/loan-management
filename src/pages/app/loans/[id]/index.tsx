@@ -1,7 +1,8 @@
-import Button from "@/components/common/Button";
-import LoanCustomer from "@/components/features/loans/Customer";
+import Card from "@/components/common/Card";
 import LoanRepayments from "@/components/features/loans/Repayments";
+import LoanSummary from "@/components/features/loans/Summary";
 import Breadcrumb from "@/components/includes/Breadcrumb";
+import { LoanContext } from "@/context/loan.context";
 import { Loan, Transaction } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
 import { BreadcrumbItem } from "@/types";
@@ -48,27 +49,28 @@ const ViewLoan = () => {
     <>
       <Breadcrumb items={breadcrumbItems} className="" />
 
-      <div className="container-fluid">
-        <div className="flex flex-col gap-y-10 py-5">
-          {/* Summary */}
+      <LoanContext.Provider
+        value={{
+          loan,
+          updateLoan: setLoan,
+          repayments,
+          updateRepayments: setRepayments,
+        }}
+      >
+        <div className="container-fluid">
           <div className="row">
             <div className="col-12 lg:col-4">
-              <LoanCustomer customer={loan.customer} />
+              <LoanSummary />
             </div>
 
-            <div className="col-12 lg:col-8"></div>
+            <div className="col-12 lg:col-8">
+              <Card className="p-5 h-screen flex flex-col gap-y-8 rounded-none lg:border-t-0">
+                <LoanRepayments />
+              </Card>
+            </div>
           </div>
-
-          {/* Repayments */}
-          {loan.status === "approved" && (
-            <LoanRepayments
-              loan={loan}
-              repayments={repayments}
-              updateRepayments={setRepayments}
-            />
-          )}
         </div>
-      </div>
+      </LoanContext.Provider>
     </>
   );
 };

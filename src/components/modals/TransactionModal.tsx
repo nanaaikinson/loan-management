@@ -1,195 +1,97 @@
-import AmountInput from "../common/AmountInput";
-import Button from "@/components/common/Button";
-import CloseButton from "@/components/common/CloseButton";
-import Dialog from "@/components/common/Dialog";
-import ErrorMessage from "@/components/common/ErrorMessage";
-import { Customer, StoreTransactionRequestTypeEnum } from "@/openapi/generated";
-import { TransactionService } from "@/services/transaction.service";
-import {
-  StoreTransactionForm,
-  storeTransactionValidationSchema,
-} from "@/validation/transaction";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { isAxiosError } from "axios";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import CloseButton from "../common/CloseButton";
+import Dialog from "../common/Dialog";
+import TransactionStatus from "../misc/TransactionStatus";
+import { Transaction } from "@/openapi/generated";
+import { formatDate, formatMoney } from "@/utils/helpers";
 
 interface TransactionModalProps {
-  customer: Customer;
   visible: boolean;
-  readonly?: boolean;
-  loanId?: string;
-  currency?: string;
+  transaction: Transaction;
   onClose: () => void;
-  onUpdate?: () => void;
 }
 
-const transactionTypeOptions = Object.values(StoreTransactionRequestTypeEnum);
-
 const TransactionModal = ({
+  transaction,
   visible,
-  customer,
-  loanId,
-  currency = "GHS",
-  readonly,
   onClose,
-  onUpdate,
 }: TransactionModalProps) => {
-  // State
-  const [amount, setAmount] = useState<number>(0);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const {
-    handleSubmit,
-    register,
-    setValue,
-    setError,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<StoreTransactionForm>({
-    resolver: yupResolver(storeTransactionValidationSchema),
-  });
-
-  // Methods
-  const onSubmit = async (data: StoreTransactionForm) => {
-    setIsSubmitting(true);
-
-    try {
-      const { data: response } =
-        await TransactionService.instance().createTransaction({
-          customer: customer.id,
-          loan: loanId ?? null,
-          amount: data.amount,
-          type: data.type as StoreTransactionRequestTypeEnum,
-          note: data.note ?? "",
-          currency: data.currency,
-        });
-
-      toast.success(response.message);
-      onUpdate?.();
-      handleClose();
-    } catch (error) {
-      if (isAxiosError(error) && error?.response) {
-        const { status, data } = error.response;
-
-        if (status === 401) {
-          for (const [key, value] of Object.entries(data.errors)) {
-            const val = value as Array<string>;
-
-            if (key === "amount") {
-              setError(key, { message: val[0] });
-            }
-            if (key === "type") {
-              setError(key, { message: val[0] });
-            }
-          }
-        } else {
-          toast.error(data.message);
-        }
-      } else {
-        toast.error((error as Error).message);
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-  const handleClose = () => {
-    setAmount(0);
-    reset();
-    onClose();
-  };
-
-  // Effects
-  useEffect(() => {
-    setValue("currency", currency);
-  }, [visible]);
-
+  if (!transaction) return null;
   return (
     <>
-      <Dialog visible={visible} size="xs">
-        <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between h-12 px-5 border-b border-gray-100">
-            <h3 className="text-xl mb-0">Transaction</h3>
+      <Dialog visible={visible} size="sm">
+        <div className="flex items-center justify-between py-5 px-8">
+          <h4 className="mb-0">Transaction details</h4>
 
-            <CloseButton onClick={handleClose} />
-          </div>
+          <CloseButton onClick={onClose} />
+        </div>
+        <div className="py-8 px-8">
+          <div className="flex flex-col divide-y divide-gray-100 gap-y-2">
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Transaction ID</span>
+              <span className="text-right">{transaction.id}</span>
+            </div>
 
-          <div className="py-8 px-5 flex-1 overflow-auto">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="row">
-                <div className="col-12">
-                  <div className="mb-4">
-                    <label htmlFor="">Customer</label>
-                    <div>{`${customer.firstName} ${customer.lastName}`}</div>
-                  </div>
-                </div>
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Reference</span>
+              <span className="text-right">{transaction.reference}</span>
+            </div>
 
-                <div className="col-12 lg:col-12">
-                  <div className="mb-4">
-                    <label htmlFor="amount">Amount *</label>
-                    <AmountInput
-                      value={amount}
-                      onChange={(value) => {
-                        setValue("amount", value);
-                        setAmount(value);
-                      }}
-                    />
-                    {errors?.amount?.message && (
-                      <ErrorMessage message={errors.amount?.message} />
-                    )}
-                  </div>
-                </div>
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Amount</span>
+              <span className="text-right">
+                {transaction.currency} {formatMoney(transaction.amount)}
+              </span>
+            </div>
 
-                <div className="col-12 lg:col-12">
-                  <div className="mb-4">
-                    <label htmlFor="type">Type *</label>
-                    <select
-                      {...register("type")}
-                      name="type"
-                      id="type"
-                      className="form-select"
-                    >
-                      <option value="">Select option</option>
-                      {transactionTypeOptions.map((option, index) => (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                    {errors?.type?.message && (
-                      <ErrorMessage message={errors.type?.message} />
-                    )}
-                  </div>
-                </div>
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Customer</span>
+              <span className="text-right">
+                {transaction?.customer
+                  ? `${transaction?.customer?.firstName} ${transaction?.customer?.lastName}`
+                  : "N/A"}
+              </span>
+            </div>
 
-                <div className="col-12 lg:col-12">
-                  <div className="mb-4">
-                    <label htmlFor="type">Note</label>
-                    <textarea
-                      {...register("note")}
-                      name="note"
-                      id="note"
-                      cols={30}
-                      rows={4}
-                      className="form-input"
-                    ></textarea>
-                  </div>
-                </div>
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Status</span>
+              <span className="text-right">
+                <TransactionStatus status={transaction.status} />
+              </span>
+            </div>
 
-                <div className="col-12">
-                  <div className="pt-4 flex">
-                    <Button
-                      type="submit"
-                      className="ml-auto px-10"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? "Submitting..." : "Transact"}
-                    </Button>
-                  </div>
-                </div>
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Transaction Date</span>
+              <span className="text-right">
+                {formatDate(
+                  transaction.createdAt,
+                  "dddd, MMMM DD, YYYY h:mm A"
+                )}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Transaction Type</span>
+              <span className="text-right capitalize">{transaction.type}</span>
+            </div>
+
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Loan Repayment</span>
+              <span className="text-right capitalize">
+                {transaction.loanRepayment ? "True" : "False"}
+              </span>
+            </div>
+
+            {transaction?.loan && (
+              <div className="flex justify-between items-center pt-2">
+                <span className="text-gray-500">Loan</span>
+                <span className="text-right">{transaction?.loan.id}</span>
               </div>
-            </form>
+            )}
+
+            <div className="flex flex-col pt-2">
+              <span className="text-gray-500">Note</span>
+              <span className="">{transaction?.note}</span>
+            </div>
           </div>
         </div>
       </Dialog>

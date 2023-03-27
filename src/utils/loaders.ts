@@ -39,3 +39,11 @@ export const loadLoans = async () => {
 
   return data;
 };
+
+export const loadLoan = async (loanId: string) => {
+  const {
+    data: { data: response },
+  } = await LoanService.instance().getLoan(loanId);
+
+  return response;
+};

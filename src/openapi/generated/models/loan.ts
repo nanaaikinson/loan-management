@@ -15,7 +15,7 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import { LoanCustomer } from './loan-customer';
+import { Customer } from './customer';
 
 /**
  * 
@@ -103,10 +103,10 @@ export interface Loan {
     'duration': number;
     /**
      * 
-     * @type {LoanCustomer}
+     * @type {Customer}
      * @memberof Loan
      */
-    'customer': LoanCustomer | null;
+    'customer': Customer;
     /**
      * 
      * @type {number}
@@ -162,7 +162,9 @@ export const LoanStatusEnum = {
     Approved: 'approved',
     Rejected: 'rejected',
     Closed: 'closed',
-    WrittenOff: 'written off'
+    WrittenOff: 'written off',
+    WaivedOff: 'waived off',
+    Disbursed: 'disbursed'
 } as const;
 
 export type LoanStatusEnum = typeof LoanStatusEnum[keyof typeof LoanStatusEnum];

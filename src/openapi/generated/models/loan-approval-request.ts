@@ -30,7 +30,11 @@ export interface LoanApprovalRequest {
 
 export const LoanApprovalRequestStatusEnum = {
     Approved: 'approved',
-    Rejected: 'rejected'
+    Rejected: 'rejected',
+    Closed: 'closed',
+    WrittenOff: 'written off',
+    WaivedOff: 'waived off',
+    Disbursed: 'disbursed'
 } as const;
 
 export type LoanApprovalRequestStatusEnum = typeof LoanApprovalRequestStatusEnum[keyof typeof LoanApprovalRequestStatusEnum];

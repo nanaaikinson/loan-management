@@ -6,17 +6,23 @@ export const formatDate = (date: string | Date, format = "YYYY-MM-DD") => {
   return dayjs(date).format(format);
 };
 
-export const generateInitials = (name: string) => {
-  if (!name) {
-    return "";
+export const generateInitials = (str: string) => {
+  if (!str) return "";
+
+  const initialsArr = str.toUpperCase().split(" ");
+
+  if (initialsArr.length === 1) {
+    return `${initialsArr[0].charAt(0)}${initialsArr[0].charAt(1)}`;
   }
 
-  // Take the first letter first word and the first letter of the last word
-  const initials = name;
-  const firstLetter = initials.charAt(0);
-  const lastLetter = initials.charAt(initials.length - 1);
+  if (initialsArr.length === 2) {
+    return `${initialsArr[0].charAt(0)}${initialsArr[1].charAt(0)}`;
+  }
 
-  return `${firstLetter}${lastLetter}`.toUpperCase();
+  // If the length is 1, then return the first letter of the word
+  return `${initialsArr[0].charAt(0)}${initialsArr[
+    initialsArr.length - 1
+  ].charAt(0)}`;
 };
 
 export const formatMoney = (
@@ -54,4 +60,21 @@ export const isEmpty = (value: any) => {
     (typeof value === "object" && Object.keys(value).length === 0) ||
     (Array.isArray(value) && value.length === 0)
   );
+};
+
+export const getDurationInMonthsReadable = (
+  durationInMonths: number
+): string => {
+  const years = Math.floor(durationInMonths / 12);
+  const months = durationInMonths % 12;
+
+  let result = `${durationInMonths} month${durationInMonths !== 1 ? "s" : ""}`;
+
+  if (years > 0) {
+    result += ` (${years} year${years !== 1 ? "s" : ""} ${months} month${
+      months !== 1 ? "s" : ""
+    })`;
+  }
+
+  return result;
 };

@@ -1,21 +1,14 @@
-import Badge from "@/components/common/Badge";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
+import LoanStatus from "@/components/misc/LoanStatus";
 import LoanModal from "@/components/modals/LoanModal";
-import Prompt from "@/components/modals/Prompt";
-import {
-  GetLoans200Response,
-  Loan,
-  LoanApprovalRequestStatusEnum,
-} from "@/openapi/generated";
+import { GetLoans200Response, Loan } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { loadLoans } from "@/utils/loaders";
 import { ColumnDef } from "@tanstack/react-table";
-import { isAxiosError } from "axios";
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 import { Link, useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
@@ -26,11 +19,8 @@ const Loans = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [readonlyLoan, setReadonlyLoan] = useState<boolean>(false);
   const [showLoanModal, setShowLoanModal] = useState<boolean>(false);
-  const [showApprovalPrompt, setShowApprovalPrompt] = useState<boolean>(false);
   const [loan, setLoan] = useState<Loan>();
   const [loans, setLoans] = useState<Array<Loan>>([]);
-  const [approvalStatus, setApprovalStatus] =
-    useState<LoanApprovalRequestStatusEnum>("approved");
 
   const tableColumns = useMemo<Array<ColumnDef<Loan>>>(
     () => [
@@ -49,7 +39,8 @@ const Loans = () => {
                 to={`/customers/${val.row.original?.customer.id}`}
                 className="text-info transition duration-300 hover:text-info-dark"
               >
-                {val.row.original?.customer.name}
+                {val.row.original?.customer.firstName}{" "}
+                {val.row.original?.customer.lastName}
               </Link>
             ) : (
               <span className="text-gray-300">None</span>
@@ -74,7 +65,6 @@ const Loans = () => {
           } ${formatMoney(val.row.original.amount)}`}</span>
         ),
       },
-
       {
         header: "Amount to Pay",
         cell: (val) => (
@@ -85,18 +75,7 @@ const Loans = () => {
       },
       {
         header: "Status",
-        cell: (val) => {
-          switch (val.row.original.status) {
-            case "pending":
-              return <Badge variant="warning" text={"pending"} />;
-            case "approved":
-              return <Badge variant="success" text={"approved"} />;
-            case "rejected":
-              return <Badge variant="danger" text={"rejected"} />;
-            default:
-              return <Badge variant="default" text={val.row.original.status} />;
-          }
-        },
+        cell: (val) => <LoanStatus status={val.row.original.status} />,
       },
       {
         header: "Start Date",
@@ -114,38 +93,13 @@ const Loans = () => {
         header: " ",
         cell: (val) => (
           <div className="flex space-x-2 items-center">
-            <button
-              className="text-info"
+            <Link
+              to={`/loans/${val.row.original.id}`}
+              className="text-info hover:text-info-dark"
               onClick={() => viewLoan(val.row.original)}
             >
               View
-            </button>
-
-            {val.row.original.status === "pending" && (
-              <>
-                <button
-                  className="text-success"
-                  onClick={() => {
-                    setLoan(val.row.original);
-                    setApprovalStatus("approved");
-                    setShowApprovalPrompt(true);
-                  }}
-                >
-                  Approve
-                </button>
-
-                <button
-                  className="text-danger"
-                  onClick={() => {
-                    setLoan(val.row.original);
-                    setApprovalStatus("rejected");
-                    setShowApprovalPrompt(true);
-                  }}
-                >
-                  Reject
-                </button>
-              </>
-            )}
+            </Link>
           </div>
         ),
       },
@@ -170,38 +124,17 @@ const Loans = () => {
       setLoading(false);
     }
   };
-  const onHandleLoanApproval = async () => {
-    if (loan) {
-      await loanApproval();
-      await loadData();
-    }
-  };
-  const loanApproval = async () => {
+  const loadData = async () => {
     setLoading(true);
-    setShowApprovalPrompt(false);
 
     try {
-      if (loan) {
-        const { data: response } = await LoanService.instance().loanApproval(
-          loan?.id,
-          { status: approvalStatus }
-        );
-        toast.success(response.message);
-      }
+      const response = await loadLoans();
+      setLoans(response.data);
     } catch (error) {
-      if (isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-      } else {
-        toast.error((error as Error).message);
-      }
+      console.log(error);
     } finally {
       setLoading(false);
     }
-  };
-  const loadData = async () => {
-    const response = await loadLoans();
-
-    setLoans(response.data);
   };
 
   // Effects
@@ -212,7 +145,7 @@ const Loans = () => {
   // Template
   return (
     <>
-      <div className="container xl:container-fluid">
+      <div className="container-fluid">
         <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">
@@ -237,16 +170,6 @@ const Loans = () => {
           setLoan(undefined);
         }}
         onUpdated={loadData}
-      />
-
-      <Prompt
-        visible={showApprovalPrompt}
-        title={`Are you sure you want to ${
-          approvalStatus === "approved" ? "approve" : "reject"
-        } this loan?`}
-        message="This action cannot be undone."
-        onConfirm={onHandleLoanApproval}
-        onCancel={() => setShowApprovalPrompt(false)}
       />
     </>
   );

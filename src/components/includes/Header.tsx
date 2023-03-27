@@ -1,16 +1,18 @@
-import Avatar from "../common/Avatar";
-import Button from "../common/Button";
+import Avatar from "@/components/common/Avatar";
+import Button from "@/components/common/Button";
 import { useAuthStore } from "@/stores/auth";
 import { generateInitials } from "@/utils/helpers";
 import { Menu, Transition } from "@headlessui/react";
 import { Icon } from "@iconify/react";
 import classNames from "classnames";
 import { Fragment, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-type HeaderProps = React.HTMLAttributes<HTMLElement>;
+interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
+  toggleSidebar: () => void;
+}
 
-const Header = ({ className }: HeaderProps) => {
+const Header = ({ className, toggleSidebar }: HeaderProps) => {
   const [initials, setInitials] = useState<string>("");
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
@@ -37,6 +39,10 @@ const Header = ({ className }: HeaderProps) => {
         )}
       >
         <div className="flex h-full items-center justify-between">
+          <button>
+            <Icon icon="bx:menu" className="text-xl" onClick={toggleSidebar} />
+          </button>
+
           <ul className="flex items-center space-x-3 ml-auto">
             <li>
               <Menu as="div" className="relative">

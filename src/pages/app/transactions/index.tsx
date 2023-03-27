@@ -1,16 +1,19 @@
 import Badge from "@/components/common/Badge";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
+import TransactionStatus from "@/components/misc/TransactionStatus";
+import TransactionModal from "@/components/modals/TransactionModal";
 import { GetTransactions200Response, Transaction } from "@/openapi/generated";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
 const Transactions = () => {
   useTitle("Transactions | Microlend");
 
+  // State
   const transactions = (useLoaderData() as GetTransactions200Response).data;
   const tableColumns = useMemo<Array<ColumnDef<Transaction>>>(
     () => [
@@ -27,17 +30,13 @@ const Transactions = () => {
           )}`}</span>
         ),
       },
-      // {
-      //   header: "Account Number",
-      //   cell: (val) => <span className=">1234567890</span>,
-      // },
       {
         header: "Customer",
         cell: (val) => (
           <>
-            <Link to={`/customers/${val.row.original.customer.id}/loans`}>
+            <Link to={`/customers/${val.row.original?.customer?.id}/loans`}>
               <span className="transition-all duration-300 text-info hover:text-info-dark">
-                {`${val.row.original.customer.firstName} ${val.row.original.customer.lastName}`}
+                {`${val.row.original?.customer?.firstName} ${val.row.original?.customer?.lastName}`}
               </span>
             </Link>
           </>
@@ -48,7 +47,7 @@ const Transactions = () => {
         cell: (val) =>
           val.row.original.loan ? (
             <>
-              <Link to={`/loans/?loanId=${val.row.original?.loan.id}`}>
+              <Link to={`/loans/${val.row.original?.loan.id}`}>
                 <span className="transition-all duration-300 text-info hover:text-info-dark">
                   {val.row.original?.loan.id}
                 </span>
@@ -59,19 +58,13 @@ const Transactions = () => {
           ),
       },
       {
+        header: "Type",
+        cell: (val) => val.renderValue(),
+        accessorKey: "type",
+      },
+      {
         header: "Status",
-        cell: (val) => {
-          switch (val.row.original.status) {
-            case "pending":
-              return <Badge variant="warning" text={"pending"} />;
-            case "success":
-              return <Badge variant="success" text={"success"} />;
-            case "failed":
-              return <Badge variant="danger" text={"failed"} />;
-            default:
-              return <Badge variant="default" text={val.row.original.status} />;
-          }
-        },
+        cell: (val) => <TransactionStatus status={val.row.original.status} />,
       },
       {
         header: "Transaction Date",
@@ -79,7 +72,7 @@ const Transactions = () => {
           <span>
             {formatDate(
               val.row.original.createdAt,
-              "dddd, MMMM DD, YYYY hh:mm A"
+              "dddd, MMMM DD, YYYY h:mm A"
             )}
           </span>
         ),
@@ -88,17 +81,31 @@ const Transactions = () => {
         header: " ",
         cell: (val) => (
           <div className="flex space-x-2">
-            <button className="text-info">View</button>
+            <button
+              className="text-info"
+              onClick={viewTransaction(val.row.original)}
+            >
+              View
+            </button>
           </div>
         ),
       },
     ],
     []
   );
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
+  // Methods
+  const viewTransaction = (transaction: Transaction) => () => {
+    setTransaction(transaction);
+    setShowModal(true);
+  };
+
+  // Template
   return (
     <>
-      <div className="container xl:container-fluid">
+      <div className="container-fluid">
         <Card className="p-5 min-h-[400px]">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">
@@ -111,6 +118,15 @@ const Transactions = () => {
           </div>
         </Card>
       </div>
+
+      <TransactionModal
+        transaction={transaction as Transaction}
+        visible={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setTransaction(null);
+        }}
+      />
     </>
   );
 };

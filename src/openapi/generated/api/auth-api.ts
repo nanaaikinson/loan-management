@@ -34,7 +34,7 @@ import { LoginResponse } from '../models';
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Authentication: Login
+         * Endpoint for signing in
          * @summary 
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
@@ -70,7 +70,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * 
+         * Endpoint for fetching the current authenticated user
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -114,7 +114,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
     return {
         /**
-         * Authentication: Login
+         * Endpoint for signing in
          * @summary 
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
@@ -125,7 +125,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
+         * Endpoint for fetching the current authenticated user
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -145,7 +145,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = AuthApiFp(configuration)
     return {
         /**
-         * Authentication: Login
+         * Endpoint for signing in
          * @summary 
          * @param {LoginRequest} loginRequest 
          * @param {*} [options] Override http request option.
@@ -155,7 +155,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.authLogin(loginRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Endpoint for fetching the current authenticated user
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -174,7 +174,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
  */
 export class AuthApi extends BaseAPI {
     /**
-     * Authentication: Login
+     * Endpoint for signing in
      * @summary 
      * @param {LoginRequest} loginRequest 
      * @param {*} [options] Override http request option.
@@ -186,7 +186,7 @@ export class AuthApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Endpoint for fetching the current authenticated user
      * @summary Your GET endpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

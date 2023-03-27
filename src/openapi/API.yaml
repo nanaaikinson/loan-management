@@ -13,6 +13,12 @@ servers:
   - url: "http://localhost:3000"
   - url: "http://microlend.test/api/v1"
     description: ""
+tags:
+  - name: auth
+  - name: customers
+  - name: loans
+  - name: transactions
+  - name: files
 paths:
   /auth/login:
     post:
@@ -27,7 +33,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
-      description: "Authentication: Login"
+      description: Endpoint for signing in
       requestBody:
         required: true
         content:
@@ -49,6 +55,7 @@ paths:
       operationId: auth-user
       security:
         - Authorization: []
+      description: Endpoint for fetching the current authenticated user
   /files/upload:
     post:
       tags:
@@ -65,7 +72,7 @@ paths:
       security:
         - Authorization: []
       parameters: []
-      description: "Files: Upload id"
+      description: Endpoint for uploading a fiel
       requestBody:
         content:
           multipart/form-data:
@@ -102,7 +109,7 @@ paths:
                   - message
                   - status
                   - data
-      description: "Customers: create customer"
+      description: Endpoint for creating a new customer
       security:
         - Authorization: []
       requestBody:
@@ -158,6 +165,7 @@ paths:
                   - data
       security:
         - Authorization: []
+      description: Endpoint for fetching a list of customers
   /customers/search:
     get:
       summary: ""
@@ -220,6 +228,7 @@ paths:
       operationId: customers-search
       security:
         - Authorization: []
+      description: Endpoint for searching for customer(s) with limited data
     parameters: []
   "/customers/{id}":
     parameters:
@@ -255,6 +264,7 @@ paths:
       security:
         - Authorization: []
       x-extension-1: null
+      description: Endpoint for fetching a particular customer
     patch:
       tags:
         - customers
@@ -291,6 +301,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/StoreCustomerRequest"
+      description: Endpoint for updating a particular customer
   "/customers/{id}/loans":
     parameters:
       - schema:
@@ -331,7 +342,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: ""
+      description: Endpoint for fetching a particular customer's loans
   "/customers/{id}/transactions":
     parameters:
       - schema:
@@ -372,7 +383,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: ""
+      description: Endpoint for fetching a particular customer's transactions
   "/customers/{id}/attach-loan":
     parameters:
       - schema:
@@ -421,6 +432,64 @@ paths:
                   - message
                   - status
                   - data
+      description: Endpoint for attaching a loan to a particular customer
+  "/customers/{id}/update-avatar":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Customer Id
+    patch:
+      tags:
+        - customers
+      summary: ""
+      operationId: update-avatar
+      security:
+        - Authorization: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: null
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    nullable: true
+                required:
+                  - message
+                  - status
+                  - data
+      description: Endpoint for updating a particular customer's profile picture
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  key: 1
+                  url: "https://example.com/profile/12nnr34nf.jpg"
+              properties:
+                key:
+                  type: integer
+                url:
+                  type: string
+              required:
+                - key
+                - url
   "/customers/{id}/transact":
     parameters:
       - schema:
@@ -431,12 +500,15 @@ paths:
         description: Customer Id
     post:
       summary: ""
+      tags:
+        - customers
       operationId: customer-transact
       responses:
         "200":
           description: OK
       security:
         - Authorization: []
+      description: Endpoint for transacting on behalf of a particular customer
   /loans:
     get:
       summary: Your GET endpoint
@@ -470,6 +542,7 @@ paths:
       operationId: get-loans
       security:
         - Authorization: []
+      description: Endpoint for fetching a list of loans
     post:
       tags:
         - loans
@@ -507,7 +580,7 @@ paths:
             schema:
               $ref: "#/components/schemas/LoanRequest"
         description: ""
-      description: "Loans: Create a new loan"
+      description: Endpoint for creating a new loan
   "/loans/{id}":
     parameters:
       - schema:
@@ -516,7 +589,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get Loan
       tags:
         - loans
       responses:
@@ -545,6 +618,7 @@ paths:
       operationId: get-loan
       security:
         - Authorization: []
+      description: Endpoint for fetching a particular loan
     patch:
       tags:
         - loans
@@ -582,7 +656,7 @@ paths:
             schema:
               $ref: "#/components/schemas/LoanRequest"
         description: ""
-      description: ""
+      description: Endpoint for updating a particular loan
   "/loans/{id}/approval":
     parameters:
       - schema:
@@ -635,8 +709,126 @@ paths:
                   enum:
                     - approved
                     - rejected
+                    - closed
+                    - written off
+                    - waived off
+                    - disbursed
               required:
                 - status
+      description: Endpoint for loan approval
+  "/loans/{id}/repayments":
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: ""
+      tags:
+        - loans
+      operationId: get-loan-repayments
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data:
+                      - id: TRX_iuVHuiEg2c
+                        amount: 400
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f9a7-37ec-4033-be68-623520638593
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:44.000000Z"
+                        status: pending
+                      - id: TRX_9SBGkHnEt0
+                        amount: 300
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f999-da71-4905-9ba8-0248d1e8d304
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:35.000000Z"
+                        status: pending
+                      - id: TRX_MUkRaFUZ7w
+                        amount: 300
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f976-9021-48ee-9ea0-6619f0628f34
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:12.000000Z"
+                        status: pending
+                      - id: TRX_DYctLoq9LR
+                        amount: 300
+                        currency: GHS
+                        type: loan repayment
+                        description: null
+                        reference: 98c5f968-4b8d-4e36-ae7b-5e22f6d6d2cd
+                        loanRepayment: true
+                        createdAt: "2023-03-25T16:10:03.000000Z"
+                        status: pending
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Transaction"
+                required:
+                  - message
+                  - status
+                  - data
+      description: Endpoind for fetch a particular loan's repayments
+      security:
+        - Authorization: []
+    post:
+      summary: ""
+      tags:
+        - loans
+      operationId: loan-repayment
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    message: ""
+                    status: 200
+                    data: {}
+                properties:
+                  message:
+                    type: string
+                  status:
+                    type: integer
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+                required:
+                  - message
+                  - status
+                  - data
+      description: Endpoint for repayment of a particluar loan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreTransactionRequest"
+      security:
+        - Authorization: []
   /transactions:
     get:
       summary: Get transactions
@@ -671,7 +863,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: Get a list of transactions
+      description: Endpoint for fetching a list of transactions
     post:
       tags:
         - transactions
@@ -692,6 +884,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/StoreTransactionRequest"
+      description: Endpoint for fetching transacting
   "/transactions/{id}":
     get:
       summary: Get transaction
@@ -708,7 +901,7 @@ paths:
       parameters: []
       security:
         - Authorization: []
-      description: Get transaction
+      description: Endpoint for fetching a particular transaction
     parameters:
       - schema:
           type: string
@@ -717,6 +910,8 @@ paths:
         required: true
     patch:
       summary: ""
+      tags:
+        - transactions
       operationId: update-transaction
       responses:
         "200":
@@ -732,6 +927,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/StoreTransactionRequest"
+      description: Endpoint for updating a particular transaction
 components:
   schemas:
     Customer:
@@ -893,7 +1089,8 @@ components:
           duration: 3
           customer:
             id: CUS_vyecouz8emdhztu2v2ay
-            name: Nana Kwesi Ofosu-Aikins
+            firstName: Nana Kwesi
+            lastName: Ofosu-Aikins
           repaymentAmount: 486
           numberOfRepayments: 7
           nextRepaymentDate: null
@@ -901,6 +1098,8 @@ components:
           loanNumber: "980008445546277"
           currency: GHS
           createdAt: "2023-03-24T07:40:37.000000Z"
+      x-stoplight:
+        id: fe973cda0ce93
       properties:
         id:
           type: string
@@ -917,6 +1116,8 @@ components:
             - rejected
             - closed
             - written off
+            - waived off
+            - disbursed
         repaymentFrequency:
           type: string
           enum:
@@ -948,16 +1149,7 @@ components:
         duration:
           type: integer
         customer:
-          type: object
-          required:
-            - id
-            - name
-          nullable: true
-          properties:
-            id:
-              type: string
-            name:
-              type: string
+          $ref: "#/components/schemas/Customer"
         repaymentAmount:
           type: integer
         numberOfRepayments:
@@ -976,11 +1168,11 @@ components:
         - id
         - type
         - status
+        - repaymentFrequency
         - amount
         - totalAmount
         - amountPaid
         - amountDue
-        - repaymentFrequency
         - interestRate
         - interestRateType
         - startDate
@@ -994,8 +1186,6 @@ components:
         - loanNumber
         - currency
         - createdAt
-      x-stoplight:
-        id: fe973cda0ce93
     StoreCustomerRequest:
       type: object
       x-examples:
@@ -1130,7 +1320,6 @@ components:
           minimum: 0
         customerId:
           type: string
-          nullable: true
         interestRateType:
           type: string
           enum:
@@ -1143,6 +1332,7 @@ components:
         - startDate
         - interestRate
         - duration
+        - customerId
         - interestRateType
     LoginRequest:
       type: object
@@ -1306,7 +1496,7 @@ components:
             - failed
             - pending
             - reversed
-        description:
+        note:
           type: string
           nullable: true
         reference:
@@ -1318,12 +1508,11 @@ components:
           type: string
       required:
         - id
-        - customer
         - amount
         - currency
         - type
         - status
-        - description
+        - note
         - reference
         - loanRepayment
         - createdAt

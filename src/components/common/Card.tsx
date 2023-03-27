@@ -8,7 +8,7 @@ const Card = ({ className, children }: CardProps) => {
     <>
       <div
         className={classNames(
-          `w-full rounded-[7px] bg-white drop-shadow-sm`,
+          `w-full rounded-[7px] bg-white border border-gray-100`,
           className
         )}
       >

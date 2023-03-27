@@ -162,7 +162,9 @@ export const LoanStatusEnum = {
     Approved: 'approved',
     Rejected: 'rejected',
     Closed: 'closed',
-    WrittenOff: 'written off'
+    WrittenOff: 'written off',
+    WaivedOff: 'waived off',
+    Disbursed: 'disbursed'
 } as const;
 
 export type LoanStatusEnum = typeof LoanStatusEnum[keyof typeof LoanStatusEnum];

@@ -2,7 +2,19 @@ import classNames from "classnames";
 import { type HTMLAttributes } from "react";
 
 interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger" | "success" | "warning" | "info";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "danger"
+    | "success"
+    | "warning"
+    | "info"
+    | "outline-primary"
+    | "outline-secondary"
+    | "outline-danger"
+    | "outline-success"
+    | "outline-warning"
+    | "outline-info";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   loading?: boolean;
   disabled?: boolean;
@@ -42,6 +54,24 @@ const Button = ({
         break;
       case "info":
         classes = "btn-info";
+        break;
+      case "outline-primary":
+        classes = "btn-outline-primary";
+        break;
+      case "outline-secondary":
+        classes = "btn-outline-secondary";
+        break;
+      case "outline-danger":
+        classes = "btn-outline-danger";
+        break;
+      case "outline-success":
+        classes = "btn-outline-success";
+        break;
+      case "outline-warning":
+        classes = "btn-outline-warning";
+        break;
+      case "outline-info":
+        classes = "btn-outline-info";
         break;
       default:
         break;

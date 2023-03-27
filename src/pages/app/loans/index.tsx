@@ -3,19 +3,12 @@ import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import LoanStatus from "@/components/misc/LoanStatus";
 import LoanModal from "@/components/modals/LoanModal";
-import Prompt from "@/components/modals/Prompt";
-import {
-  GetLoans200Response,
-  Loan,
-  LoanApprovalRequestStatusEnum,
-} from "@/openapi/generated";
+import { GetLoans200Response, Loan } from "@/openapi/generated";
 import { LoanService } from "@/services/loan.service";
 import { formatDate, formatMoney } from "@/utils/helpers";
 import { loadLoans } from "@/utils/loaders";
 import { ColumnDef } from "@tanstack/react-table";
-import { isAxiosError } from "axios";
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 import { Link, useLoaderData } from "react-router-dom";
 import { useTitle } from "react-use";
 
@@ -26,11 +19,8 @@ const Loans = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [readonlyLoan, setReadonlyLoan] = useState<boolean>(false);
   const [showLoanModal, setShowLoanModal] = useState<boolean>(false);
-  const [showApprovalPrompt, setShowApprovalPrompt] = useState<boolean>(false);
   const [loan, setLoan] = useState<Loan>();
   const [loans, setLoans] = useState<Array<Loan>>([]);
-  const [approvalStatus, setApprovalStatus] =
-    useState<LoanApprovalRequestStatusEnum>("approved");
 
   const tableColumns = useMemo<Array<ColumnDef<Loan>>>(
     () => [
@@ -134,38 +124,17 @@ const Loans = () => {
       setLoading(false);
     }
   };
-  const onHandleLoanApproval = async () => {
-    if (loan) {
-      await loanApproval();
-      await loadData();
-    }
-  };
-  const loanApproval = async () => {
+  const loadData = async () => {
     setLoading(true);
-    setShowApprovalPrompt(false);
 
     try {
-      if (loan) {
-        const { data: response } = await LoanService.instance().loanApproval(
-          loan?.id,
-          { status: approvalStatus }
-        );
-        toast.success(response.message);
-      }
+      const response = await loadLoans();
+      setLoans(response.data);
     } catch (error) {
-      if (isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-      } else {
-        toast.error((error as Error).message);
-      }
+      console.log(error);
     } finally {
       setLoading(false);
     }
-  };
-  const loadData = async () => {
-    const response = await loadLoans();
-
-    setLoans(response.data);
   };
 
   // Effects
@@ -201,16 +170,6 @@ const Loans = () => {
           setLoan(undefined);
         }}
         onUpdated={loadData}
-      />
-
-      <Prompt
-        visible={showApprovalPrompt}
-        title={`Are you sure you want to ${
-          approvalStatus === "approved" ? "approve" : "reject"
-        } this loan?`}
-        message="This action cannot be undone."
-        onConfirm={onHandleLoanApproval}
-        onCancel={() => setShowApprovalPrompt(false)}
       />
     </>
   );

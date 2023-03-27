@@ -709,6 +709,10 @@ paths:
                   enum:
                     - approved
                     - rejected
+                    - closed
+                    - written off
+                    - waived off
+                    - disbursed
               required:
                 - status
       description: Endpoint for loan approval
@@ -1112,6 +1116,8 @@ components:
             - rejected
             - closed
             - written off
+            - waived off
+            - disbursed
         repaymentFrequency:
           type: string
           enum:

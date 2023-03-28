@@ -51,11 +51,8 @@ const Loans = () => {
       {
         header: "Interest Rate",
         cell: (val) => (
-          <span className="text-right">{`${val.renderValue()} (${
-            val.row.original.interestRateType === "amount" ? "cash" : "%"
-          })`}</span>
+          <span className="text-right">{`${val.row.original.ratePercent}%`}</span>
         ),
-        accessorKey: "interestRate",
       },
       {
         header: "Loan Amount",
@@ -63,14 +60,6 @@ const Loans = () => {
           <span className="text-right">{`${
             val.row.original.currency
           } ${formatMoney(val.row.original.amount)}`}</span>
-        ),
-      },
-      {
-        header: "Amount to Pay",
-        cell: (val) => (
-          <span className="text-right">{`${
-            val.row.original.currency
-          } ${formatMoney(val.row.original.totalAmount)}`}</span>
         ),
       },
       {
@@ -82,8 +71,12 @@ const Loans = () => {
         cell: (val) => formatDate(val.row.original.startDate, "MMM DD, YYYY"),
       },
       {
-        header: "End Date",
-        cell: (val) => formatDate(val.row.original.endDate, "MMM DD, YYYY"),
+        header: "Repayment Frequency",
+        cell: (val) => (
+          <span className="capitalize">
+            {val.row.original.repaymentFrequency}
+          </span>
+        ),
       },
       {
         header: "Added On",

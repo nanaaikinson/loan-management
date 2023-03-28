@@ -5,6 +5,7 @@ api/auth-api.ts
 api/customers-api.ts
 api/files-api.ts
 api/loans-api.ts
+api/statistics-api.ts
 api/transactions-api.ts
 base.ts
 common.ts
@@ -38,6 +39,10 @@ models/loan.ts
 models/login-request.ts
 models/login-response-data.ts
 models/login-response.ts
+models/statistics-dashboard-data-dashboard-loan-statuses-count-inner.ts
+models/statistics-dashboard-data-dashboard.ts
+models/statistics-dashboard-data.ts
+models/statistics-dashboard.ts
 models/store-customer-request.ts
 models/store-transaction-request.ts
 models/transaction-response.ts

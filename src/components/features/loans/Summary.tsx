@@ -261,14 +261,6 @@ const LoanSummary = () => {
             </div>
 
             <div className="flex justify-between items-center pt-2">
-              <span className="text-gray-500">Amount</span>
-              <span className="text-right">
-                {loanContext?.loan.currency}{" "}
-                {formatMoney(loanContext?.loan.amount)}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center pt-2">
               <span className="text-gray-500">Type</span>
               <span className="text-right capitalize">
                 {loanContext?.loan.type}
@@ -304,7 +296,7 @@ const LoanSummary = () => {
             <div className="flex justify-between items-center pt-2">
               <span className="text-gray-500">Annual Interest Rate</span>
               <span className="text-right">
-                {loanContext?.loan.interestRate}%
+                {loanContext?.loan.ratePercent}%
               </span>
             </div>
 
@@ -316,18 +308,10 @@ const LoanSummary = () => {
             </div>
 
             <div className="flex justify-between items-center pt-2">
-              <span className="text-gray-500">Estimated monthly repayment</span>
+              <span className="text-gray-500">Loan Amount</span>
               <span className="text-right">
                 {loanContext?.loan.currency}{" "}
-                {formatMoney(loanContext?.loan.repaymentAmount)}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center pt-2">
-              <span className="text-gray-500">Total Interest</span>
-              <span className="text-right">
-                {loanContext?.loan.currency}{" "}
-                {formatMoney(loanContext?.loan.amountDue)}
+                {formatMoney(loanContext?.loan.amount)}
               </span>
             </div>
 
@@ -338,6 +322,30 @@ const LoanSummary = () => {
                 {formatMoney(loanContext?.loan.totalAmount)}
               </span>
             </div>
+
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Interest Amount</span>
+              <span className="text-right">
+                {loanContext?.loan.currency}{" "}
+                {formatMoney(loanContext?.loan.interestAmount)}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Amount Due</span>
+              <span className="text-right">
+                {loanContext?.loan.currency}{" "}
+                {formatMoney(loanContext?.loan.amountDue)}
+              </span>
+            </div>
+
+            {/* <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Total Repayment</span>
+              <span className="text-right">
+                {loanContext?.loan.currency}{" "}
+                {formatMoney(loanContext?.loan.totalAmount)}
+              </span>
+            </div> */}
           </div>
         </div>
       </div>

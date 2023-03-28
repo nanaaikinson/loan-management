@@ -16,7 +16,15 @@ const Dashboard = () => {
   useTitle("Dashboard | Microlend");
 
   // State
-  const [data, setData] = useState<StatisticsDashboardData | null>(null);
+  const [data, setData] = useState<StatisticsDashboardData>({
+    recentTransactions: [],
+    dashboard: {
+      totalNumberOfLoans: 0,
+      totalLoanAmount: 0,
+      totalAmountPaid: 0,
+      loanStatusesCount: [],
+    },
+  });
   const [loading, setLoading] = useState<boolean>(false);
   const tableColumns = useMemo<Array<ColumnDef<Transaction>>>(
     () => [
@@ -91,12 +99,14 @@ const Dashboard = () => {
       // setLoans(response.data);
     } catch (error) {
       if (isAxiosError(error) && error?.response) {
-        toast.error(error?.response?.data?.message);
+        toast.error(error?.response?.data.message);
       } else {
         toast.error((error as Error).message);
       }
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   };
 
@@ -106,15 +116,11 @@ const Dashboard = () => {
   }, []);
 
   // Template
-  if (loading) {
-    return <DashboardSkeleton />;
-  } else {
-    if (!data) {
-      return <div>No data</div>;
-    }
-
-    return (
-      <>
+  return (
+    <>
+      {loading ? (
+        <DashboardSkeleton />
+      ) : (
         <div className="container-fluid">
           <div className="flex flex-col gap-y-8">
             <div>
@@ -125,7 +131,7 @@ const Dashboard = () => {
                     <Card className="p-4">
                       <p className="text-gray-500">Total loans</p>
 
-                      <h5>{data?.dashboard.totalNumberOfLoans}</h5>
+                      <h5>{data.dashboard.totalNumberOfLoans}</h5>
                     </Card>
                   </div>
                 </div>
@@ -135,9 +141,7 @@ const Dashboard = () => {
                     <Card className="p-4">
                       <p className="text-gray-500">Total invested</p>
 
-                      <h5>
-                        GHS {formatMoney(data?.dashboard.totalLoanAmount)}
-                      </h5>
+                      <h5>GHS {formatMoney(data.dashboard.totalLoanAmount)}</h5>
                     </Card>
                   </div>
                 </div>
@@ -150,7 +154,7 @@ const Dashboard = () => {
                       <h5>
                         GHS{" "}
                         {formatMoney(
-                          data?.dashboard.totalAmountPaid as unknown as number
+                          data.dashboard.totalAmountPaid as unknown as number
                         )}
                       </h5>
                     </Card>
@@ -162,14 +166,14 @@ const Dashboard = () => {
             <div>
               <h4>Recent repayments</h4>
               <Card className="p-4">
-                <Table columns={tableColumns} data={data?.recentTransactions} />
+                <Table columns={tableColumns} data={data.recentTransactions} />
               </Card>
             </div>
           </div>
         </div>
-      </>
-    );
-  }
+      )}
+    </>
+  );
 };
 
 export default Dashboard;

@@ -1968,7 +1968,7 @@ components:
                 totalLoanAmount:
                   type: integer
                 totalAmountPaid:
-                  type: string
+                  type: integer
                 loanStatusesCount:
                   type: array
                   items:
@@ -1978,9 +1978,15 @@ components:
                         type: string
                       count:
                         type: integer
+                      personal:
+                        type: integer
+                      business:
+                        type: integer
                     required:
                       - status
                       - count
+                      - personal
+                      - business
             recentTransactions:
               type: array
               items:

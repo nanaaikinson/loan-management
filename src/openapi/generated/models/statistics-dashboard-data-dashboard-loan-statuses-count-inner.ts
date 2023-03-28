@@ -32,5 +32,17 @@ export interface StatisticsDashboardDataDashboardLoanStatusesCountInner {
      * @memberof StatisticsDashboardDataDashboardLoanStatusesCountInner
      */
     'count': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StatisticsDashboardDataDashboardLoanStatusesCountInner
+     */
+    'personal': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StatisticsDashboardDataDashboardLoanStatusesCountInner
+     */
+    'business': number;
 }
 

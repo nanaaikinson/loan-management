@@ -37,10 +37,10 @@ export interface StatisticsDashboardDataDashboard {
     'totalLoanAmount': number;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof StatisticsDashboardDataDashboard
      */
-    'totalAmountPaid': string;
+    'totalAmountPaid': number;
     /**
      * 
      * @type {Array<StatisticsDashboardDataDashboardLoanStatusesCountInner>}

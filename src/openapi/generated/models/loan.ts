@@ -149,6 +149,18 @@ export interface Loan {
      * @memberof Loan
      */
     'createdAt': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'interestAmount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'ratePercent': number;
 }
 
 export const LoanTypeEnum = {
@@ -164,7 +176,9 @@ export const LoanStatusEnum = {
     Closed: 'closed',
     WrittenOff: 'written off',
     WaivedOff: 'waived off',
-    Disbursed: 'disbursed'
+    Disbursed: 'disbursed',
+    Settled: 'settled',
+    Paid: 'paid'
 } as const;
 
 export type LoanStatusEnum = typeof LoanStatusEnum[keyof typeof LoanStatusEnum];

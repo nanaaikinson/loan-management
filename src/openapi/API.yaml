@@ -713,6 +713,8 @@ paths:
                     - written off
                     - waived off
                     - disbursed
+                    - settled
+                    - paid
               required:
                 - status
       description: Endpoint for loan approval
@@ -1118,6 +1120,8 @@ components:
             - written off
             - waived off
             - disbursed
+            - settled
+            - paid
         repaymentFrequency:
           type: string
           enum:
@@ -1164,6 +1168,10 @@ components:
           type: string
         createdAt:
           type: string
+        interestAmount:
+          type: integer
+        ratePercent:
+          type: integer
       required:
         - id
         - type
@@ -1186,6 +1194,8 @@ components:
         - loanNumber
         - currency
         - createdAt
+        - interestAmount
+        - ratePercent
     StoreCustomerRequest:
       type: object
       x-examples:

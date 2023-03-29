@@ -34,7 +34,9 @@ export const LoanApprovalRequestStatusEnum = {
     Closed: 'closed',
     WrittenOff: 'written off',
     WaivedOff: 'waived off',
-    Disbursed: 'disbursed'
+    Disbursed: 'disbursed',
+    Settled: 'settled',
+    Paid: 'paid'
 } as const;
 
 export type LoanApprovalRequestStatusEnum = typeof LoanApprovalRequestStatusEnum[keyof typeof LoanApprovalRequestStatusEnum];

@@ -3,6 +3,7 @@ import Dialog from "@/components/common/Dialog";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import {
   CreateLoan200Response,
+  LoanRequestInterestRateTypeEnum,
   LoanRequestRepaymentFrequencyEnum,
   LoanRequestTypeEnum,
   UpdateLoan200Response,
@@ -39,6 +40,7 @@ const StoreLoanModal = ({
 }: StoreLoanModalProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<string>("");
+  const [interestRateType, setInterestRateType] = useState<string>("amount");
   const [customer, setCustomer] = useState<{ name: string; id: string }>({
     name: "",
     id: "",
@@ -185,12 +187,9 @@ const StoreLoanModal = ({
         name: `${loan.customer.firstName} ${loan.customer.lastName}`,
         id: loan.customer.id,
       });
+      setInterestRateType(loan.interestRateType);
     }
   }, [visible]);
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
 
   // Template
   return (
@@ -302,7 +301,7 @@ const StoreLoanModal = ({
                   </div>
                 </div>
 
-                {/* <div className="col-12">
+                <div className="col-12">
                   <div className="mb-4">
                     <label htmlFor="interestRateType">
                       Interest Rate Type*
@@ -314,7 +313,9 @@ const StoreLoanModal = ({
                       className="form-select"
                       onChange={(e) => {
                         const value = e.target.value;
+                        setInterestRateType(value);
                       }}
+                      value={interestRateType}
                       disabled={readonlyProp}
                     >
                       <option value="" disabled>
@@ -334,11 +335,14 @@ const StoreLoanModal = ({
                       />
                     )}
                   </div>
-                </div> */}
+                </div>
 
                 <div className="col-12">
                   <div className="mb-4">
-                    <label htmlFor="interestRate">Interest Rate (%)*</label>
+                    <label htmlFor="interestRate">
+                      Interest Rate (
+                      {interestRateType === "amount" ? "cash" : "%"})*
+                    </label>
                     <input
                       {...register("interestRate")}
                       type="text"

@@ -122,6 +122,12 @@ const LoanRepayments = () => {
         response.data,
         ...(loanContext?.repayments as Transaction[]),
       ]);
+
+      const { data: loanResponse } = await LoanService.instance().getLoan(
+        loanContext?.loan.id as string
+      );
+      loanContext?.updateLoan(loanResponse.data);
+
       closeRepaymentModal();
     } catch (error) {
       //

@@ -19,6 +19,7 @@ tags:
   - name: loans
   - name: transactions
   - name: files
+  - name: statistics
 paths:
   /auth/login:
     post:
@@ -713,6 +714,8 @@ paths:
                     - written off
                     - waived off
                     - disbursed
+                    - settled
+                    - paid
               required:
                 - status
       description: Endpoint for loan approval
@@ -928,6 +931,21 @@ paths:
             schema:
               $ref: "#/components/schemas/StoreTransactionRequest"
       description: Endpoint for updating a particular transaction
+  /statistics/dashboard:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - statistics
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatisticsDashboard"
+      operationId: get-dashboard-analytics
+      description: Endpoint for dashboard analytics
+    parameters: []
 components:
   schemas:
     Customer:
@@ -1118,6 +1136,8 @@ components:
             - written off
             - waived off
             - disbursed
+            - settled
+            - paid
         repaymentFrequency:
           type: string
           enum:
@@ -1164,6 +1184,10 @@ components:
           type: string
         createdAt:
           type: string
+        interestAmount:
+          type: integer
+        ratePercent:
+          type: integer
       required:
         - id
         - type
@@ -1186,6 +1210,8 @@ components:
         - loanNumber
         - currency
         - createdAt
+        - interestAmount
+        - ratePercent
     StoreCustomerRequest:
       type: object
       x-examples:
@@ -1572,6 +1598,403 @@ components:
         - status
         - data
       title: ""
+    StatisticsDashboard:
+      type: object
+      x-examples:
+        Example 1:
+          message: ""
+          code: 200
+          data:
+            dashboard:
+              totalNumberOfLoans: 5
+              totalLoanAmount: 6200000
+              totalAmountPaid: "675000"
+              loanStatusesCount:
+                - status: pending
+                  count: 0
+                - status: approved
+                  count: 4
+                - status: rejected
+                  count: 0
+                - status: disbursed
+                  count: 0
+                - status: closed
+                  count: 1
+                - status: written off
+                  count: 0
+                - status: waived off
+                  count: 0
+                - status: settled
+                  count: 0
+                - status: paid
+                  count: 0
+            recentTransactions:
+              - id: 7
+                customer:
+                  id: CUS_XNc8AGr8n0
+                  firstName: Noela
+                  lastName: Sheppard
+                  email: dyfamoxas@mailinator.com
+                  phoneNumber: "0504989952"
+                  secondaryPhone: null
+                  occupation: null
+                  gpAddress: null
+                  postalAddress: null
+                  dateOfBirth: "1985-02-28"
+                  gender: female
+                  maritalStatus: married
+                  sourceOfIncome: null
+                  avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                  createdAt: "2023-03-26T17:20:14.000000Z"
+                  identification: null
+                loan:
+                  id: LN_hWUIM8BK02
+                  type: personal
+                  status: closed
+                  amount: 3000
+                  totalAmount: 3399
+                  interestAmount: 399
+                  amountPaid: 3400
+                  amountDue: 0
+                  repaymentFrequency: bi-weekly
+                  interestRate: null
+                  ratePercent: 53.3
+                  interestRateType: amount
+                  startDate: "2023-04-03"
+                  endDate: "2023-07-03"
+                  duration: 3
+                  repaymentAmount: 1090
+                  numberOfRepayments: 0
+                  nextRepaymentDate: null
+                  progress: 113
+                  loanNumber: "923971"
+                  currency: GHS
+                  createdAt: "2023-03-28T10:37:50.000000Z"
+                  customer:
+                    id: CUS_XNc8AGr8n0
+                    firstName: Noela
+                    lastName: Sheppard
+                    email: dyfamoxas@mailinator.com
+                    phoneNumber: "0504989952"
+                    secondaryPhone: null
+                    occupation: null
+                    gpAddress: null
+                    postalAddress: null
+                    dateOfBirth: "1985-02-28"
+                    gender: female
+                    maritalStatus: married
+                    sourceOfIncome: null
+                    avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                    createdAt: "2023-03-26T17:20:14.000000Z"
+                    identification: null
+                  am: 399
+                amount: 10000
+                type: loan repayment
+                status: success
+                createdAt: "2023-03-28T13:09:28.000000Z"
+              - id: 6
+                customer:
+                  id: CUS_XNc8AGr8n0
+                  firstName: Noela
+                  lastName: Sheppard
+                  email: dyfamoxas@mailinator.com
+                  phoneNumber: "0504989952"
+                  secondaryPhone: null
+                  occupation: null
+                  gpAddress: null
+                  postalAddress: null
+                  dateOfBirth: "1985-02-28"
+                  gender: female
+                  maritalStatus: married
+                  sourceOfIncome: null
+                  avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                  createdAt: "2023-03-26T17:20:14.000000Z"
+                  identification: null
+                loan:
+                  id: LN_hWUIM8BK02
+                  type: personal
+                  status: closed
+                  amount: 3000
+                  totalAmount: 3399
+                  interestAmount: 399
+                  amountPaid: 3400
+                  amountDue: 0
+                  repaymentFrequency: bi-weekly
+                  interestRate: null
+                  ratePercent: 53.3
+                  interestRateType: amount
+                  startDate: "2023-04-03"
+                  endDate: "2023-07-03"
+                  duration: 3
+                  repaymentAmount: 1090
+                  numberOfRepayments: 0
+                  nextRepaymentDate: null
+                  progress: 113
+                  loanNumber: "923971"
+                  currency: GHS
+                  createdAt: "2023-03-28T10:37:50.000000Z"
+                  customer:
+                    id: CUS_XNc8AGr8n0
+                    firstName: Noela
+                    lastName: Sheppard
+                    email: dyfamoxas@mailinator.com
+                    phoneNumber: "0504989952"
+                    secondaryPhone: null
+                    occupation: null
+                    gpAddress: null
+                    postalAddress: null
+                    dateOfBirth: "1985-02-28"
+                    gender: female
+                    maritalStatus: married
+                    sourceOfIncome: null
+                    avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                    createdAt: "2023-03-26T17:20:14.000000Z"
+                    identification: null
+                  am: 399
+                amount: 55000
+                type: loan repayment
+                status: success
+                createdAt: "2023-03-28T13:09:19.000000Z"
+              - id: 5
+                customer:
+                  id: CUS_XNc8AGr8n0
+                  firstName: Noela
+                  lastName: Sheppard
+                  email: dyfamoxas@mailinator.com
+                  phoneNumber: "0504989952"
+                  secondaryPhone: null
+                  occupation: null
+                  gpAddress: null
+                  postalAddress: null
+                  dateOfBirth: "1985-02-28"
+                  gender: female
+                  maritalStatus: married
+                  sourceOfIncome: null
+                  avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                  createdAt: "2023-03-26T17:20:14.000000Z"
+                  identification: null
+                loan:
+                  id: LN_hWUIM8BK02
+                  type: personal
+                  status: closed
+                  amount: 3000
+                  totalAmount: 3399
+                  interestAmount: 399
+                  amountPaid: 3400
+                  amountDue: 0
+                  repaymentFrequency: bi-weekly
+                  interestRate: null
+                  ratePercent: 53.3
+                  interestRateType: amount
+                  startDate: "2023-04-03"
+                  endDate: "2023-07-03"
+                  duration: 3
+                  repaymentAmount: 1090
+                  numberOfRepayments: 0
+                  nextRepaymentDate: null
+                  progress: 113
+                  loanNumber: "923971"
+                  currency: GHS
+                  createdAt: "2023-03-28T10:37:50.000000Z"
+                  customer:
+                    id: CUS_XNc8AGr8n0
+                    firstName: Noela
+                    lastName: Sheppard
+                    email: dyfamoxas@mailinator.com
+                    phoneNumber: "0504989952"
+                    secondaryPhone: null
+                    occupation: null
+                    gpAddress: null
+                    postalAddress: null
+                    dateOfBirth: "1985-02-28"
+                    gender: female
+                    maritalStatus: married
+                    sourceOfIncome: null
+                    avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                    createdAt: "2023-03-26T17:20:14.000000Z"
+                    identification: null
+                  am: 399
+                amount: 25000
+                type: loan repayment
+                status: success
+                createdAt: "2023-03-28T13:09:13.000000Z"
+              - id: 4
+                customer:
+                  id: CUS_XNc8AGr8n0
+                  firstName: Noela
+                  lastName: Sheppard
+                  email: dyfamoxas@mailinator.com
+                  phoneNumber: "0504989952"
+                  secondaryPhone: null
+                  occupation: null
+                  gpAddress: null
+                  postalAddress: null
+                  dateOfBirth: "1985-02-28"
+                  gender: female
+                  maritalStatus: married
+                  sourceOfIncome: null
+                  avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                  createdAt: "2023-03-26T17:20:14.000000Z"
+                  identification: null
+                loan:
+                  id: LN_hWUIM8BK02
+                  type: personal
+                  status: closed
+                  amount: 3000
+                  totalAmount: 3399
+                  interestAmount: 399
+                  amountPaid: 3400
+                  amountDue: 0
+                  repaymentFrequency: bi-weekly
+                  interestRate: null
+                  ratePercent: 53.3
+                  interestRateType: amount
+                  startDate: "2023-04-03"
+                  endDate: "2023-07-03"
+                  duration: 3
+                  repaymentAmount: 1090
+                  numberOfRepayments: 0
+                  nextRepaymentDate: null
+                  progress: 113
+                  loanNumber: "923971"
+                  currency: GHS
+                  createdAt: "2023-03-28T10:37:50.000000Z"
+                  customer:
+                    id: CUS_XNc8AGr8n0
+                    firstName: Noela
+                    lastName: Sheppard
+                    email: dyfamoxas@mailinator.com
+                    phoneNumber: "0504989952"
+                    secondaryPhone: null
+                    occupation: null
+                    gpAddress: null
+                    postalAddress: null
+                    dateOfBirth: "1985-02-28"
+                    gender: female
+                    maritalStatus: married
+                    sourceOfIncome: null
+                    avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                    createdAt: "2023-03-26T17:20:14.000000Z"
+                    identification: null
+                  am: 399
+                amount: 50000
+                type: loan repayment
+                status: success
+                createdAt: "2023-03-28T13:06:53.000000Z"
+              - id: 3
+                customer:
+                  id: CUS_XNc8AGr8n0
+                  firstName: Noela
+                  lastName: Sheppard
+                  email: dyfamoxas@mailinator.com
+                  phoneNumber: "0504989952"
+                  secondaryPhone: null
+                  occupation: null
+                  gpAddress: null
+                  postalAddress: null
+                  dateOfBirth: "1985-02-28"
+                  gender: female
+                  maritalStatus: married
+                  sourceOfIncome: null
+                  avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                  createdAt: "2023-03-26T17:20:14.000000Z"
+                  identification: null
+                loan:
+                  id: LN_hWUIM8BK02
+                  type: personal
+                  status: closed
+                  amount: 3000
+                  totalAmount: 3399
+                  interestAmount: 399
+                  amountPaid: 3400
+                  amountDue: 0
+                  repaymentFrequency: bi-weekly
+                  interestRate: null
+                  ratePercent: 53.3
+                  interestRateType: amount
+                  startDate: "2023-04-03"
+                  endDate: "2023-07-03"
+                  duration: 3
+                  repaymentAmount: 1090
+                  numberOfRepayments: 0
+                  nextRepaymentDate: null
+                  progress: 113
+                  loanNumber: "923971"
+                  currency: GHS
+                  createdAt: "2023-03-28T10:37:50.000000Z"
+                  customer:
+                    id: CUS_XNc8AGr8n0
+                    firstName: Noela
+                    lastName: Sheppard
+                    email: dyfamoxas@mailinator.com
+                    phoneNumber: "0504989952"
+                    secondaryPhone: null
+                    occupation: null
+                    gpAddress: null
+                    postalAddress: null
+                    dateOfBirth: "1985-02-28"
+                    gender: female
+                    maritalStatus: married
+                    sourceOfIncome: null
+                    avatar: "http://microlend.test/uploads/PROFILE/f4CDejElzLvf61soNbZgnzJlBI834eS1PyI.jpg"
+                    createdAt: "2023-03-26T17:20:14.000000Z"
+                    identification: null
+                  am: 399
+                amount: 200000
+                type: loan repayment
+                status: success
+                createdAt: "2023-03-28T13:05:48.000000Z"
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+            - dashboard
+            - recentTransactions
+          properties:
+            dashboard:
+              type: object
+              required:
+                - totalNumberOfLoans
+                - totalLoanAmount
+                - totalAmountPaid
+                - loanStatusesCount
+              properties:
+                totalNumberOfLoans:
+                  type: integer
+                totalLoanAmount:
+                  type: integer
+                totalAmountPaid:
+                  type: integer
+                loanStatusesCount:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                      count:
+                        type: integer
+                      personal:
+                        type: integer
+                      business:
+                        type: integer
+                    required:
+                      - status
+                      - count
+                      - personal
+                      - business
+            recentTransactions:
+              type: array
+              items:
+                $ref: "#/components/schemas/Transaction"
+      required:
+        - message
+        - code
+        - data
   securitySchemes:
     Authorization:
       type: http

@@ -191,10 +191,6 @@ const StoreLoanModal = ({
     }
   }, [visible]);
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
   // Template
   return (
     <>

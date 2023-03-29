@@ -9,11 +9,14 @@ import { isAxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useTitle } from "react-use";
 
 const mlAtName = import.meta.env.VITE_ACCESS_TOKEN_NAME;
 const mlAtExpiresAtName = import.meta.env.VITE_ACCESS_TOKEN_EXPIRES_AT_NAME;
 
 const Login = () => {
+  useTitle("Login | Microlend");
+
   const [loading, setLoading] = useState(false);
   const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();

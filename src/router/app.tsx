@@ -8,6 +8,7 @@ import StoreCustomer from "@/pages/app/customers/new";
 import Dashboard from "@/pages/app/dashboard";
 import Loans from "@/pages/app/loans";
 import ViewLoan from "@/pages/app/loans/[id]";
+import LoanCalculator from "@/pages/app/loans/calculator";
 import Reports from "@/pages/app/reports";
 import Transactions from "@/pages/app/transactions";
 import {
@@ -32,6 +33,10 @@ const appRoutes: Array<RouteObject> = [
       {
         path: "reports",
         element: <Reports />,
+      },
+      {
+        path: "loan-calculator",
+        element: <LoanCalculator />,
       },
       {
         path: "loans",

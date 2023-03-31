@@ -71,10 +71,32 @@ export const getDurationInMonthsReadable = (
   let result = `${durationInMonths} month${durationInMonths !== 1 ? "s" : ""}`;
 
   if (years > 0) {
-    result += ` (${years} year${years !== 1 ? "s" : ""} ${months} month${
+    result = ` ${years} year${years !== 1 ? "s" : ""} ${months} month${
       months !== 1 ? "s" : ""
-    })`;
+    }`;
   }
 
   return result;
+};
+
+export const calculateLoan = (
+  loanAmount: number,
+  interestRate: number,
+  durationMonths: number
+) => {
+  const monthlyInterestRate = interestRate / 1200; // Convert yearly interest rate to monthly
+  const totalInterest = loanAmount * monthlyInterestRate * durationMonths;
+  const totalRepayment = loanAmount + totalInterest;
+  const monthlyRepayment = totalRepayment / durationMonths;
+
+  return {
+    totalRepayment:
+      isNaN(totalRepayment) || totalRepayment === Infinity ? 0 : totalRepayment,
+    totalInterest:
+      isNaN(totalInterest) || totalInterest === Infinity ? 0 : totalInterest,
+    monthlyRepayment:
+      isNaN(monthlyRepayment) || monthlyRepayment === Infinity
+        ? 0
+        : monthlyRepayment,
+  };
 };

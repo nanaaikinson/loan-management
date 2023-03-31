@@ -35,6 +35,11 @@ const Sidebar = ({ className }: SidebarProps) => {
             <span>Loans</span>
           </NavLink>
 
+          <NavLink className="sidebar-item" to="/loan-calculator">
+            <Icon icon="uil:calculator-alt" className="icon" />
+            <span>Loan calculator</span>
+          </NavLink>
+
           <NavLink className="sidebar-item" to="/transactions">
             <Icon icon="uil:transaction" className="icon" />
             <span>Transactions</span>

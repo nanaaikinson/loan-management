@@ -89,7 +89,7 @@
   }
 
   .btn {
-    @apply transform-none py-[10px] px-5 hover:shadow-sm focus:ring-0 active:ring-0;
+    @apply transform-none px-5 py-[10px] hover:shadow-sm focus:ring-0 active:ring-0;
   }
 
   .btn-secondary {
@@ -141,5 +141,15 @@
     @apply app-shadow mt-1;
   }
   .react-form-select .react-select__control {
+  }
+
+  input[type="range"].input-slider {
+    @apply h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-100 transition ease-in-out;
+  }
+  .input-slider::-webkit-slider-thumb {
+    @apply h-4 w-4 cursor-pointer appearance-none rounded-full bg-primary;
+  }
+  .input-slider::-moz-range-thumb {
+    @apply h-4 w-4 cursor-pointer appearance-none rounded-full bg-primary;
   }
 }

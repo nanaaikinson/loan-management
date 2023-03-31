@@ -90,8 +90,13 @@ export const calculateLoan = (
   const monthlyRepayment = totalRepayment / durationMonths;
 
   return {
-    totalRepayment: isNaN(totalRepayment) ? 0 : totalRepayment,
-    totalInterest: isNaN(totalInterest) ? 0 : totalInterest,
-    monthlyRepayment: isNaN(monthlyRepayment) ? 0 : monthlyRepayment,
+    totalRepayment:
+      isNaN(totalRepayment) || totalRepayment === Infinity ? 0 : totalRepayment,
+    totalInterest:
+      isNaN(totalInterest) || totalInterest === Infinity ? 0 : totalInterest,
+    monthlyRepayment:
+      isNaN(monthlyRepayment) || monthlyRepayment === Infinity
+        ? 0
+        : monthlyRepayment,
   };
 };

@@ -1,9 +1,9 @@
-import AmountInput from "@/components/common/AmountInput";
 import Badge from "@/components/common/Badge";
 import Button from "@/components/common/Button";
 import Dialog from "@/components/common/Dialog";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Table from "@/components/common/Table";
+import AmountInput from "@/components/form/AmountInput";
 import TransactionModal from "@/components/modals/TransactionModal";
 import { LoanContext } from "@/context/loan.context";
 import {
@@ -157,15 +157,16 @@ const LoanRepayments = () => {
       <div>
         <div className="flex items-center justify-between mb-5">
           <span className="font-semibold text-lg">Repayments</span>
-          {loanContext?.loan.status === "approved" && (
-            <Button
-              variant="primary"
-              type="button"
-              onClick={() => setShowRepaymentModal(true)}
-            >
-              New payment
-            </Button>
-          )}
+          {loanContext?.loan.status === "approved" &&
+            loanContext?.loan.amountDue > 0 && (
+              <Button
+                variant="primary"
+                type="button"
+                onClick={() => setShowRepaymentModal(true)}
+              >
+                New payment
+              </Button>
+            )}
         </div>
 
         <Table columns={tableColumns} data={loanContext?.repayments} />

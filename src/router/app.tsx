@@ -10,6 +10,9 @@ import Loans from "@/pages/app/loans";
 import ViewLoan from "@/pages/app/loans/[id]";
 import LoanCalculator from "@/pages/app/loans/calculator";
 import Reports from "@/pages/app/reports";
+import Settings from "@/pages/app/settings";
+import ChangePassword from "@/pages/app/settings/password";
+import Profile from "@/pages/app/settings/profile";
 import Transactions from "@/pages/app/transactions";
 import {
   loadCustomer,
@@ -101,6 +104,14 @@ const appRoutes: Array<RouteObject> = [
         loader: async () => {
           return await loadTransactions();
         },
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+        children: [
+          { index: true, element: <Profile /> },
+          { path: "password", element: <ChangePassword /> },
+        ],
       },
     ],
   },

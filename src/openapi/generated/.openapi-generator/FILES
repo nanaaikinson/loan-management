@@ -16,6 +16,10 @@ models/attach-loan-request.ts
 models/attach-loan200-response.ts
 models/auth-user-data.ts
 models/auth-user.ts
+models/change-avatar200-response-data.ts
+models/change-avatar200-response.ts
+models/change-password-request.ts
+models/change-password200-response.ts
 models/create-customer200-response.ts
 models/create-loan200-response.ts
 models/customer-loans200-response.ts

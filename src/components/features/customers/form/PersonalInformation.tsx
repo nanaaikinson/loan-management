@@ -1,11 +1,12 @@
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import Input from "@/components/form/TextInput";
 import { StoreCustomerContext } from "@/context/customer.context";
 import {
   StoreCustomerRequestGenderEnum,
   StoreCustomerRequestMaritalStatusEnum,
 } from "@/openapi/generated";
-import { formatDate } from "@/utils/helpers";
+import { formatDate, getEnumOptions } from "@/utils/helpers";
 import {
   PersonalInfoForm,
   personalInfoValidationSchema,
@@ -14,18 +15,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Icon } from "@iconify/react";
 import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-flatpickr";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
-
 
 interface PersonalInformationProps {
   updateStep: () => void;
 }
 
-const genderOptions = Object.values(StoreCustomerRequestGenderEnum);
-const maritalStatusOptions = Object.values(
-  StoreCustomerRequestMaritalStatusEnum
-);
 // 18 years and above
 const maxDateOfBirth = new Date();
 maxDateOfBirth.setFullYear(maxDateOfBirth.getFullYear() - 18);
@@ -38,6 +34,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
     handleSubmit,
     setValue,
     formState: { errors },
+    control,
   } = useForm<PersonalInfoForm>({
     resolver: yupResolver(personalInfoValidationSchema),
   });
@@ -50,10 +47,9 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
     }
   };
 
-  const location = useLocation()
+  const location = useLocation();
 
-  const isEditRoute = location.pathname.includes('edit')
-
+  const isEditRoute = location.pathname.includes("edit");
 
   useEffect(() => {
     if (storeCustomerContext?.customer) {
@@ -75,71 +71,51 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="row">
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="firstName">
-                First name <span className="text-danger">*</span>
-              </label>
-              <input
-                {...register("firstName")}
-                type="text"
-                name="firstName"
+        <div className="grid lg:grid-cols-2 lg:gap-4 lg:gap-x-8">
+          <Controller
+            name="firstName"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"First name"}
                 id="firstName"
-                className="form-input"
                 disabled={isEditRoute}
+                error={errors?.firstName?.message}
+                required
+                {...field}
               />
-              {errors?.firstName?.message && (
-                <ErrorMessage message={errors?.firstName?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="lastName">
-                Last name <span className="text-danger">*</span>
-              </label>
-              <input
-                {...register("lastName")}
-                type="text"
-                name="lastName"
+            )}
+          />{" "}
+          <Controller
+            name="lastName"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"Last name"}
                 id="lastName"
-                className="form-input"
                 disabled={isEditRoute}
-
+                error={errors?.lastName?.message}
+                required
+                {...field}
               />
-              {errors?.lastName?.message && (
-                <ErrorMessage message={errors?.lastName?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="gender">
-                Gender <span className="text-danger">*</span>
-              </label>
-              <select
-                {...register("gender")}
-                name="gender"
+            )}
+          />{" "}
+          <Controller
+            name="gender"
+            control={control}
+            render={({ field }) => (
+              <Input
+                variant="select"
+                label={"Gender"}
                 id="gender"
-                className="form-select"
-              >
-                <option value="">Select option</option>
-                {genderOptions.map((g, index) => (
-                  <option key={index} value={g}>
-                    {g}
-                  </option>
-                ))}
-              </select>
-              {errors?.gender?.message && (
-                <ErrorMessage message={errors?.gender?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
+                error={errors?.gender?.message}
+                required
+                {...field}
+                options={getEnumOptions(StoreCustomerRequestGenderEnum)}
+              />
+            )}
+          />
+          <div className="">
             <div className="mb-4">
               <label htmlFor="dateOfBirth">
                 Date Of Birth <span className="text-danger">*</span>
@@ -167,128 +143,94 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
               )}
             </div>
           </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="maritalStatus">
-                Marital status <span className="text-danger">*</span>
-              </label>
-              <select
-                {...register("maritalStatus")}
-                name="maritalStatus"
+          <Controller
+            name="maritalStatus"
+            control={control}
+            render={({ field }) => (
+              <Input
+                variant="select"
+                label={"Marital Status"}
                 id="maritalStatus"
-                className="form-select"
-              >
-                <option value="">Select option</option>
-                {maritalStatusOptions.map((g, index) => (
-                  <option key={index} value={g}>
-                    {g}
-                  </option>
-                ))}
-              </select>
-              {errors?.maritalStatus?.message && (
-                <ErrorMessage message={errors?.maritalStatus?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="phoneNumber">
-                Phone number <span className="text-danger">*</span>
-              </label>
-              <input
-                {...register("phoneNumber")}
-                type="text"
-                name="phoneNumber"
+                error={errors?.maritalStatus?.message}
+                required
+                {...field}
+                options={getEnumOptions(StoreCustomerRequestMaritalStatusEnum)}
+              />
+            )}
+          />{" "}
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"Phone number"}
                 id="phoneNumber"
-                className="form-input"
+                error={errors?.phoneNumber?.message}
+                required
+                {...field}
               />
-              {errors?.phoneNumber?.message && (
-                <ErrorMessage message={errors?.phoneNumber?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="secondaryPhone">Secondary phone</label>
-              <input
-                {...register("secondaryPhone")}
-                type="text"
-                name="secondaryPhone"
+            )}
+          />
+          <Controller
+            name="secondaryPhone"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"Secondary phone"}
                 id="secondaryPhone"
-                className="form-input"
+                error={errors?.secondaryPhone?.message}
+                {...field}
               />
-              {errors?.secondaryPhone?.message && (
-                <ErrorMessage message={errors?.secondaryPhone?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="email">Email</label>
-              <input
-                {...register("email")}
-                type="text"
-                name="email"
+            )}
+          />
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"Email"}
                 id="email"
-                className="form-input"
+                error={errors?.email?.message}
+                {...field}
               />
-              {errors?.email?.message && (
-                <ErrorMessage message={errors?.email?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="occupation">Occupation</label>
-              <input
-                {...register("occupation")}
-                type="text"
-                name="occupation"
+            )}
+          />{" "}
+          <Controller
+            name="occupation"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"Occupation"}
                 id="occupation"
-                className="form-input"
+                error={errors?.occupation?.message}
+                {...field}
               />
-              {errors?.occupation?.message && (
-                <ErrorMessage message={errors?.occupation?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="gpAddress">Ghana post address</label>
-              <input
-                {...register("gpAddress")}
-                type="text"
-                name="gpAddress"
+            )}
+          />{" "}
+          <Controller
+            name="gpAddress"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"Ghana post address"}
                 id="gpAddress"
-                className="form-input"
+                error={errors?.gpAddress?.message}
+                {...field}
               />
-              {errors?.gpAddress?.message && (
-                <ErrorMessage message={errors?.gpAddress?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="postalAddress">Postal address</label>
-              <input
-                {...register("postalAddress")}
-                type="text"
-                name="postalAddress"
+            )}
+          />{" "}
+          <Controller
+            name="postalAddress"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={"Postal address"}
                 id="postalAddress"
-                className="form-input"
+                error={errors?.postalAddress?.message}
+                {...field}
               />
-              {errors?.postalAddress?.message && (
-                <ErrorMessage message={errors?.postalAddress?.message} />
-              )}
-            </div>
-          </div>
+            )}
+          />
         </div>
 
         <div className="mt-10 flex justify-end">

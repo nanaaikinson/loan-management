@@ -1,5 +1,6 @@
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import Input from "@/components/form/TextInput";
 import {
   IStoreCustomerContext,
   StoreCustomerContext,
@@ -12,7 +13,7 @@ import {
 } from "@/openapi/generated";
 import { CustomerService } from "@/services/customer.service";
 import { FileService } from "@/services/file.service";
-import { formatDate, isEmpty } from "@/utils/helpers";
+import { formatDate, getEnumOptions, isEmpty } from "@/utils/helpers";
 import {
   IdentificationInfoForm,
   identificationValidationSchema,
@@ -23,15 +24,13 @@ import { isAxiosError } from "axios";
 import classNames from "classnames";
 import React, { useContext, useEffect, useState } from "react";
 import DatePicker from "react-flatpickr";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 interface IdentificationInformationProps {
   previousStep: () => void;
 }
-
-const idTypeOptions = Object.values(StoreCustomerRequestIdTypeEnum);
 
 const IdentificationInformation = ({
   previousStep,
@@ -54,6 +53,7 @@ const IdentificationInformation = ({
     getValues,
     clearErrors,
     formState: { errors },
+    control,
   } = useForm<IdentificationInfoForm>({
     resolver: yupResolver(identificationValidationSchema),
   });
@@ -284,60 +284,42 @@ const IdentificationInformation = ({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="row">
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="idNumber">ID number</label>
-              <input
-                {...register("idNumber")}
-                type="text"
-                name="idNumber"
-                id="idNumber"
-                className="form-input"
+        <div className="grid lg:grid-cols-2 lg:gap-4 lg:gap-x-8">
+          <Controller
+            name="idNumber"
+            control={control}
+            render={({
+              field: { value, name, ref },
+              fieldState: { error },
+            }) => (
+              <Input
+                label="ID number"
+                name={name}
+                value={value}
+                error={error?.message}
                 onInput={(e) => {
                   setIdNumber(e.currentTarget.value);
                   if (e.currentTarget.value.length === 0) clearErrors();
                 }}
               />
-              {errors?.idNumber?.message && (
-                <ErrorMessage message={errors?.idNumber?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="idType">
-                ID type{" "}
-                <span
-                  className={classNames(
-                    idNumber.length ? "text-danger" : "hidden"
-                  )}
-                >
-                  *
-                </span>
-              </label>
-              <select
-                {...register("idType")}
-                name="idType"
-                id="idType"
-                className="form-select"
-              >
-                <option value="">Select option</option>
-                {idTypeOptions.map((t, index) => (
-                  <option key={index} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-              {errors?.idType?.message && (
-                <ErrorMessage message={errors?.idType?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
+            )}
+          />
+          <Controller
+            name="idType"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label="ID Type"
+                variant="select"
+                {...field}
+                required={idNumber.length ? true : false}
+                error={errors?.idType?.message}
+                options={getEnumOptions(StoreCustomerRequestIdTypeEnum)}
+              />
+            )}
+          />
+          <div className="">
+            <div className="">
               <label htmlFor="idIssueDate">
                 ID Issue date{" "}
                 <span
@@ -371,9 +353,8 @@ const IdentificationInformation = ({
               )}
             </div>
           </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
+          <div className="">
+            <div className="">
               <label htmlFor="idExpiryDate">
                 ID Expiry date{" "}
                 <span
@@ -407,59 +388,30 @@ const IdentificationInformation = ({
               )}
             </div>
           </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="idIssuingAuthority">
-                ID Issuing authority{" "}
-                <span
-                  className={classNames(
-                    idNumber.length ? "text-danger" : "hidden"
-                  )}
-                >
-                  *
-                </span>
-              </label>
-              <input
-                {...register("idIssuingAuthority")}
-                type="text"
-                name="idIssuingAuthority"
-                id="idIssuingAuthority"
-                className="form-input"
+          <Controller
+            name="idIssuingAuthority"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label="ID Issuing Authority"
+                {...field}
+                required={idNumber.length ? true : false}
+                error={errors?.idIssuingAuthority?.message}
               />
-              {errors?.idIssuingAuthority?.message && (
-                <ErrorMessage message={errors?.idIssuingAuthority?.message} />
-              )}
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <label htmlFor="idIssuingCountry">
-                ID Issuing country{" "}
-                <span
-                  className={classNames(
-                    idNumber.length ? "text-danger" : "hidden"
-                  )}
-                >
-                  *
-                </span>
-              </label>
-              <input
-                {...register("idIssuingCountry")}
-                type="text"
-                name="idIssuingCountry"
-                id="idIssuingCountry"
-                className="form-input"
+            )}
+          />{" "}
+          <Controller
+            name="idIssuingCountry"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label="ID Issuing Country"
+                {...field}
+                required={idNumber.length ? true : false}
+                error={errors?.idIssuingCountry?.message}
               />
-              {errors?.idIssuingCountry?.message && (
-                <ErrorMessage message={errors?.idIssuingCountry?.message} />
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
+            )}
+          />
           <div className="col-12 lg:col-6">
             <div className="mb-4">
               <div className=" mb-1">
@@ -513,59 +465,60 @@ const IdentificationInformation = ({
             </div>
           </div>
 
-          <div className="col-12 lg:col-6">
-            <div className="mb-4">
-              <div className="mb-1">
-                <label className="block">
-                  ID Back Image{" "}
-                  <span
-                    className={classNames(
-                      idNumber.length ? "text-danger" : "hidden"
-                    )}
-                  >
-                    *
-                  </span>
-                </label>
-                {errors?.idFrontUrl?.message && (
-                  <ErrorMessage message={errors?.idFrontUrl?.message} />
-                )}
-              </div>
 
-              {idBackImage.length ? (
-                <div className="relative border border-gray-200 rounded h-[200px] overflow-hidden">
-                  <img
-                    src={idBackImage}
-                    alt=""
-                    className="h-full object-cover rounded"
-                  />
-                  <button
-                    type="button"
-                    className="absolute top-2 right-2 flex items-center justify-center"
-                    onClick={() => removeImage("idBackImage")}
-                  >
-                    <Icon icon="bx:trash" />
-                  </button>
-                </div>
-              ) : (
-                <label
-                  htmlFor="idBackImageInput"
-                  className="flex flex-col items-center justify-center border border-gray-200 bg-gray-100 rounded h-[200px] cursor-pointer"
+          <div className="mb-4">
+            <div className="mb-1">
+              <label className="block">
+                ID Back Image{" "}
+                <span
+                  className={classNames(
+                    idNumber.length ? "text-danger" : "hidden"
+                  )}
                 >
-                  <input
-                    type="file"
-                    name="idBackImageInput"
-                    id="idBackImageInput"
-                    className="hidden"
-                    accept="image/jpeg, image/png, image/jpg"
-                    onChange={(e) => onChangeImageFile("idBackImage", e)}
-                  />
-
-                  <Icon icon="bx:image" className="h-10 w-10" />
-                  <span className="text-xs">Click to upload</span>
-                </label>
+                  *
+                </span>
+              </label>
+              {errors?.idFrontUrl?.message && (
+                <ErrorMessage message={errors?.idFrontUrl?.message} />
               )}
             </div>
+
+            {idBackImage.length ? (
+              <div className="relative border border-gray-200 rounded h-[200px] overflow-hidden">
+                <img
+                  src={idBackImage}
+                  alt=""
+                  className="h-full object-cover rounded"
+                />
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 flex items-center justify-center"
+                  onClick={() => removeImage("idBackImage")}
+                >
+                  <Icon icon="bx:trash" />
+                </button>
+              </div>
+            ) : (
+              <label
+                htmlFor="idBackImageInput"
+                className="flex flex-col items-center justify-center border border-gray-200 bg-gray-100 rounded h-[200px] cursor-pointer"
+              >
+                <input
+                  type="file"
+                  name="idBackImageInput"
+                  id="idBackImageInput"
+                  className="hidden"
+                  accept="image/jpeg, image/png, image/jpg"
+                  onChange={(e) => onChangeImageFile("idBackImage", e)}
+                />
+
+                <Icon icon="bx:image" className="h-10 w-10" />
+                <span className="text-xs">Click to upload</span>
+              </label>
+            )}
           </div>
+
+
         </div>
 
         <div className="mt-10 flex space-x-3 justify-end">

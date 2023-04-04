@@ -100,3 +100,24 @@ export const calculateLoan = (
         : monthlyRepayment,
   };
 };
+
+
+export const getEnumOptions = (_enum: any) => {
+  const keys = Object.keys(_enum);
+  return keys?.map((item) => {
+    return {
+      value: _enum[item],
+      label: toNormalCase(_enum[item]),
+    };
+  });
+};
+
+export const toNormalCase = (str = "") => {
+  if (!str) {
+    return "";
+  }
+  const words = str.toLocaleLowerCase().split("_");
+  return words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};

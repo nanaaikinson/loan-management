@@ -11,31 +11,42 @@ interface InputProps
   label?: string;
 }
 
-const TextAreaInput = forwardRef(function Input(
-  { error, label, placeholder, onChange, name, required, value }: InputProps,
-  ref
-) {
-  return (
-    <>
-      {label && (
-        <label className="block" htmlFor={name}>
-          {label} {required && <span className="text-danger">*</span>}
-        </label>
-      )}
+const TextAreaInput = forwardRef<HTMLTextAreaElement, InputProps>(
+  function Input(
+    {
+      error,
+      label,
+      placeholder,
+      onChange,
+      name,
+      required,
+      value = "",
+    }: InputProps,
+    ref
+  ) {
+    return (
+      <>
+        {label && (
+          <label className="block" htmlFor={name}>
+            {label} {required && <span className="text-danger">*</span>}
+          </label>
+        )}
 
-      <textarea
-        rows={5}
-        onChange={onChange}
-        className="form-input"
-        placeholder={placeholder}
-        id={name}
-        value={value}
-        name={name}
-      />
+        <textarea
+          ref={ref}
+          rows={5}
+          onChange={onChange}
+          className="form-input"
+          placeholder={placeholder}
+          id={name}
+          value={value}
+          name={name}
+        />
 
-      {error && <span className="text-sm text-danger">{error}</span>}
-    </>
-  );
-});
+        {error && <span className="text-sm text-danger">{error}</span>}
+      </>
+    );
+  }
+);
 
 export default TextAreaInput;

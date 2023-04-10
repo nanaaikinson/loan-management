@@ -1,6 +1,7 @@
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import Input from "@/components/form/TextInput";
+import SelectInput from "@/components/form/SelectInput";
+import TextInput from "@/components/form/TextInput";
 import {
   IStoreCustomerContext,
   StoreCustomerContext,
@@ -292,7 +293,7 @@ const IdentificationInformation = ({
               field: { value, name, ref },
               fieldState: { error },
             }) => (
-              <Input
+              <TextInput
                 label="ID number"
                 name={name}
                 value={value}
@@ -308,9 +309,8 @@ const IdentificationInformation = ({
             name="idType"
             control={control}
             render={({ field }) => (
-              <Input
+              <SelectInput
                 label="ID Type"
-                variant="select"
                 {...field}
                 required={idNumber.length ? true : false}
                 error={errors?.idType?.message}
@@ -392,7 +392,7 @@ const IdentificationInformation = ({
             name="idIssuingAuthority"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label="ID Issuing Authority"
                 {...field}
                 required={idNumber.length ? true : false}
@@ -404,7 +404,7 @@ const IdentificationInformation = ({
             name="idIssuingCountry"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label="ID Issuing Country"
                 {...field}
                 required={idNumber.length ? true : false}
@@ -464,8 +464,6 @@ const IdentificationInformation = ({
               )}
             </div>
           </div>
-
-
           <div className="mb-4">
             <div className="mb-1">
               <label className="block">
@@ -517,8 +515,6 @@ const IdentificationInformation = ({
               </label>
             )}
           </div>
-
-
         </div>
 
         <div className="mt-10 flex space-x-3 justify-end">

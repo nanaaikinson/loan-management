@@ -9,10 +9,10 @@ interface InputProps
   label: string;
 }
 
-const TextInput = forwardRef(function Input(
+const TextInput = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
     error,
-    value,
+    value = "",
     label,
     disabled = false,
     type = "text",
@@ -30,8 +30,9 @@ const TextInput = forwardRef(function Input(
           {label} {required && <span className="text-danger">*</span>}
         </label>
       )}
-      (
+
       <input
+        ref={ref}
         disabled={disabled}
         onChange={onChange}
         className="form-input"
@@ -41,7 +42,7 @@ const TextInput = forwardRef(function Input(
         id={name}
         name={name}
       />
-      ){error && <span className="text-sm text-danger">{error}</span>}
+      {error && <span className="text-sm text-danger">{error}</span>}
     </div>
   );
 });

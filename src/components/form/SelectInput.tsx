@@ -11,35 +11,35 @@ interface InputProps
   options?: SelectOptions[];
 }
 
-const SelectInput = forwardRef(function Input(
+const SelectInput = forwardRef<HTMLSelectElement, InputProps>(function Input(
   {
     error,
     label,
-     onChange,
+    onChange,
     name,
     required,
     disabled,
-    value,
+    value = "",
     options,
   }: InputProps,
   ref
 ) {
   return (
-    <>
+    <div>
       {label && (
-        <label className="block" htmlFor={name}>
+        <label htmlFor={name}>
           {label} {required && <span className="text-danger">*</span>}
         </label>
       )}
 
       <select
+        ref={ref}
         disabled={disabled}
         onChange={onChange}
         className="form-select"
         value={value}
         id={name}
         name={name}
-
       >
         <option value="">Please select an option</option>
         {options?.map((item) => (
@@ -50,7 +50,7 @@ const SelectInput = forwardRef(function Input(
       </select>
 
       {error && <span className="text-sm text-danger">{error}</span>}
-    </>
+    </div>
   );
 });
 

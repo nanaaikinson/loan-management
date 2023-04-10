@@ -1,6 +1,7 @@
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import Input from "@/components/form/TextInput";
+import SelectInput from "@/components/form/SelectInput";
+import TextInput from "@/components/form/TextInput";
 import { StoreCustomerContext } from "@/context/customer.context";
 import {
   StoreCustomerRequestGenderEnum,
@@ -76,7 +77,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="firstName"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"First name"}
                 id="firstName"
                 disabled={isEditRoute}
@@ -90,7 +91,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="lastName"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"Last name"}
                 id="lastName"
                 disabled={isEditRoute}
@@ -104,8 +105,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="gender"
             control={control}
             render={({ field }) => (
-              <Input
-                variant="select"
+              <SelectInput
                 label={"Gender"}
                 id="gender"
                 error={errors?.gender?.message}
@@ -147,8 +147,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="maritalStatus"
             control={control}
             render={({ field }) => (
-              <Input
-                variant="select"
+              <SelectInput
                 label={"Marital Status"}
                 id="maritalStatus"
                 error={errors?.maritalStatus?.message}
@@ -162,7 +161,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="phoneNumber"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"Phone number"}
                 id="phoneNumber"
                 error={errors?.phoneNumber?.message}
@@ -175,7 +174,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="secondaryPhone"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"Secondary phone"}
                 id="secondaryPhone"
                 error={errors?.secondaryPhone?.message}
@@ -187,7 +186,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="email"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"Email"}
                 id="email"
                 error={errors?.email?.message}
@@ -199,7 +198,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="occupation"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"Occupation"}
                 id="occupation"
                 error={errors?.occupation?.message}
@@ -211,7 +210,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="gpAddress"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"Ghana post address"}
                 id="gpAddress"
                 error={errors?.gpAddress?.message}
@@ -223,7 +222,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
             name="postalAddress"
             control={control}
             render={({ field }) => (
-              <Input
+              <TextInput
                 label={"Postal address"}
                 id="postalAddress"
                 error={errors?.postalAddress?.message}

@@ -190,54 +190,59 @@ const LoanSummary = () => {
                           )}
                           {loanContext?.loan.status === "approved" && (
                             <>
-                              <Menu.Item>
-                                <button
-                                  className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
-                                  onClick={() =>
-                                    triggerLoanApproval(
-                                      LoanApprovalRequestStatusEnum.Disbursed
-                                    )
-                                  }
-                                >
-                                  Disburse
-                                </button>
-                              </Menu.Item>
-                              <Menu.Item>
-                                <button
-                                  className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
-                                  onClick={() =>
-                                    triggerLoanApproval(
-                                      LoanApprovalRequestStatusEnum.WrittenOff
-                                    )
-                                  }
-                                >
-                                  Write off
-                                </button>
-                              </Menu.Item>
-                              <Menu.Item>
-                                <button
-                                  className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
-                                  onClick={() =>
-                                    triggerLoanApproval(
-                                      LoanApprovalRequestStatusEnum.WaivedOff
-                                    )
-                                  }
-                                >
-                                  Waive off
-                                </button>
-                              </Menu.Item>
-                              <Menu.Item>
-                                <button
-                                  className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
-                                  onClick={() =>
-                                    triggerLoanApproval(
-                                      LoanApprovalRequestStatusEnum.Closed
-                                    )
-                                  }
-                                >
-                                  Close
-                                </button>
-                              </Menu.Item>
+                              {loanContext?.loan.amountDue > 0 ? (
+                                <>
+                                  <Menu.Item>
+                                    <button
+                                      className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
+                                      onClick={() =>
+                                        triggerLoanApproval(
+                                          LoanApprovalRequestStatusEnum.Disbursed
+                                        )
+                                      }
+                                    >
+                                      Disburse
+                                    </button>
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    <button
+                                      className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
+                                      onClick={() =>
+                                        triggerLoanApproval(
+                                          LoanApprovalRequestStatusEnum.WrittenOff
+                                        )
+                                      }
+                                    >
+                                      Write off
+                                    </button>
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    <button
+                                      className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
+                                      onClick={() =>
+                                        triggerLoanApproval(
+                                          LoanApprovalRequestStatusEnum.WaivedOff
+                                        )
+                                      }
+                                    >
+                                      Waive off
+                                    </button>
+                                  </Menu.Item>
+                                </>
+                              ) : (
+                                <Menu.Item>
+                                  <button
+                                    className="text-left px-4 py-1 text-gray-500 transition rounded-[4px] duration-300 hover:bg-gray-50 hover:text-dark"
+                                    onClick={() =>
+                                      triggerLoanApproval(
+                                        LoanApprovalRequestStatusEnum.Closed
+                                      )
+                                    }
+                                  >
+                                    Close
+                                  </button>
+                                </Menu.Item>
+                              )}
                             </>
                           )}
                         </div>
@@ -312,6 +317,14 @@ const LoanSummary = () => {
               <span className="text-right">
                 {loanContext?.loan.currency}{" "}
                 {formatMoney(loanContext?.loan.amount)}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-gray-500">Est. Monthly Repayment</span>
+              <span className="text-right">
+                {loanContext?.loan.currency}{" "}
+                {formatMoney(loanContext?.loan.monthlyRepayment)}
               </span>
             </div>
 

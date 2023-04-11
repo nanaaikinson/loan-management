@@ -161,6 +161,12 @@ export interface Loan {
      * @memberof Loan
      */
     'ratePercent': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Loan
+     */
+    'monthlyRepayment': number;
 }
 
 export const LoanTypeEnum = {

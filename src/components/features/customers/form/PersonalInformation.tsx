@@ -15,6 +15,8 @@ import { Icon } from "@iconify/react";
 import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-flatpickr";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
+
 
 interface PersonalInformationProps {
   updateStep: () => void;
@@ -48,6 +50,11 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
     }
   };
 
+  const location = useLocation()
+
+  const isEditRoute = location.pathname.includes('edit')
+
+
   useEffect(() => {
     if (storeCustomerContext?.customer) {
       setValue("firstName", storeCustomerContext.customer.firstName);
@@ -80,6 +87,7 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
                 name="firstName"
                 id="firstName"
                 className="form-input"
+                disabled={isEditRoute}
               />
               {errors?.firstName?.message && (
                 <ErrorMessage message={errors?.firstName?.message} />
@@ -98,6 +106,8 @@ const PersonalInformation = ({ updateStep }: PersonalInformationProps) => {
                 name="lastName"
                 id="lastName"
                 className="form-input"
+                disabled={isEditRoute}
+
               />
               {errors?.lastName?.message && (
                 <ErrorMessage message={errors?.lastName?.message} />
